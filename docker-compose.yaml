@@ -12,7 +12,7 @@ services:
     container_name: local-nginx
     image: nginx:1.18.0
     ports:
-      - "8100:80"
+      - "80:80"
     volumes:
       - .:/var/www/oa_project_end
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
