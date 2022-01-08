@@ -36,21 +36,26 @@ services:
       TZ: "Asia/Shanghai"
       REDIS_HOST: "redis"
 
-  mysql:
-    container_name: mysql
-    image: mysql:5.7
-    volumes:
-      - ./dbService/mysql/mysql.cnf:/etc/mysql/conf.d/mysql.cnf:ro
-      - ./logData/mysql:/var/lib/mysql/:rw
-      - ./logServer/mysql:/var/log/mysql:rw
-    ports:
-      - "3306:3306"
+  db:
+    platform: linux/x86_64
+    image: mysql
     restart: always
     environment:
-      MYSQL_ROOT_PASSWARD: "1234321"
-      TZ: "Asia/Shanghai"
-    networks:
-      - host
+      MYSQL_ROOT_PASSWORD: 123456
+    command:
+      --default-authentication-plugin=mysql_native_password
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_general_ci
+      --explicit_defaults_for_timestamp=true
+      --lower_case_table_names=1
+    ports:
+      - 3306:3306
+    volumes:
+      - ./data:/var/lib/mysql
 
-networks:
-  host:
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
