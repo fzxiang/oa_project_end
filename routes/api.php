@@ -18,6 +18,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/api/foo', function (){
+Route::get('/foo', function (){
     return [1,4,2,6,5,8,9];
 });
