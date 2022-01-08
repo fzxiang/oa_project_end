@@ -14,11 +14,11 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-Route::get('/', function () {
+Route::get('/asd', function () {
    return [1,2,2];
 });
 
-//
+
 // Route::get('/', 'StaticPagesController@home')->name('home');
 // Route::get('/help', 'StaticPagesController@help')->name('help');
 // Route::get('/about', 'StaticPagesController@about')->name('about');

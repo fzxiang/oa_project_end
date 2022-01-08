@@ -35,3 +35,22 @@ services:
     environment:
       TZ: "Asia/Shanghai"
       REDIS_HOST: "redis"
+
+  mysql:
+    container_name: mysql
+    image: mysql:5.7
+    volumes:
+      - ./dbService/mysql/mysql.cnf:/etc/mysql/conf.d/mysql.cnf:ro
+      - ./logData/mysql:/var/lib/mysql/:rw
+      - ./logServer/mysql:/var/log/mysql:rw
+    ports:
+      - "3306:3306"
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWARD: "1234321"
+      TZ: "Asia/Shanghai"
+    networks:
+      - host
+
+networks:
+  host:
