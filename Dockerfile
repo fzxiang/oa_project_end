@@ -42,7 +42,7 @@ RUN groupadd --gid $USER_GID $USERNAME \
     # && echo "xdebug.remote_autostart=on" >> /usr/local/etc/php/conf.d/xdebug.ini \
     #
     # Install redis extension
-    && pecl install redis && docker-php-ext-enable redis \
+#    && pecl install redis && docker-php-ext-enable redis \
     #
     # Install ssh2 extension
     && pecl install ssh2-1.3.1 && docker-php-ext-enable ssh2 \
@@ -61,6 +61,7 @@ RUN groupadd --gid $USER_GID $USERNAME \
     && curl -o /usr/local/bin/composer https://mirrors.aliyun.com/composer/composer.phar \
     && chmod +x /usr/local/bin/composer \
     && runuser -l $USERNAME -c 'composer config -g repo.packagist composer https://mirrors.aliyun.com/composer/' \
+
     #
     # Clean up
     && apt-get autoremove -y \
