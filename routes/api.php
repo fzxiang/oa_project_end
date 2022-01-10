@@ -38,4 +38,3 @@ Route::post('/initPwd', 'oaUsersController@initPwd')->name('initPwd');
 Route::post('/delUser', 'oaUsersController@delUser')->name('delUser');
 // 用户权限修改(用户唯一id，权限(json格式))
 Route::post('/updateShop', 'oaUsersController@updateShop')->name('updateShop');
-
