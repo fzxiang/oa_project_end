@@ -30,11 +30,11 @@ services:
     ports:
       - "9000:9000"
     restart: always
-    depends_on:
-      - redis
+#    depends_on:
+#      - redis
     environment:
       TZ: "Asia/Shanghai"
-      REDIS_HOST: "redis"
+#      REDIS_HOST: "redis"
 
   db:
     container_name: local-db
