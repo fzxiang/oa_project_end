@@ -12,7 +12,12 @@ dfdfdf
 </html>
 <script>
 $.ajax({
-    url: '/api/test?name=1',
+    url: '/api/login',
+    method: 'post',
+    data: {
+        uId: 1,
+        passward: '123456',
+    },
     success: function(res){
         $('#res').html(res)
         console.log(res)
