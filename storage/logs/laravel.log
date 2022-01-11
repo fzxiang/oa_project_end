@@ -17,3 +17,245 @@ Did you mean one of these?
 #4 /Users/project/oa_project_end/artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle()
 #5 {main}
 "} 
+[2022-01-09 06:44:02] local.ERROR: Command "route" is not defined.
+
+Did you mean one of these?
+    route:cache
+    route:clear
+    route:list {"exception":"[object] (Symfony\\Component\\Console\\Exception\\CommandNotFoundException(code: 0): Command \"route\" is not defined.
+
+Did you mean one of these?
+    route:cache
+    route:clear
+    route:list at /Users/project/oa_project_end/vendor/symfony/console/Application.php:651)
+[stacktrace]
+#0 /Users/project/oa_project_end/vendor/symfony/console/Application.php(230): Symfony\\Component\\Console\\Application->find()
+#1 /Users/project/oa_project_end/vendor/symfony/console/Application.php(142): Symfony\\Component\\Console\\Application->doRun()
+#2 /Users/project/oa_project_end/vendor/laravel/framework/src/Illuminate/Console/Application.php(93): Symfony\\Component\\Console\\Application->run()
+#3 /Users/project/oa_project_end/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(129): Illuminate\\Console\\Application->run()
+#4 /Users/project/oa_project_end/artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle()
+#5 {main}
+"} 
+[2022-01-09 08:23:31] local.ERROR: Command "migrade" is not defined.
+
+Did you mean one of these?
+    migrate
+    migrate:fresh
+    migrate:install
+    migrate:refresh
+    migrate:reset
+    migrate:rollback
+    migrate:status {"exception":"[object] (Symfony\\Component\\Console\\Exception\\CommandNotFoundException(code: 0): Command \"migrade\" is not defined.
+
+Did you mean one of these?
+    migrate
+    migrate:fresh
+    migrate:install
+    migrate:refresh
+    migrate:reset
+    migrate:rollback
+    migrate:status at /var/www/oa_project_end/vendor/symfony/console/Application.php:651)
+[stacktrace]
+#0 /var/www/oa_project_end/vendor/symfony/console/Application.php(230): Symfony\\Component\\Console\\Application->find('migrade')
+#1 /var/www/oa_project_end/vendor/symfony/console/Application.php(142): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#2 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Console/Application.php(93): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#3 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(129): Illuminate\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#4 /var/www/oa_project_end/artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#5 {main}
+"} 
+[2022-01-09 08:23:42] local.ERROR: SQLSTATE[HY000] [1049] Unknown database 'oa_project' (SQL: select * from information_schema.tables where table_schema = oa_project and table_name = migrations and table_type = 'BASE TABLE') {"exception":"[object] (Illuminate\\Database\\QueryException(code: 1049): SQLSTATE[HY000] [1049] Unknown database 'oa_project' (SQL: select * from information_schema.tables where table_schema = oa_project and table_name = migrations and table_type = 'BASE TABLE') at /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Connection.php:671)
+[stacktrace]
+#0 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Connection.php(631): Illuminate\\Database\\Connection->runQueryCallback('select * from i...', Array, Object(Closure))
+#1 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Connection.php(339): Illuminate\\Database\\Connection->run('select * from i...', Array, Object(Closure))
+#2 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Schema/MySqlBuilder.php(18): Illuminate\\Database\\Connection->select('select * from i...', Array)
+#3 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Migrations/DatabaseMigrationRepository.php(169): Illuminate\\Database\\Schema\\MySqlBuilder->hasTable('migrations')
+#4 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Migrations/Migrator.php(608): Illuminate\\Database\\Migrations\\DatabaseMigrationRepository->repositoryExists()
+#5 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Console/Migrations/MigrateCommand.php(93): Illuminate\\Database\\Migrations\\Migrator->repositoryExists()
+#6 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Console/Migrations/MigrateCommand.php(64): Illuminate\\Database\\Console\\Migrations\\MigrateCommand->prepareDatabase()
+#7 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Migrations/Migrator.php(541): Illuminate\\Database\\Console\\Migrations\\MigrateCommand->Illuminate\\Database\\Console\\Migrations\\{closure}()
+#8 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Console/Migrations/MigrateCommand.php(81): Illuminate\\Database\\Migrations\\Migrator->usingConnection(NULL, Object(Closure))
+#9 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(36): Illuminate\\Database\\Console\\Migrations\\MigrateCommand->handle()
+#10 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Container/Util.php(37): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
+#11 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(93): Illuminate\\Container\\Util::unwrapIfClosure(Object(Closure))
+#12 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(37): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))
+#13 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Container/Container.php(596): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)
+#14 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Console/Command.php(134): Illuminate\\Container\\Container->call(Array)
+#15 /var/www/oa_project_end/vendor/symfony/console/Command/Command.php(258): Illuminate\\Console\\Command->execute(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#16 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Console/Command.php(121): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#17 /var/www/oa_project_end/vendor/symfony/console/Application.php(920): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#18 /var/www/oa_project_end/vendor/symfony/console/Application.php(266): Symfony\\Component\\Console\\Application->doRunCommand(Object(Illuminate\\Database\\Console\\Migrations\\MigrateCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#19 /var/www/oa_project_end/vendor/symfony/console/Application.php(142): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#20 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Console/Application.php(93): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#21 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(129): Illuminate\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#22 /var/www/oa_project_end/artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#23 {main}
+
+[previous exception] [object] (PDOException(code: 1049): SQLSTATE[HY000] [1049] Unknown database 'oa_project' at /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Connectors/Connector.php:70)
+[stacktrace]
+#0 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Connectors/Connector.php(70): PDO->__construct('mysql:host=47.9...', 'root', '123456', Array)
+#1 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Connectors/Connector.php(46): Illuminate\\Database\\Connectors\\Connector->createPdoConnection('mysql:host=47.9...', 'root', '123456', Array)
+#2 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Connectors/MySqlConnector.php(24): Illuminate\\Database\\Connectors\\Connector->createConnection('mysql:host=47.9...', Array, Array)
+#3 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Connectors/ConnectionFactory.php(184): Illuminate\\Database\\Connectors\\MySqlConnector->connect(Array)
+#4 [internal function]: Illuminate\\Database\\Connectors\\ConnectionFactory->Illuminate\\Database\\Connectors\\{closure}()
+#5 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Connection.php(926): call_user_func(Object(Closure))
+#6 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Connection.php(961): Illuminate\\Database\\Connection->getPdo()
+#7 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Connection.php(405): Illuminate\\Database\\Connection->getReadPdo()
+#8 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Connection.php(331): Illuminate\\Database\\Connection->getPdoForSelect(true)
+#9 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Connection.php(664): Illuminate\\Database\\Connection->Illuminate\\Database\\{closure}('select * from i...', Array)
+#10 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Connection.php(631): Illuminate\\Database\\Connection->runQueryCallback('select * from i...', Array, Object(Closure))
+#11 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Connection.php(339): Illuminate\\Database\\Connection->run('select * from i...', Array, Object(Closure))
+#12 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Schema/MySqlBuilder.php(18): Illuminate\\Database\\Connection->select('select * from i...', Array)
+#13 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Migrations/DatabaseMigrationRepository.php(169): Illuminate\\Database\\Schema\\MySqlBuilder->hasTable('migrations')
+#14 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Migrations/Migrator.php(608): Illuminate\\Database\\Migrations\\DatabaseMigrationRepository->repositoryExists()
+#15 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Console/Migrations/MigrateCommand.php(93): Illuminate\\Database\\Migrations\\Migrator->repositoryExists()
+#16 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Console/Migrations/MigrateCommand.php(64): Illuminate\\Database\\Console\\Migrations\\MigrateCommand->prepareDatabase()
+#17 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Migrations/Migrator.php(541): Illuminate\\Database\\Console\\Migrations\\MigrateCommand->Illuminate\\Database\\Console\\Migrations\\{closure}()
+#18 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Console/Migrations/MigrateCommand.php(81): Illuminate\\Database\\Migrations\\Migrator->usingConnection(NULL, Object(Closure))
+#19 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(36): Illuminate\\Database\\Console\\Migrations\\MigrateCommand->handle()
+#20 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Container/Util.php(37): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
+#21 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(93): Illuminate\\Container\\Util::unwrapIfClosure(Object(Closure))
+#22 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(37): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))
+#23 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Container/Container.php(596): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)
+#24 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Console/Command.php(134): Illuminate\\Container\\Container->call(Array)
+#25 /var/www/oa_project_end/vendor/symfony/console/Command/Command.php(258): Illuminate\\Console\\Command->execute(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#26 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Console/Command.php(121): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#27 /var/www/oa_project_end/vendor/symfony/console/Application.php(920): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#28 /var/www/oa_project_end/vendor/symfony/console/Application.php(266): Symfony\\Component\\Console\\Application->doRunCommand(Object(Illuminate\\Database\\Console\\Migrations\\MigrateCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#29 /var/www/oa_project_end/vendor/symfony/console/Application.php(142): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#30 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Console/Application.php(93): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#31 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(129): Illuminate\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#32 /var/www/oa_project_end/artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#33 {main}
+"} 
+[2022-01-09 08:54:09] local.ERROR: SQLSTATE[42S01]: Base table or view already exists: 1050 Table 'password_resets' already exists (SQL: create table `password_resets` (`email` varchar(255) not null, `token` varchar(255) not null, `created_at` timestamp null) default character set utf8mb4 collate 'utf8mb4_unicode_ci') {"exception":"[object] (Illuminate\\Database\\QueryException(code: 42S01): SQLSTATE[42S01]: Base table or view already exists: 1050 Table 'password_resets' already exists (SQL: create table `password_resets` (`email` varchar(255) not null, `token` varchar(255) not null, `created_at` timestamp null) default character set utf8mb4 collate 'utf8mb4_unicode_ci') at /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Connection.php:671)
+[stacktrace]
+#0 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Connection.php(631): Illuminate\\Database\\Connection->runQueryCallback('create table `p...', Array, Object(Closure))
+#1 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Connection.php(465): Illuminate\\Database\\Connection->run('create table `p...', Array, Object(Closure))
+#2 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Schema/Blueprint.php(102): Illuminate\\Database\\Connection->statement('create table `p...')
+#3 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Schema/Builder.php(290): Illuminate\\Database\\Schema\\Blueprint->build(Object(Illuminate\\Database\\MySqlConnection), Object(Illuminate\\Database\\Schema\\Grammars\\MySqlGrammar))
+#4 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Schema/Builder.php(167): Illuminate\\Database\\Schema\\Builder->build(Object(Illuminate\\Database\\Schema\\Blueprint))
+#5 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Support/Facades/Facade.php(261): Illuminate\\Database\\Schema\\Builder->create('password_resets', Object(Closure))
+#6 /var/www/oa_project_end/database/migrations/2014_10_12_100000_create_password_resets_table.php(20): Illuminate\\Support\\Facades\\Facade::__callStatic('create', Array)
+#7 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Migrations/Migrator.php(392): CreatePasswordResetsTable->up()
+#8 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Migrations/Migrator.php(401): Illuminate\\Database\\Migrations\\Migrator->Illuminate\\Database\\Migrations\\{closure}()
+#9 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Migrations/Migrator.php(200): Illuminate\\Database\\Migrations\\Migrator->runMigration(Object(CreatePasswordResetsTable), 'up')
+#10 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Migrations/Migrator.php(165): Illuminate\\Database\\Migrations\\Migrator->runUp('/var/www/oa_pro...', 2, false)
+#11 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Migrations/Migrator.php(110): Illuminate\\Database\\Migrations\\Migrator->runPending(Array, Array)
+#12 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Console/Migrations/MigrateCommand.php(72): Illuminate\\Database\\Migrations\\Migrator->run(Array, Array)
+#13 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Migrations/Migrator.php(541): Illuminate\\Database\\Console\\Migrations\\MigrateCommand->Illuminate\\Database\\Console\\Migrations\\{closure}()
+#14 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Console/Migrations/MigrateCommand.php(81): Illuminate\\Database\\Migrations\\Migrator->usingConnection(NULL, Object(Closure))
+#15 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(36): Illuminate\\Database\\Console\\Migrations\\MigrateCommand->handle()
+#16 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Container/Util.php(37): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
+#17 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(93): Illuminate\\Container\\Util::unwrapIfClosure(Object(Closure))
+#18 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(37): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))
+#19 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Container/Container.php(596): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)
+#20 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Console/Command.php(134): Illuminate\\Container\\Container->call(Array)
+#21 /var/www/oa_project_end/vendor/symfony/console/Command/Command.php(258): Illuminate\\Console\\Command->execute(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#22 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Console/Command.php(121): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#23 /var/www/oa_project_end/vendor/symfony/console/Application.php(920): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#24 /var/www/oa_project_end/vendor/symfony/console/Application.php(266): Symfony\\Component\\Console\\Application->doRunCommand(Object(Illuminate\\Database\\Console\\Migrations\\MigrateCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#25 /var/www/oa_project_end/vendor/symfony/console/Application.php(142): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#26 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Console/Application.php(93): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#27 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(129): Illuminate\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#28 /var/www/oa_project_end/artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#29 {main}
+
+[previous exception] [object] (PDOException(code: 42S01): SQLSTATE[42S01]: Base table or view already exists: 1050 Table 'password_resets' already exists at /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Connection.php:464)
+[stacktrace]
+#0 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Connection.php(464): PDOStatement->execute()
+#1 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Connection.php(664): Illuminate\\Database\\Connection->Illuminate\\Database\\{closure}('create table `p...', Array)
+#2 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Connection.php(631): Illuminate\\Database\\Connection->runQueryCallback('create table `p...', Array, Object(Closure))
+#3 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Connection.php(465): Illuminate\\Database\\Connection->run('create table `p...', Array, Object(Closure))
+#4 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Schema/Blueprint.php(102): Illuminate\\Database\\Connection->statement('create table `p...')
+#5 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Schema/Builder.php(290): Illuminate\\Database\\Schema\\Blueprint->build(Object(Illuminate\\Database\\MySqlConnection), Object(Illuminate\\Database\\Schema\\Grammars\\MySqlGrammar))
+#6 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Schema/Builder.php(167): Illuminate\\Database\\Schema\\Builder->build(Object(Illuminate\\Database\\Schema\\Blueprint))
+#7 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Support/Facades/Facade.php(261): Illuminate\\Database\\Schema\\Builder->create('password_resets', Object(Closure))
+#8 /var/www/oa_project_end/database/migrations/2014_10_12_100000_create_password_resets_table.php(20): Illuminate\\Support\\Facades\\Facade::__callStatic('create', Array)
+#9 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Migrations/Migrator.php(392): CreatePasswordResetsTable->up()
+#10 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Migrations/Migrator.php(401): Illuminate\\Database\\Migrations\\Migrator->Illuminate\\Database\\Migrations\\{closure}()
+#11 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Migrations/Migrator.php(200): Illuminate\\Database\\Migrations\\Migrator->runMigration(Object(CreatePasswordResetsTable), 'up')
+#12 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Migrations/Migrator.php(165): Illuminate\\Database\\Migrations\\Migrator->runUp('/var/www/oa_pro...', 2, false)
+#13 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Migrations/Migrator.php(110): Illuminate\\Database\\Migrations\\Migrator->runPending(Array, Array)
+#14 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Console/Migrations/MigrateCommand.php(72): Illuminate\\Database\\Migrations\\Migrator->run(Array, Array)
+#15 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Migrations/Migrator.php(541): Illuminate\\Database\\Console\\Migrations\\MigrateCommand->Illuminate\\Database\\Console\\Migrations\\{closure}()
+#16 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Console/Migrations/MigrateCommand.php(81): Illuminate\\Database\\Migrations\\Migrator->usingConnection(NULL, Object(Closure))
+#17 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(36): Illuminate\\Database\\Console\\Migrations\\MigrateCommand->handle()
+#18 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Container/Util.php(37): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
+#19 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(93): Illuminate\\Container\\Util::unwrapIfClosure(Object(Closure))
+#20 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(37): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))
+#21 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Container/Container.php(596): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)
+#22 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Console/Command.php(134): Illuminate\\Container\\Container->call(Array)
+#23 /var/www/oa_project_end/vendor/symfony/console/Command/Command.php(258): Illuminate\\Console\\Command->execute(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#24 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Console/Command.php(121): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#25 /var/www/oa_project_end/vendor/symfony/console/Application.php(920): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#26 /var/www/oa_project_end/vendor/symfony/console/Application.php(266): Symfony\\Component\\Console\\Application->doRunCommand(Object(Illuminate\\Database\\Console\\Migrations\\MigrateCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#27 /var/www/oa_project_end/vendor/symfony/console/Application.php(142): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#28 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Console/Application.php(93): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#29 /var/www/oa_project_end/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(129): Illuminate\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#30 /var/www/oa_project_end/artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#31 {main}
+"} 
+[2022-01-09 15:43:16] local.ERROR: could not find driver (SQL: select * from information_schema.tables where table_schema = oa_project and table_name = migrations and table_type = 'BASE TABLE') {"exception":"[object] (Illuminate\\Database\\QueryException(code: 0): could not find driver (SQL: select * from information_schema.tables where table_schema = oa_project and table_name = migrations and table_type = 'BASE TABLE') at /Users/project/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Connection.php:671)
+[stacktrace]
+#0 /Users/project/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Connection.php(631): Illuminate\\Database\\Connection->runQueryCallback()
+#1 /Users/project/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Connection.php(339): Illuminate\\Database\\Connection->run()
+#2 /Users/project/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Schema/MySqlBuilder.php(18): Illuminate\\Database\\Connection->select()
+#3 /Users/project/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Migrations/DatabaseMigrationRepository.php(169): Illuminate\\Database\\Schema\\MySqlBuilder->hasTable()
+#4 /Users/project/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Migrations/Migrator.php(608): Illuminate\\Database\\Migrations\\DatabaseMigrationRepository->repositoryExists()
+#5 /Users/project/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Console/Migrations/MigrateCommand.php(93): Illuminate\\Database\\Migrations\\Migrator->repositoryExists()
+#6 /Users/project/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Console/Migrations/MigrateCommand.php(64): Illuminate\\Database\\Console\\Migrations\\MigrateCommand->prepareDatabase()
+#7 /Users/project/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Migrations/Migrator.php(541): Illuminate\\Database\\Console\\Migrations\\MigrateCommand->Illuminate\\Database\\Console\\Migrations\\{closure}()
+#8 /Users/project/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Console/Migrations/MigrateCommand.php(81): Illuminate\\Database\\Migrations\\Migrator->usingConnection()
+#9 /Users/project/oa_project_end/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(36): Illuminate\\Database\\Console\\Migrations\\MigrateCommand->handle()
+#10 /Users/project/oa_project_end/vendor/laravel/framework/src/Illuminate/Container/Util.php(37): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
+#11 /Users/project/oa_project_end/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(93): Illuminate\\Container\\Util::unwrapIfClosure()
+#12 /Users/project/oa_project_end/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(37): Illuminate\\Container\\BoundMethod::callBoundMethod()
+#13 /Users/project/oa_project_end/vendor/laravel/framework/src/Illuminate/Container/Container.php(596): Illuminate\\Container\\BoundMethod::call()
+#14 /Users/project/oa_project_end/vendor/laravel/framework/src/Illuminate/Console/Command.php(134): Illuminate\\Container\\Container->call()
+#15 /Users/project/oa_project_end/vendor/symfony/console/Command/Command.php(258): Illuminate\\Console\\Command->execute()
+#16 /Users/project/oa_project_end/vendor/laravel/framework/src/Illuminate/Console/Command.php(121): Symfony\\Component\\Console\\Command\\Command->run()
+#17 /Users/project/oa_project_end/vendor/symfony/console/Application.php(920): Illuminate\\Console\\Command->run()
+#18 /Users/project/oa_project_end/vendor/symfony/console/Application.php(266): Symfony\\Component\\Console\\Application->doRunCommand()
+#19 /Users/project/oa_project_end/vendor/symfony/console/Application.php(142): Symfony\\Component\\Console\\Application->doRun()
+#20 /Users/project/oa_project_end/vendor/laravel/framework/src/Illuminate/Console/Application.php(93): Symfony\\Component\\Console\\Application->run()
+#21 /Users/project/oa_project_end/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(129): Illuminate\\Console\\Application->run()
+#22 /Users/project/oa_project_end/artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle()
+#23 {main}
+
+[previous exception] [object] (PDOException(code: 0): could not find driver at /Users/project/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Connectors/Connector.php:70)
+[stacktrace]
+#0 /Users/project/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Connectors/Connector.php(70): PDO->__construct()
+#1 /Users/project/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Connectors/Connector.php(46): Illuminate\\Database\\Connectors\\Connector->createPdoConnection()
+#2 /Users/project/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Connectors/MySqlConnector.php(24): Illuminate\\Database\\Connectors\\Connector->createConnection()
+#3 /Users/project/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Connectors/ConnectionFactory.php(184): Illuminate\\Database\\Connectors\\MySqlConnector->connect()
+#4 [internal function]: Illuminate\\Database\\Connectors\\ConnectionFactory->Illuminate\\Database\\Connectors\\{closure}()
+#5 /Users/project/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Connection.php(926): call_user_func()
+#6 /Users/project/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Connection.php(961): Illuminate\\Database\\Connection->getPdo()
+#7 /Users/project/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Connection.php(405): Illuminate\\Database\\Connection->getReadPdo()
+#8 /Users/project/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Connection.php(331): Illuminate\\Database\\Connection->getPdoForSelect()
+#9 /Users/project/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Connection.php(664): Illuminate\\Database\\Connection->Illuminate\\Database\\{closure}()
+#10 /Users/project/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Connection.php(631): Illuminate\\Database\\Connection->runQueryCallback()
+#11 /Users/project/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Connection.php(339): Illuminate\\Database\\Connection->run()
+#12 /Users/project/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Schema/MySqlBuilder.php(18): Illuminate\\Database\\Connection->select()
+#13 /Users/project/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Migrations/DatabaseMigrationRepository.php(169): Illuminate\\Database\\Schema\\MySqlBuilder->hasTable()
+#14 /Users/project/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Migrations/Migrator.php(608): Illuminate\\Database\\Migrations\\DatabaseMigrationRepository->repositoryExists()
+#15 /Users/project/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Console/Migrations/MigrateCommand.php(93): Illuminate\\Database\\Migrations\\Migrator->repositoryExists()
+#16 /Users/project/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Console/Migrations/MigrateCommand.php(64): Illuminate\\Database\\Console\\Migrations\\MigrateCommand->prepareDatabase()
+#17 /Users/project/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Migrations/Migrator.php(541): Illuminate\\Database\\Console\\Migrations\\MigrateCommand->Illuminate\\Database\\Console\\Migrations\\{closure}()
+#18 /Users/project/oa_project_end/vendor/laravel/framework/src/Illuminate/Database/Console/Migrations/MigrateCommand.php(81): Illuminate\\Database\\Migrations\\Migrator->usingConnection()
+#19 /Users/project/oa_project_end/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(36): Illuminate\\Database\\Console\\Migrations\\MigrateCommand->handle()
+#20 /Users/project/oa_project_end/vendor/laravel/framework/src/Illuminate/Container/Util.php(37): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
+#21 /Users/project/oa_project_end/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(93): Illuminate\\Container\\Util::unwrapIfClosure()
+#22 /Users/project/oa_project_end/vendor/laravel/framework/src/Illuminate/Container/BoundMethod.php(37): Illuminate\\Container\\BoundMethod::callBoundMethod()
+#23 /Users/project/oa_project_end/vendor/laravel/framework/src/Illuminate/Container/Container.php(596): Illuminate\\Container\\BoundMethod::call()
+#24 /Users/project/oa_project_end/vendor/laravel/framework/src/Illuminate/Console/Command.php(134): Illuminate\\Container\\Container->call()
+#25 /Users/project/oa_project_end/vendor/symfony/console/Command/Command.php(258): Illuminate\\Console\\Command->execute()
+#26 /Users/project/oa_project_end/vendor/laravel/framework/src/Illuminate/Console/Command.php(121): Symfony\\Component\\Console\\Command\\Command->run()
+#27 /Users/project/oa_project_end/vendor/symfony/console/Application.php(920): Illuminate\\Console\\Command->run()
+#28 /Users/project/oa_project_end/vendor/symfony/console/Application.php(266): Symfony\\Component\\Console\\Application->doRunCommand()
+#29 /Users/project/oa_project_end/vendor/symfony/console/Application.php(142): Symfony\\Component\\Console\\Application->doRun()
+#30 /Users/project/oa_project_end/vendor/laravel/framework/src/Illuminate/Console/Application.php(93): Symfony\\Component\\Console\\Application->run()
+#31 /Users/project/oa_project_end/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(129): Illuminate\\Console\\Application->run()
+#32 /Users/project/oa_project_end/artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle()
+#33 {main}
+"} 
