@@ -12,11 +12,13 @@ dfdfdf
 </html>
 <script>
 $.ajax({
-    url: '/api/login',
+    url: '/api/getUsers',
     method: 'post',
     data: {
-        uId: 1,
-        passward: '123456',
+        token: 'nV3xzd5tCXt4afpADbRQ+mVptoOhlTcPzQTH4osh9yQ=',
+        shopName: 'ali',
+        companyName: 'paoPao',
+        remarks: 'NICASFSFEAFASFI',
     },
     success: function(res){
         $('#res').html(res)
