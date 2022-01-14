@@ -71,6 +71,27 @@ class oaUsersController extends Controller
         self::result();
     }
 
+    // 修改密码
+    public function changePwd(Request $request)
+    {
+        $token = $request->header('Authorization');
+        // 用户未登陆
+        if (!$data = self::getUserIdOfToken($token)) {
+            return self::result([],-1, 'err_token');
+        }
+
+        if (!$request['password']) {
+            return self::result([], -1, 'err_param');
+        }
+
+        $bool = DB::table('users')->where('user_id', '=', $data['user_id'])->update(['password' => bcrypt($request['password'])]);
+
+        $relt = [
+            'success' => $bool
+        ];
+        return self::result($relt);
+    }
+
     // token获取玩家数据
     public static function getUserIdOfToken($token)
     {
@@ -202,7 +223,7 @@ class oaUsersController extends Controller
         $bool = DB::table('users')->where('user_id', '=', $initUid)->update(['password' => bcrypt('123456')]);
 
         $relt = [
-            'sqlBool' => $bool
+            'success' => $bool
         ];
         return self::result($relt);
     }
@@ -227,7 +248,7 @@ class oaUsersController extends Controller
         $bool = DB::table('users')->where('user_id', '=', $initUid)->delete();
 
         $relt = [
-            'sqlBool' => $bool
+            'success' => $bool
         ];
         return self::result($relt);
     }
@@ -252,7 +273,7 @@ class oaUsersController extends Controller
         $delBool = DB::table('user_power')->where('user_id', '=', $request['uId'])->delete();
 
         $relt = [
-            'sqlBool' => $delBool
+            'success' => $delBool
         ];
         if (!$delBool) {
             return self::result($relt, -1, 'err_sql');
@@ -279,7 +300,7 @@ class oaUsersController extends Controller
         $arr && $bool = DB::table('user_power')->insert($arr);
 
         $relt = [
-            'sqlBool' => $bool
+            'success' => $bool
         ];
 //        $data = DB::table('shop')->whereRaw('shop_id = ? and shop_name = ?', [1, 'aaa'])->get()->toArray();
         return self::result($relt);
@@ -338,7 +359,7 @@ class oaUsersController extends Controller
         ]);
 
         $relt = [
-            'sqlNum' => $num,
+            'changeNum' => $num,
         ];
         return self::result($relt);
     }
@@ -418,7 +439,7 @@ class oaUsersController extends Controller
         $bool = DB::table('users')->where('user_id', '=', $data['uId'])->update(['shop_id' => $request['shop_id']]);
 
         $relt = [
-            'sqlBool' => $bool,
+            'success' => $bool,
         ];
 
         return self::result($relt);

@@ -25,10 +25,12 @@ Route::get('/test', 'testController@test')->name('test');
 
 
 
-// 用户登录(用户名(username)，密码)(返回token)
+// 用户登录(用户名(username)，密码(password))(返回token)
 Route::post('/login', 'oa\oaUsersController@store')->name('login');
 // 用户登出(token)
 Route::post('/logout', 'oa\oaUsersController@logout')->name('logout');
+// 修改密码(token,密码(password))
+Route::post('/changePwd', 'oa\oaUsersController@changePwd')->name('changePwd');
 // 请求用户信息(token)
 Route::get('/getUserInfo', 'oa\oaUsersController@power')->name('power');
 /*********管理员(高权限者)操作*********/
