@@ -4,6 +4,7 @@ namespace App\Http\Controllers\oa;
 
 use App\Http\Controllers\Controller;
 use App\Libs\TokenSsl;
+use App\Models\Role;
 use App\Models\Shop;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -126,6 +127,13 @@ class oaUsersController extends Controller
 
         $userDB = DB::table('users')->where('user_id', '=', $data['user_id'])->get()->toArray();
         $userDB = $userDB[0];
+
+        $selectedId = $userDB->shop_id;
+        if (!$userDB->shop_id) {
+            $shop = Shop::find(1);
+            $selectedId = $shop['shop_id'];
+        }
+
         $relt = [
             'count' => $count,
             'permission' => $formatUserPowers,
@@ -133,7 +141,7 @@ class oaUsersController extends Controller
             'userId' => $userDB->user_id,
             'username' => $userDB->username,
             'realName' => $userDB->nickname,
-            'selectedShop' => $userDB->shop_id,
+            'selectedShop' => $selectedId,
         ];
         return self::result($relt);
     }
@@ -143,11 +151,14 @@ class oaUsersController extends Controller
         $formatData = [];
         foreach ($datas as $data) {
             $item['menu'] = json_decode($data->menu);
-            $item['shop_id'] = $data->shop_id;
-            $item['user_id'] = $data->user_id;
+            $item['shop'] = $data->shop_id;
+            $item['userId'] = $data->user_id;
             // 店铺
             $shop = Shop::find($data->shop_id);
-            $item['shop_name'] = $shop['shop_name'];
+            if (!$shop) {
+                continue;
+            }
+            $item['shopName'] = $shop['shop_name'];
 
             $formatData[] = $item;
         }
@@ -329,9 +340,7 @@ class oaUsersController extends Controller
             'update_user' => $data['user_id'],
         ]);
 
-        $relt = [
-            'shop' => $shop,
-        ];
+        $relt = $shop;
         return self::result($relt);
     }
 
@@ -400,9 +409,7 @@ class oaUsersController extends Controller
 
         $data = User::all()->toArray();
 
-        $relt = [
-            'users' => $data,
-        ];
+        $relt = $data;
         return self::result($relt);
     }
 
@@ -417,9 +424,7 @@ class oaUsersController extends Controller
 
         $data = Shop::all()->toArray();
 
-        $relt = [
-            'shops' => $data,
-        ];
+        $relt = $data;
         return self::result($relt);
     }
 
@@ -436,12 +441,92 @@ class oaUsersController extends Controller
             return self::result([], -1, 'err_param');
         }
 
-        $bool = DB::table('users')->where('user_id', '=', $data['uId'])->update(['shop_id' => $request['shop_id']]);
+        $bool = DB::table('users')->where('user_id', '=', $data['user_id'])->update(['shop_id' => $request['shop_id']]);
 
         $relt = [
             'success' => $bool,
         ];
 
+        return self::result($relt);
+    }
+
+    // 角色添加
+    public function addRole(Request $request)
+    {
+        $token = $request->header('Authorization');
+        // 用户未登陆
+        if (!$data = self::getUserIdOfToken($token)) {
+            return self::result([],-1, 'err_token');
+        }
+
+        if (!$request['roleName']) {
+            return self::result([],-1, 'err_param');
+        }
+
+        $shop = Role::create([
+            'role_name' => $request['roleName'],
+            'remarks' => $request['remarks'],
+            'menu' => json_encode($request['menu'], true)
+        ]);
+
+        $relt = $shop;
+        return self::result($relt);
+    }
+
+    // 角色删除
+    public function delRole(Request $request)
+    {
+        $token = $request->header('Authorization');
+        // 用户未登陆
+        if (!$data = self::getUserIdOfToken($token)) {
+            return self::result([],-1, 'err_token');
+        }
+
+        if (!$request['roleId']) {
+            return self::result([],-1, 'err_param');
+        }
+
+        $num = Role::destroy($request['roleId']);
+
+        $relt = [
+            'num' => $num
+        ];
+        return self::result($relt);
+    }
+
+    // 角色权限修改
+    public function updateRolePower(Request $request)
+    {
+        $token = $request->header('Authorization');
+        // 用户未登陆
+        if (!$data = self::getUserIdOfToken($token)) {
+            return self::result([],-1, 'err_token');
+        }
+
+        if (!$request['roleId'] || !$request['menu']) {
+            return self::result([],-1, 'err_param');
+        }
+
+        $num = Role::where('id', '=', $request['roleId'])->update(['menu' => json_encode($request['menu'], true)]);
+
+        $relt = [
+            'num' => $num
+        ];
+        return self::result($relt);
+    }
+
+    // 角色列表获取
+    public function getRoleList(Request $request)
+    {
+        $token = $request->header('Authorization');
+        // 用户未登陆
+        if (!$data = self::getUserIdOfToken($token)) {
+            return self::result([],-1, 'err_token');
+        }
+
+        $data = Role::all()->toArray();
+
+        $relt = $data;
         return self::result($relt);
     }
 
