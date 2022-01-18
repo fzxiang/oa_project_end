@@ -328,13 +328,13 @@ class oaUsersController extends Controller
 
         // todo 权限管理
 
-        if (!$request['shopName']) {
+        if (!$request['shop_name']) {
             return self::result([],-1, 'err_param');
         }
 
         $shop = Shop::create([
-            'shop_name' => $request['shopName'],
-            'company_name' => $request['companyName'],
+            'shop_name' => $request['shop_name'],
+            'company_name' => $request['company_name'],
             'remarks' => $request['remarks'],
             'create_user' => $data['user_id'],
             'update_user' => $data['user_id'],
@@ -356,13 +356,13 @@ class oaUsersController extends Controller
 
         // todo 权限管理
 
-        if (!$request['shop_id'] || !$request['shopName']) {
+        if (!$request['shop_id'] || !$request['shop_name']) {
             return self::result([],-1, 'err_param');
         }
 
         $num = Shop::where('shop_id', '=' , $request['shop_id'])->update([
-            'shop_name' => $request['shopName'],
-            'company_name' => $request['companyName'],
+            'shop_name' => $request['shop_name'],
+            'company_name' => $request['company_name'],
             'remarks' => $request['remarks'],
             'update_user' => $data['user_id'],
         ]);
@@ -396,6 +396,27 @@ class oaUsersController extends Controller
 
         Log::info('aaa', $relt);
         return self::result($relt);
+    }
+
+    // 商店查询
+    public function searchShop(Request $request)
+    {
+//        $token = $request->header('Authorization');
+//        // 用户未登陆
+//        if (!$data = self::getUserIdOfToken($token)) {
+//            return self::result([],-1, 'err_token');
+//        }
+
+        if (!$request['shop_name']) {
+            return self::result([],-1, 'err_param');
+        }
+
+        $shops = DB::table('shop')->where('shop_name', '=', $request['shop_name'])->get()->toArray();
+
+        $shop = $shops[0];
+        $relt = $shop;
+        return self::result($relt);
+
     }
 
     // 获取所有用户
@@ -528,6 +549,135 @@ class oaUsersController extends Controller
 
         $relt = $data;
         return self::result($relt);
+    }
+
+    // 测试压包
+    public function testGzencode(Request $request)
+    {
+        $arrJson = [
+            'a' => 1,
+            'b' => '猜猜我是谁',
+            'c' => [2,1,34,523,4,23,4],
+            'd' => [
+                'aa' => 22,
+                'bb' => 'balabala',
+                'cc' => '发哦飞机哦啊我服'
+            ]
+        ];
+
+        $jsonEn = json_encode($arrJson);
+        $abc = gzencode($jsonEn, 9);
+        $ddd = base64_encode($abc);
+        $eee = serialize($arrJson);
+
+        $relt = $eee;
+        return self::result($relt);
+    }
+
+    // 测试导出
+    public function exportTest(Request $request)
+    {
+        ini_set("memory_limit", "128M");    // 设置使用内存
+        ini_set('max_execution_time', 120); // 强制设置PHP超时时间
+        // 最大导出数量
+        $count = 10000;
+
+        // 导出的csv名称
+        $title = 'testExpo';
+//        $title = urlencode($title); // 转码中文，防止乱码 需要前端将文件名进行解码
+
+        header('Content-Type: application/vnd.ms-excel');   //header设置
+        header("Content-Disposition: attachment;filename=" . $title . ".csv");
+//        header("Content-Type: application/vnd.ms-excel; charset=UTF-8");
+        header('Cache-Control: max-age=0');
+
+        $fp = fopen('php://output', 'a');//打开output流logGetList
+        if (ob_get_length() > 0) {
+            ob_clean();
+        }
+
+        // 获取表头数据
+        $headings = ['a1', 'a2', 'a3', 'a4'];
+
+        mb_convert_variables('GBK', 'UTF-8', $headings);
+        fputcsv($fp, $headings);
+
+        $maps = ['b1', 'b2', 'b3', 'b4'];
+
+        $limit   = 1000;          // 分片请求限制查询数量
+        $pageAll = ceil($count / $limit); // 总页数
+
+        for ($page = 1; $page <= $pageAll; $page++) {
+
+            // 获取数据
+            $dataList = [
+                'count' => 10,
+                'data' => [
+                    [
+                    'b1' => 100,
+                    'b2' => 'jfoajeoa',
+                    'b3' => '哈佛啊饿哦',
+                    'b4' => 2000
+                    ],
+                    [
+                    'b1' => 232,
+                    'b2' => '大法',
+                    'b3' => 'safeaf',
+                    'b4' => 333
+                    ],
+                ]
+            ];
+
+            if (isset($dataList['count']) && (int)$dataList['count'] <= $count) {
+                $pageAll = ceil((int)$dataList['count'] / $limit); // 总页数
+            }
+
+            $data = $dataList['data'] ?? [];
+
+            foreach ($data as $val) {
+                $newData = [];
+                foreach ($maps as $v) {
+                    $new_value = '';
+                    if (isset($val[$v])) {
+                        #判断返回格式
+                        if (is_int($val[$v]) || is_string($val[$v])) {
+                            #防止科学计数法
+                            $new_value = (string)$val[$v] . ($this->checkScientific($val[$v]) ? "\t" : '');
+                        } else {
+                            #非int类型 强转，主要是防止数组格式
+                            $new_value = strval($val[$v]);
+                        }
+                        $newData[] = $new_value;
+                    } else {
+                        $newData[] = $new_value;
+                    }
+                }
+                mb_convert_variables('GBK', 'UTF-8', $newData);
+                fputcsv($fp, $newData);
+                unset($newData);
+            }
+            // 销毁变量，节省内存空间
+            unset($data, $dataList);
+        }
+        if (ob_get_level() > 0) {
+            ob_flush();
+        }
+        flush();
+        fclose($fp);
+        exit();
+    }
+
+    public function checkScientific($str)
+    {
+        if (strstr($str, ',')) {
+            $str = explode(',', $str)[0];
+        }
+        if (is_numeric($str) && mb_strlen((string)$str) > 10) {
+            return true;
+        } else {
+            return false;
+        }
+
     }
 
 }
