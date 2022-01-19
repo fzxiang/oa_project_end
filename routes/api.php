@@ -24,7 +24,7 @@ Route::get('/foo', function (){
 Route::get('/test', 'testController@test')->name('test');
 
 Route::get('/testGzencode', 'oa\oaUsersController@testGzencode')->name('testGzencode');
-Route::post('/exportTest', 'oa\oaUsersController@exportTest')->name('exportTest');
+Route::any('/exportTest', 'oa\oaUsersController@exportTest')->name('exportTest');
 
 
 
@@ -75,11 +75,28 @@ Route::post('/selectShop', 'oa\oaUsersController@selectShop')->name('selectShop'
 /**************业务逻辑操作(我的订单)(以下操作均需要上传token)*************/
 // 添加订单(订单信息(orderInfo(json格式)))
 Route::post('/addOrder', 'oa\businessController@addOrder')->name('addOrder');
+// 编辑订单(订单信息(orderInfo(json格式)))
+Route::post('/updateOrder', 'oa\businessController@updateOrder')->name('updateOrder');
 // 校验订单编号(淘宝编号(taoBaoId))
 Route::post('/checkOrder', 'oa\businessController@checkOrder')->name('checkOrder');
 // 上传附件(type(1:总揽附件，2:退款附件)，对应字断数据(json格式))
 Route::post('/uploadOrderFile', 'oa\businessController@uploadOrderFile')->name('uploadOrderFile');
 // 导出
 Route::post('/exportOrder', 'oa\businessController@exportOrder')->name('exportOrder');
-// 检索(json格式(shopId, pageSize))
+// 检索(json格式(shopId, pageNumber, pageSize, taoBaoId(淘宝编号), orderId(发单号), memberName(会员名),
+// settleStatus(结算状态), pStartData, pEndData, rStartData, rEndData))
 Route::get('/searchOrder', 'oa\businessController@searchOrder')->name('searchOrder');
+
+// 写手总览检索(json格式(shopId, pageNumber, pageSize, phoneNum(手机号), qqNum(qq号), weChatNum(微信号)
+Route::get('/searchWriter', 'oa\businessController@searchWriter')->name('searchWriter');
+// 写手信息编辑(json格式)
+Route::post('/updateWriter', 'oa\businessController@updateWriter')->name('updateWriter');
+
+/**************业务逻辑操作(客服管理)(以下操作均需要上传token)*************/
+// 写手报表检索(json格式(shopId, pageNumber, pageSize, taoBaoId(淘宝编号), orderId(发单号), memberName(会员名),
+// settleStatus(结算状态), pStartData, pEndData, rStartData, rEndData))
+Route::get('/searchWriter', 'oa\businessController@searchWriter')->name('searchWriter');
+// 写手报表上传已结算订单(对应字断数据(json格式))
+Route::post('/uploadSettled', 'oa\businessController@uploadSettled')->name('uploadSettled');
+// 写手报表订单导出
+Route::post('/exportWriter', 'oa\businessController@exportWriter')->name('exportWriter');

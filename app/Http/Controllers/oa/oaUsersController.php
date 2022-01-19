@@ -334,10 +334,10 @@ class oaUsersController extends Controller
 
         $shop = Shop::create([
             'shop_name' => $request['shop_name'],
-            'company_name' => $request['company_name'],
-            'remarks' => $request['remarks'],
-            'create_user' => $data['user_id'],
-            'update_user' => $data['user_id'],
+            'company_name' => $request['company_name'] ?? '',
+            'remarks' => $request['remarks'] ?? '',
+            'create_user' => $data['user_id'] ?: 0,
+            'update_user' => $data['user_id'] ?: 0,
         ]);
 
         $relt = $shop;
@@ -348,7 +348,6 @@ class oaUsersController extends Controller
     public function updateShop(Request $request)
     {
         $token = $request->header('Authorization');
-        $token = $request['token'];
         // 用户未登陆
         if (!$data = self::getUserIdOfToken($token)) {
             return self::result([],-1, 'err_token');
@@ -362,9 +361,9 @@ class oaUsersController extends Controller
 
         $num = Shop::where('shop_id', '=' , $request['shop_id'])->update([
             'shop_name' => $request['shop_name'],
-            'company_name' => $request['company_name'],
-            'remarks' => $request['remarks'],
-            'update_user' => $data['user_id'],
+            'company_name' => $request['company_name'] ?? '',
+            'remarks' => $request['remarks'] ?? '',
+            'update_user' => $data['user_id'] ?: 0,
         ]);
 
         $relt = [
@@ -394,24 +393,27 @@ class oaUsersController extends Controller
             'delNum' => $num,
         ];
 
-        Log::info('aaa', $relt);
         return self::result($relt);
     }
 
     // 商店查询
     public function searchShop(Request $request)
     {
-//        $token = $request->header('Authorization');
-//        // 用户未登陆
-//        if (!$data = self::getUserIdOfToken($token)) {
-//            return self::result([],-1, 'err_token');
-//        }
+        $token = $request->header('Authorization');
+        // 用户未登陆
+        if (!$data = self::getUserIdOfToken($token)) {
+            return self::result([],-1, 'err_token');
+        }
 
         if (!$request['shop_name']) {
             return self::result([],-1, 'err_param');
         }
 
         $shops = DB::table('shop')->where('shop_name', '=', $request['shop_name'])->get()->toArray();
+
+        if (!$shops) {
+            return self::result([], -1, 'no_shop');
+        }
 
         $shop = $shops[0];
         $relt = $shop;
@@ -583,8 +585,8 @@ class oaUsersController extends Controller
         $count = 10000;
 
         // 导出的csv名称
-        $title = 'testExpo';
-//        $title = urlencode($title); // 转码中文，防止乱码 需要前端将文件名进行解码
+        $title = '大道质检ofaoejoa';
+        $title = urlencode($title); // 转码中文，防止乱码 需要前端将文件名进行解码
 
         header('Content-Type: application/vnd.ms-excel');   //header设置
         header("Content-Disposition: attachment;filename=" . $title . ".csv");
