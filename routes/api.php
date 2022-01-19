@@ -58,11 +58,11 @@ Route::get('/getShops', 'oa\oaUsersController@getShops')->name('getShops');
 // 商店查询(店铺名(shop_name))
 Route::get('/searchShop', 'oa\oaUsersController@searchShop')->name('searchShop');
 
-// 角色添加(名称(roleName), 备注(remarks), 权限(数组)(menu))
+// 角色添加(名称(role_name), 备注(remarks), 权限(数组)(menu))
 Route::post('/addRole', 'oa\oaUsersController@addRole')->name('addRole');
-// 角色删除(角色ID(roleId))
+// 角色删除(角色ID(id))
 Route::post('/delRole', 'oa\oaUsersController@delRole')->name('delRole');
-// 角色权限修改(角色ID(roleId), 权限(数组)(menu))
+// 角色权限修改(角色ID(id), 权限(数组)(menu))
 Route::post('/updateRolePower', 'oa\oaUsersController@updateRolePower')->name('updateRolePower');
 // 角色列表获取
 Route::get('/getRoleList', 'oa\oaUsersController@getRoleList')->name('getRoleList');
@@ -82,21 +82,36 @@ Route::post('/checkOrder', 'oa\businessController@checkOrder')->name('checkOrder
 // 上传附件(type(1:总揽附件，2:退款附件)，对应字断数据(json格式))
 Route::post('/uploadOrderFile', 'oa\businessController@uploadOrderFile')->name('uploadOrderFile');
 // 导出
-Route::post('/exportOrder', 'oa\businessController@exportOrder')->name('exportOrder');
-// 检索(json格式(shopId, pageNumber, pageSize, taoBaoId(淘宝编号), orderId(发单号), memberName(会员名),
+Route::any('/exportOrder', 'oa\businessController@exportOrder')->name('exportOrder');
+// 检索(json格式(shop_id, pageNumber(第几页), pageSize(每页几条数据), taoBaoId(淘宝编号), orderId(发单号), memberName(会员名),
 // settleStatus(结算状态), pStartData, pEndData, rStartData, rEndData))
 Route::get('/searchOrder', 'oa\businessController@searchOrder')->name('searchOrder');
 
-// 写手总览检索(json格式(shopId, pageNumber, pageSize, phoneNum(手机号), qqNum(qq号), weChatNum(微信号)
+// pageNumber不传代表获取所有
+// 写手总览检索(json格式(shop_id, pageNumber(第几页), pageSize(每页几条数据), phoneNum(手机号), qqNum(qq号), weChatNum(微信号)
 Route::get('/searchWriter', 'oa\businessController@searchWriter')->name('searchWriter');
 // 写手信息编辑(json格式)
 Route::post('/updateWriter', 'oa\businessController@updateWriter')->name('updateWriter');
 
 /**************业务逻辑操作(客服管理)(以下操作均需要上传token)*************/
-// 写手报表检索(json格式(shopId, pageNumber, pageSize, taoBaoId(淘宝编号), orderId(发单号), memberName(会员名),
+// 写手报表检索(json格式(shop_id, pageNumber(第几页), pageSize(每页几条数据), taoBaoId(淘宝编号), orderId(发单号), memberName(会员名),
 // settleStatus(结算状态), pStartData, pEndData, rStartData, rEndData))
 Route::get('/searchWriter', 'oa\businessController@searchWriter')->name('searchWriter');
 // 写手报表上传已结算订单(对应字断数据(json格式))
 Route::post('/uploadSettled', 'oa\businessController@uploadSettled')->name('uploadSettled');
 // 写手报表订单导出
-Route::post('/exportWriter', 'oa\businessController@exportWriter')->name('exportWriter');
+Route::any('/exportWriter', 'oa\businessController@exportWriter')->name('exportWriter');
+// 写手报表订单全部结算(写手编号ID(writeId))
+Route::post('/quickWriterOrderStatus', 'oa\businessController@quickWriterOrderStatus')->name('quickWriterOrderStatus');
+
+// 客服报表检索(json格式(shop_id, pageNumber(第几页), pageSize(每页几条数据),settleStatus(结算状态),
+// customerId(客服),pStartData, pEndData, rStartData, rEndData))
+Route::get('/searchCustomer', 'oa\businessController@searchCustomer')->name('searchCustomer');
+// 客服报表批量修改状态(json格式(shop_id, pageNumber(第几页), pageSize(每页几条数据),settleStatus(结算状态),
+// customerId(客服),pStartData, pEndData, rStartData, rEndData))
+Route::post('/updateAllOrderState', 'oa\businessController@updateAllOrderState')->name('updateAllOrderState');
+
+// 更新单个单子状态(orderId(单号ID), status(1：已结算，2：未结算，3：暂缓结算))
+Route::post('/updateOneOrderState', 'oa\businessController@updateOneOrderState')->name('updateOneOrderState');
+// 获取客服下拉列表(shop_id)
+Route::get('/getUsersOfPower', 'oa\oaUsersController@getUsersOfPower')->name('getUsersOfPower');

@@ -482,12 +482,12 @@ class oaUsersController extends Controller
             return self::result([],-1, 'err_token');
         }
 
-        if (!$request['roleName']) {
+        if (!$request['role_name']) {
             return self::result([],-1, 'err_param');
         }
 
         $shop = Role::create([
-            'role_name' => $request['roleName'],
+            'role_name' => $request['role_name'],
             'remarks' => $request['remarks'],
             'menu' => json_encode($request['menu'], true)
         ]);
@@ -505,11 +505,11 @@ class oaUsersController extends Controller
             return self::result([],-1, 'err_token');
         }
 
-        if (!$request['roleId']) {
+        if (!$request['id']) {
             return self::result([],-1, 'err_param');
         }
 
-        $num = Role::destroy($request['roleId']);
+        $num = Role::destroy($request['id']);
 
         $relt = [
             'num' => $num
@@ -526,11 +526,11 @@ class oaUsersController extends Controller
             return self::result([],-1, 'err_token');
         }
 
-        if (!$request['roleId'] || !$request['menu']) {
+        if (!$request['id'] || !$request['menu']) {
             return self::result([],-1, 'err_param');
         }
 
-        $num = Role::where('id', '=', $request['roleId'])->update(['menu' => json_encode($request['menu'], true)]);
+        $num = Role::where('id', '=', $request['id'])->update(['menu' => json_encode($request['menu'], true)]);
 
         $relt = [
             'num' => $num
@@ -548,6 +548,10 @@ class oaUsersController extends Controller
         }
 
         $data = Role::all()->toArray();
+
+        foreach ($data as $k => $item) {
+            $data[$k]['menu'] = json_decode($item['menu']);
+        }
 
         $relt = $data;
         return self::result($relt);
