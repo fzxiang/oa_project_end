@@ -190,24 +190,24 @@ class oaUsersController extends Controller
         ]);
 
         // 权限处理
-        $time = date('Y-m-d H:i:s');
-        $arr = [];
-        $jsonConf = $request['powerJson'] ?? [];
-        $powerJson = $request['powerJson'] ? json_decode($jsonConf, true) : [];
-        if ($powerJson) {
-            foreach ($powerJson as $conf) {
-                $sqlArr = [
-                    'user_id' => $data['user_id'],
-                    'shop_id' => $conf['shopId'],
-                    'menu' => json_encode($conf['power'], true),
-                    'created_at' => $time,
-                    'updated_at' => $time,
-                ];
-                $arr[] = $sqlArr;
-            }
-        }
-
-        $arr && $bool = DB::table('user_power')->insert($arr);
+//        $time = date('Y-m-d H:i:s');
+//        $arr = [];
+//        $jsonConf = $request['powerJson'] ?? [];
+//        $powerJson = $request['powerJson'] ? json_decode($jsonConf, true) : [];
+//        if ($powerJson) {
+//            foreach ($powerJson as $conf) {
+//                $sqlArr = [
+//                    'user_id' => $data['user_id'],
+//                    'shop_id' => $conf['shopId'],
+//                    'menu' => json_encode($conf['power'], true),
+//                    'created_at' => $time,
+//                    'updated_at' => $time,
+//                ];
+//                $arr[] = $sqlArr;
+//            }
+//        }
+//
+//        $arr && $bool = DB::table('user_power')->insert($arr);
 
         $relt = [
             'user' => $user,
