@@ -37,7 +37,7 @@ Route::post('/changePwd', 'oa\oaUsersController@changePwd')->name('changePwd');
 // 请求用户信息(token)
 Route::get('/getUserInfo', 'oa\oaUsersController@power')->name('power');
 /*********管理员(高权限者)操作*********/
-// 添加用户(token,用户名(username)，昵称(nickname)，密码(password)，权限(json格式)(powerJson))
+// 添加用户(token,用户名(username)，昵称(nickname)，密码(password), 角色ID(roleId)
 Route::post('/addUser', 'oa\oaUsersController@addUser')->name('addUser');
 // 初始化密码(token,用户唯一id(uId))
 Route::post('/initPwd', 'oa\oaUsersController@initPwd')->name('initPwd');
@@ -58,7 +58,7 @@ Route::get('/getShops', 'oa\oaUsersController@getShops')->name('getShops');
 // 商店查询(店铺名(shop_name))
 Route::get('/searchShop', 'oa\oaUsersController@searchShop')->name('searchShop');
 
-// 角色添加(名称(role_name), 备注(remarks), 权限(数组)(menu))
+// 角色添加(名称(role_name), 备注(remarks), role(1,2,3,4,5), 权限(数组)(menu))
 Route::post('/addRole', 'oa\oaUsersController@addRole')->name('addRole');
 // 角色删除(角色ID(id))
 Route::post('/delRole', 'oa\oaUsersController@delRole')->name('delRole');

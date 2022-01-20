@@ -18,6 +18,7 @@ class CreateRoleTable extends Migration
             $table->string('role_name')->default('')->comment('角色名');
             $table->longText('remarks')->nullable()->comment('备注');
             $table->longText('menu')->nullable()->comment('权限标签配置');
+            $table->smallInteger('role')->default(0)->comment('角色状态');
             $table->timestamps();
             $table->unique(['role_name'], 'role_req');
         });

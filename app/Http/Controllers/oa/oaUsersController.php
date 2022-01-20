@@ -184,8 +184,9 @@ class oaUsersController extends Controller
         $password = $request['password'];
         $user = User::create([
             'username' => $request['username'],
-            'nickname' => $request['nickname'],
+            'nickname' => $request['nickname'] ?? '',
             'password' => bcrypt($password),
+            'role' => $request['roleId'] ?: 0,
         ]);
 
         // 权限处理
@@ -482,14 +483,15 @@ class oaUsersController extends Controller
             return self::result([],-1, 'err_token');
         }
 
-        if (!$request['role_name']) {
+        if (!$request['role_name'] || !$request['role']) {
             return self::result([],-1, 'err_param');
         }
 
         $shop = Role::create([
             'role_name' => $request['role_name'],
-            'remarks' => $request['remarks'],
-            'menu' => json_encode($request['menu'], true)
+            'remarks' => $request['remarks'] ?? '',
+            'menu' => json_encode($request['menu'], true),
+            'role' => $request['role'],
         ]);
 
         $relt = $shop;
@@ -556,6 +558,19 @@ class oaUsersController extends Controller
         $relt = $data;
         return self::result($relt);
     }
+
+    // 获取客服下拉列表
+    public function getUsersOfPower(Request $request)
+    {
+        $token = $request->header('Authorization');
+        // 用户未登陆
+        if (!$data = self::getUserIdOfToken($token)) {
+            return self::result([],-1, 'err_token');
+        }
+
+
+    }
+
 
     // 测试压包
     public function testGzencode(Request $request)

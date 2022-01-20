@@ -10,7 +10,7 @@ class Role extends Model
     protected $primaryKey = "id";
 
     protected $fillable = [
-        'role_name', 'remarks', 'menu'
+        'role_name', 'remarks', 'menu', 'role'
     ];
 
 }
