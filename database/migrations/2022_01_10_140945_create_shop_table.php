@@ -17,7 +17,7 @@ class CreateShopTable extends Migration
             $table->bigInteger('shop_id', true);
             $table->string('shop_name')->default('')->comment('店铺名');
             $table->string('company_name')->default('')->comment('公司名');
-            $table->string('remarks')->default('')->comment('备注');
+            $table->longText('remarks')->nullable()->comment('备注');
             $table->bigInteger('create_user')->default(0)->comment('创建者用户ID');
             $table->bigInteger('update_user')->default(0)->comment('更新者用户ID');
             $table->timestamps();
