@@ -178,7 +178,7 @@ class oaUsersController extends Controller
 
         $this->validate($request, [
             'username' => 'required|max:50',
-            'password' => 'nullable|min:6'
+            'password' => 'min:6'
         ]);
 
         $password = $request['password'];
