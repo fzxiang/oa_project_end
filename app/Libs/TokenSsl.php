@@ -7,7 +7,7 @@ class TokenSsl
     const TOKEN_KEY = 'kkkasrf9jhdc2~456';
 
     // 加密
-    static function encryptOpenssl($input, $key)
+    public static function encryptOpenssl($input, $key)
     {
         $newInput = is_array($input) ? json_encode($input, true) : $input;
 
@@ -17,7 +17,7 @@ class TokenSsl
     }
 
     // 解密
-    static function decryptOpenssl($str, $key)
+    public static function decryptOpenssl($str, $key)
     {
         $decrypted = self::decryptOnlyOpenssl($str, $key);
         if ($decrypted === false) {
@@ -32,7 +32,7 @@ class TokenSsl
     }
 
     // 数据解密
-    static function decryptOnlyOpenssl($str, $key)
+    public static function decryptOnlyOpenssl($str, $key)
     {
         $decodeStr = base64_decode($str);
         if ($decodeStr === false) {
@@ -40,4 +40,6 @@ class TokenSsl
         }
         return openssl_decrypt($decodeStr, 'AES-128-ECB', $key, OPENSSL_RAW_DATA);
     }
+
+
 }

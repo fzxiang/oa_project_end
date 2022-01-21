@@ -27,6 +27,7 @@ class CreateOrderTable extends Migration
             $table->integer('paymentTime')->default(0)->comment('订单付款时间');
             $table->integer('receivingTime')->default(0)->comment('订单收货时间');
             $table->index(['paymentTime','receivingTime'], 'index1');
+            $table->unique(['aliOrder'], 'unique1');
         });
     }
 

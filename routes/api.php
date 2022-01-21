@@ -75,17 +75,20 @@ Route::post('/selectShop', 'oa\oaUsersController@selectShop')->name('selectShop'
 /**************业务逻辑操作(我的订单)(以下操作均需要上传token)*************/
 // 添加订单(订单信息(orderInfo(json格式)))
 Route::post('/addOrder', 'oa\businessController@addOrder')->name('addOrder');
-// 编辑订单(订单信息(orderInfo(json格式)))
+// 编辑订单(订单信息(orderInfo(json格式(数据中需要有原本订单ID和写手ID))))
 Route::post('/updateOrder', 'oa\businessController@updateOrder')->name('updateOrder');
-// 校验订单编号(淘宝编号(taoBaoId))
+// 校验订单编号(淘宝编号(aliOrder))
 Route::post('/checkOrder', 'oa\businessController@checkOrder')->name('checkOrder');
-// 上传附件(type(1:总揽附件，2:退款附件)，对应字断数据(json格式))
+// 上传附件(type(1:总揽附件，2:退款附件)，对应字断数据(fileData)(json格式))
 Route::post('/uploadOrderFile', 'oa\businessController@uploadOrderFile')->name('uploadOrderFile');
 // 导出
 Route::any('/exportOrder', 'oa\businessController@exportOrder')->name('exportOrder');
 // 检索(json格式(shop_id, pageNumber(第几页), pageSize(每页几条数据), taoBaoId(淘宝编号), orderId(发单号), memberName(会员名),
 // settleStatus(结算状态), pStartData, pEndData, rStartData, rEndData))
 Route::get('/searchOrder', 'oa\businessController@searchOrder')->name('searchOrder');
+
+// 检验写手(写手手机号(writerNum))
+Route::get('/checkWriter', 'oa\businessController@checkWriter')->name('checkWriter');
 
 // pageNumber不传代表获取所有
 // 写手总览检索(json格式(shop_id, pageNumber(第几页), pageSize(每页几条数据), phoneNum(手机号), qqNum(qq号), weChatNum(微信号)
@@ -96,7 +99,7 @@ Route::post('/updateWriter', 'oa\businessController@updateWriter')->name('update
 /**************业务逻辑操作(客服管理)(以下操作均需要上传token)*************/
 // 写手报表检索(json格式(shop_id, pageNumber(第几页), pageSize(每页几条数据), taoBaoId(淘宝编号), orderId(发单号), memberName(会员名),
 // settleStatus(结算状态), pStartData, pEndData, rStartData, rEndData))
-Route::get('/searchWriter', 'oa\businessController@searchWriter')->name('searchWriter');
+Route::get('/searchWriterOfKefu', 'oa\businessController@searchWriterOfKefu')->name('searchWriterOfKefu');
 // 写手报表上传已结算订单(对应字断数据(json格式))
 Route::post('/uploadSettled', 'oa\businessController@uploadSettled')->name('uploadSettled');
 // 写手报表订单导出
@@ -113,5 +116,7 @@ Route::post('/updateAllOrderState', 'oa\businessController@updateAllOrderState')
 
 // 更新单个单子状态(orderId(单号ID), status(1：已结算，2：未结算，3：暂缓结算))
 Route::post('/updateOneOrderState', 'oa\businessController@updateOneOrderState')->name('updateOneOrderState');
+
+
 // 获取客服下拉列表(shop_id)
 Route::get('/getUsersOfPower', 'oa\oaUsersController@getUsersOfPower')->name('getUsersOfPower');

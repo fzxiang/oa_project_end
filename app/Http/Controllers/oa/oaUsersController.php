@@ -433,6 +433,11 @@ class oaUsersController extends Controller
 
         $data = User::all()->toArray();
 
+        foreach ($data as $k => $item) {
+            $role = Role::find($item['role_id']);
+            $data[$k]['role_name'] = $role['role_name'] ?? '';
+        }
+
         $relt = $data;
         return self::result($relt);
     }
@@ -568,7 +573,48 @@ class oaUsersController extends Controller
             return self::result([],-1, 'err_token');
         }
 
+        if (!$request['shop_id']) {
+            return self::result([],-1, 'err_param');
+        }
 
+        $kefuArr = [3,4,5];
+        // 获取当前用户对象
+        $users = User::all()->toArray();
+
+        $dataInfo = [];
+        foreach ($users as $user) {
+            // 当前用户分配的角色ID
+            $roleId = $user['role_id'] ?: 0;
+
+            $isKefu = false;
+            if ($roleId) {
+                $roleArr = Role::find($roleId);
+                $roleState = $roleArr['role'] ?: 0;
+                in_array($roleState, $kefuArr) && $isKefu = true;
+            }
+
+            $userPowers = DB::table('user_power')->where('user_id', '=', $user['user_id'])->get()->toArray();
+
+            // 该客服存在该商店权限
+            $hasShop = false;
+            foreach ($userPowers as $item) {
+                if ($item->shop_id != $request['shop_id']) {
+                    continue;
+                }
+                $hasShop = true;
+                break;
+            }
+
+            if ($isKefu && $hasShop) {
+                $dataInfo[] = [
+                    'user_id' => $user['user_id'],
+                    'username' => $user['username'],
+                ];
+            }
+        }
+
+        $relt = $dataInfo;
+        return self::result($relt);
     }
 
 
