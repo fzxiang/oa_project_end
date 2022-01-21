@@ -215,6 +215,28 @@ class oaUsersController extends Controller
         return self::result($relt);
     }
 
+    // 编辑用户
+    public function updateUser(Request $request)
+    {
+        $token = $request->header('Authorization');
+        // 用户未登陆
+        if (!$data = self::getUserIdOfToken($token)) {
+            return self::result([],-1, 'err_token');
+        }
+
+        if (!$request['user_id']) {
+            return self::result([],-1, 'err_param');
+        }
+
+        $num = User::where('user_id', '=', $request['user_id'])->update([
+            'username' => $request['username'],
+            'nickname' => $request['nickname'] ?? '',
+            'role_id' => $request['role_id'] ?: 0,
+        ]);
+
+        return self::result($num);
+    }
+
     // 初始化对应用户密码
     public function initPwd(Request $request)
     {

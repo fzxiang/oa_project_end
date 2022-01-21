@@ -39,6 +39,8 @@ Route::get('/getUserInfo', 'oa\oaUsersController@power')->name('power');
 /*********管理员(高权限者)操作*********/
 // 添加用户(token,用户名(username)，昵称(nickname)，密码(password), 角色ID(role_id)
 Route::post('/addUser', 'oa\oaUsersController@addUser')->name('addUser');
+// 编辑用户(token,唯一ID(user_id),用户名(username)，昵称(nickname), 角色ID(role_id)
+Route::post('/updateUser', 'oa\oaUsersController@updateUser')->name('updateUser');
 // 初始化密码(token,用户唯一id(uId))
 Route::post('/initPwd', 'oa\oaUsersController@initPwd')->name('initPwd');
 // 删除(token,用户唯一id(uId))
