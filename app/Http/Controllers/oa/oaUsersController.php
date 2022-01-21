@@ -186,7 +186,7 @@ class oaUsersController extends Controller
             'username' => $request['username'],
             'nickname' => $request['nickname'] ?? '',
             'password' => bcrypt($password),
-            'role' => $request['role_id'] ?: 0,
+            'role_id' => $request['role_id'] ?: 0,
         ]);
 
         // 权限处理
