@@ -47,10 +47,10 @@ class User extends Authenticatable
     public static function boot()
     {
         parent::boot();
-
-        static::creating(function ($user) {
-            $user->activation_token = Str::random(10);
-        });
+//
+//        static::creating(function ($user) {
+//            $user->activation_token = Str::random(10);
+//        });
     }
 
     public function statuses()
