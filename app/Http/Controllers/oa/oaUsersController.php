@@ -178,7 +178,7 @@ class oaUsersController extends Controller
 
         $this->validate($request, [
             'username' => 'required|max:50',
-            'password' => 'min:6'
+            'password' => 'nullable|min:6'
         ]);
 
         $password = $request['password'];
@@ -186,7 +186,7 @@ class oaUsersController extends Controller
             'username' => $request['username'],
             'nickname' => $request['nickname'] ?? '',
             'password' => bcrypt($password),
-            'role' => $request['roleId'] ?: 0,
+            'role' => $request['role_id'] ?: 0,
         ]);
 
         // 权限处理
