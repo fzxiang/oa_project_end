@@ -86,7 +86,7 @@ Route::post('/checkOrder', 'oa\businessController@checkOrder')->name('checkOrder
 Route::post('/uploadOrderFile', 'oa\businessController@uploadOrderFile')->name('uploadOrderFile');
 // 导出
 Route::any('/exportOrder', 'oa\businessController@exportOrder')->name('exportOrder');
-// 检索(searchParams json格式(shop_id, pageNumber(第几页), pageSize(每页几条数据), taoBaoId(淘宝编号), orderId(发单号), memberName(会员名),
+// 检索(searchParams json格式(pageNumber(第几页), pageSize(每页几条数据), taoBaoId(淘宝编号), orderId(发单号), memberName(会员名),
 // settleStatus(结算状态), pStartData, pEndData, rStartData, rEndData))
 Route::get('/searchOrder', 'oa\businessController@searchOrder')->name('searchOrder');
 
@@ -94,13 +94,13 @@ Route::get('/searchOrder', 'oa\businessController@searchOrder')->name('searchOrd
 Route::get('/checkWriter', 'oa\businessController@checkWriter')->name('checkWriter');
 
 // pageNumber不传代表获取所有
-// 写手总览检索(json格式(shop_id, pageNumber(第几页), pageSize(每页几条数据), phoneNum(手机号), qqNum(qq号), weChatNum(微信号)
+// 写手总览检索(json格式(pageNumber(第几页), pageSize(每页几条数据), phoneNum(手机号), qqNum(qq号), weChatNum(微信号)
 Route::get('/searchWriter', 'oa\businessController@searchWriter')->name('searchWriter');
 // 写手信息编辑(json格式)
 Route::post('/updateWriter', 'oa\businessController@updateWriter')->name('updateWriter');
 
 /**************业务逻辑操作(客服管理)(以下操作均需要上传token)*************/
-// 写手报表检索(json格式(shop_id, pageNumber(第几页), pageSize(每页几条数据), taoBaoId(淘宝编号), orderId(发单号), memberName(会员名),
+// 写手报表检索(json格式(pageNumber(第几页), pageSize(每页几条数据), taoBaoId(淘宝编号), orderId(发单号), memberName(会员名),
 // settleStatus(结算状态), pStartData, pEndData, rStartData, rEndData))
 Route::get('/searchWriterOfKefu', 'oa\businessController@searchWriterOfKefu')->name('searchWriterOfKefu');
 // 写手报表上传已结算订单(对应字断数据(json格式))
@@ -110,10 +110,10 @@ Route::any('/exportWriter', 'oa\businessController@exportWriter')->name('exportW
 // 写手报表订单全部结算(写手编号ID(writeId))
 Route::post('/quickWriterOrderStatus', 'oa\businessController@quickWriterOrderStatus')->name('quickWriterOrderStatus');
 
-// 客服报表检索(json格式(shop_id, pageNumber(第几页), pageSize(每页几条数据),settleStatus(结算状态),
+// 客服报表检索(json格式(pageNumber(第几页), pageSize(每页几条数据),settleStatus(结算状态),
 // customerId(客服),pStartData, pEndData, rStartData, rEndData))
 Route::get('/searchCustomer', 'oa\businessController@searchCustomer')->name('searchCustomer');
-// 客服报表批量修改状态(json格式(shop_id, pageNumber(第几页), pageSize(每页几条数据),settleStatus(结算状态),
+// 客服报表批量修改状态(json格式(pageNumber(第几页), pageSize(每页几条数据),settleStatus(结算状态),
 // customerId(客服),pStartData, pEndData, rStartData, rEndData))
 Route::post('/updateAllOrderState', 'oa\businessController@updateAllOrderState')->name('updateAllOrderState');
 
