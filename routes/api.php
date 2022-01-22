@@ -91,6 +91,8 @@ Route::any('/exportOrder', 'oa\businessController@exportOrder')->name('exportOrd
 // 检索(searchParams json格式(pageNumber(第几页), pageSize(每页几条数据), aliOrder(淘宝编号), invoice(发单号), memberName(会员名),
 // settleState(结算状态), pStartData, pEndData, rStartData, rEndData))
 Route::get('/searchOrder', 'oa\businessController@searchOrder')->name('searchOrder');
+// 写手对应订单补偿状态(orderId(订单唯一ID)，writerId(写手唯一ID)，state(0:暂无补偿，1:稿费补偿))
+Route::post('/updateOrderRedress', 'oa\businessController@updateOrderRedress')->name('updateOrderRedress');
 
 // 检验写手(写手手机号(writerNum))
 Route::get('/checkWriter', 'oa\businessController@checkWriter')->name('checkWriter');

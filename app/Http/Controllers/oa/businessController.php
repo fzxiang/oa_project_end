@@ -429,10 +429,10 @@ class businessController extends Controller
             'invoice' => 'zy239301', // 发单号
             'memberName' => 'jiosjd', // 会员名
             'settleState' => 1, // 结算状态(1:已结算，2:未结算, 3:暂缓结算)
-            'pStartData' => 0, // 订单付款开始时间
-            'pEndData' => 0, // 订单付款结束时间
-            'rStartData' => 0, // 订单收货开始时间
-            'rEndData' => 0, // 订单收货结束时间
+            'pStartDate' => 0, // 订单付款开始时间
+            'pEndDate' => 0, // 订单付款结束时间
+            'rStartDate' => 0, // 订单收货开始时间
+            'rEndDate' => 0, // 订单收货结束时间
         ];
 
         // 页码，条数
