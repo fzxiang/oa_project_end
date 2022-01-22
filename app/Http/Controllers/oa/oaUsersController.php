@@ -321,8 +321,8 @@ class oaUsersController extends Controller
         if ($powerJson) {
             foreach ($powerJson as $conf) {
                 $sqlArr = [
-                    'user_id' => $data['user_id'],
-                    'shop_id' => $conf['shopId'],
+                    'user_id' => $request['uId'],
+                    'shop_id' => $conf['shop_id'],
                     'menu' => json_encode($conf['power'], true),
                     'created_at' => $time,
                     'updated_at' => $time,

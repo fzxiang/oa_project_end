@@ -422,30 +422,288 @@ class businessController extends Controller
 
         $shopId = 1;
 
+        $data = [
+            'pageNumber' => 1, // 第几页
+            'pageSize' => 10, // 一页几条数据
+            'aliOrder' => '140294402340', // 淘宝订单编号
+            'invoice' => 'zy239301', // 发单号
+            'memberName' => 'jiosjd', // 会员名
+            'settleState' => 1, // 结算状态(1:已结算，2:未结算, 3:暂缓结算)
+            'pStartData' => 0, // 订单付款开始时间
+            'pEndData' => 0, // 订单付款结束时间
+            'rStartData' => 0, // 订单收货开始时间
+            'rEndData' => 0, // 订单收货结束时间
+        ];
 
+        // 页码，条数
+        $page = isset($data['pageNumber']) ? intval($data['pageNumber']) : 1;
+        $limit = isset($data['pageSize']) ? intval($data['pageSize']) : 10;
+        $page  = max(1, $page);
+
+        // 跳过的条数
+        $offset = $limit * ($page - 1);
+
+        // sql语句处理
+        $sqlArr = [];
+        // 默认开始时间
+        if (isset($data['pStartData']) && $data['pStartData']) {
+            $pStartTime = strtotime($data['pStartData']);
+        }
+        else {
+            $pStartTime = strtotime("2022-01-01");
+        }
+
+        // 默认结束时间
+        if (isset($data['pEndData']) && $data['pEndData']) {
+            $pEndTime = strtotime($data['pEndData']);
+        }
+        else {
+            $pEndTime = time();
+        }
+
+        $sqlArr[] = ['shop_id', '=', $shopId];
+        $sqlArr[] = ['paymentTime', '>=', $pStartTime];
+        $sqlArr[] = ['paymentTime', '<=', $pEndTime];
+
+        // 确认收货时间
+        if (isset($data['rStartData']) && $data['rStartData'] && isset($data['rEndData']) && $data['rEndData']) {
+            $sqlArr[] = ['receivingTime', '>=', $data['rStartData']];
+            $sqlArr[] = ['receivingTime', '<=', $data['rEndData']];
+        }
+
+        // 淘宝订单编号
+        if (isset($data['aliOrder']) && $data['aliOrder']) {
+            $sqlArr[] = ['aliOrder', '=', $data['aliOrder']];
+        }
+
+        // 发单号
+        if (isset($data['invoice']) && $data['invoice']) {
+            $sqlArr[] = ['invoice', '=', $data['invoice']];
+        }
+
+        // 会员名
+        if (isset($data['memberName']) && $data['memberName']) {
+            $sqlArr[] = ['memberName', '=', $data['memberName']];
+        }
+
+        // 结算状态
+        if (isset($data['settleState']) && $data['settleState']) {
+            $sqlArr[] = ['settleState', '=', $data['settleState']];
+        }
+
+        $order = Order::where($sqlArr)->skip($offset)->take($limit)->get()->toArray();
+
+        $relt = $order;
+        return oaUsersController::result($relt);
     }
 
     // 写手总览检索
     public function searchWriter(Request $request)
     {
+        $token = $request->header('Authorization');
+        // 用户未登陆
+        if (!$data = oaUsersController::getUserIdOfToken($token)) {
+            return oaUsersController::result([],-1, 'err_token');
+        }
 
+        if (!$request['searchParams']) {
+            return oaUsersController::result([],-1, 'err_param');
+        }
+
+        $shopId = 1;
+
+        $data = [
+            'pageNumber' => 1, // 第几页
+            'pageSize' => 10, // 一页几条数据
+            'writerNum' => '15280392932', // 写手手机号
+            'qqAccount' => 'zy239301', // 写手qq
+            'wechatAccount' => 'jiosjd', // 写手微信
+        ];
+
+        // 页码，条数
+        $page = isset($data['pageNumber']) ? intval($data['pageNumber']) : 1;
+        $limit = isset($data['pageSize']) ? intval($data['pageSize']) : 10;
+        $page  = max(1, $page);
+
+        // 跳过的条数
+        $offset = $limit * ($page - 1);
+
+        $sqlArr = [];
+
+        // 写手商店
+        $sqlArr[] = ['shop_id', '=', $shopId];
+
+        // 写手手机号
+        if (isset($data['writerNum']) && $data['writerNum']) {
+            $sqlArr[] = ['writerNum', '=', $data['writerNum']];
+        }
+
+        // 写手qq
+        if (isset($data['qqAccount']) && $data['qqAccount']) {
+            $sqlArr[] = ['qqAccount', '=', $data['qqAccount']];
+        }
+
+        // 写手微信
+        if (isset($data['wechatAccount']) && $data['wechatAccount']) {
+            $sqlArr[] = ['wechatAccount', '=', $data['wechatAccount']];
+        }
+
+        $writer = Writer::where($sqlArr)->skip($offset)->take($limit)->get()->toArray();
+
+        $relt = $writer;
+        return oaUsersController::result($relt);
     }
 
     // 写手信息编辑
     public function updateWriter(Request $request)
     {
+        $token = $request->header('Authorization');
+        // 用户未登陆
+        if (!$data = oaUsersController::getUserIdOfToken($token)) {
+            return oaUsersController::result([],-1, 'err_token');
+        }
 
+        if (!$request['id'] || !$request['writerInfo']) {
+            return oaUsersController::result([],-1, 'err_param');
+        }
+
+        $shopId = 1;
+
+        $data = [
+            'name' => 'dadan', // 写手名
+            'qqAccount' => '10929323', // 写手qq
+            'wechatAccount' => 'aj293293', // 写手微信
+            'alipayAccount' => '102932934@qq.com', // 写手支付宝
+        ];
+
+        $num = Writer::where([['id', '=', $request['id'], ['shop_id', '=', $shopId]]])->update([
+            'name' => $data['name'],
+            'qqAccount' => $data['qqAccount'],
+            'wechatAccount' => $data['wechatAccount'],
+            'alipayAccount' => $data['alipayAccount'],
+        ]);
+
+        return oaUsersController::result($num);
     }
 
     // 写手报表检索
     public function searchWriterOfKefu(Request $request)
     {
+        $token = $request->header('Authorization');
+        // 用户未登陆
+        if (!$data = oaUsersController::getUserIdOfToken($token)) {
+            return oaUsersController::result([],-1, 'err_token');
+        }
 
+        if (!$request['searchParams']) {
+            return oaUsersController::result([],-1, 'err_param');
+        }
+
+        $shopId = 1;
+
+        $data = [
+            'pageNumber' => 1, // 第几页
+            'pageSize' => 10, // 一页几条数据
+            'writerNum' => '140294402340', // 写手手机号
+            'qqAccount' => '109284929@qq.com', // 写手qq号
+            'wechatAccount' => 'zy239301', // 写手微信号
+            'writerId' => 1, // 写手ID
+            'settleState' => 1, // 结算状态(1:已结算，2:未结算, 3:暂缓结算)
+            'pStartData' => 0, // 订单付款开始时间
+            'pEndData' => 0, // 订单付款结束时间
+            'rStartData' => 0, // 订单收货开始时间
+            'rEndData' => 0, // 订单收货结束时间
+        ];
+
+        // 页码，条数
+        $page = isset($data['pageNumber']) ? intval($data['pageNumber']) : 1;
+        $limit = isset($data['pageSize']) ? intval($data['pageSize']) : 10;
+        $page  = max(1, $page);
+
+        // 跳过的条数
+        $offset = $limit * ($page - 1);
+
+        $writerSqlArr = [];
+        $writerSqlArr[] = ['shop_id', '<=', $shopId];
+        // 写手手机号
+        if (isset($data['writerNum']) && $data['writerNum']) {
+            $writerSqlArr[] = ['writerNum', '=', $data['writerNum']];
+        }
+
+        // 写手qq
+        if (isset($data['qqAccount']) && $data['qqAccount']) {
+            $writerSqlArr[] = ['qqAccount', '=', $data['qqAccount']];
+        }
+
+        // 写手微信
+        if (isset($data['wechatAccount']) && $data['wechatAccount']) {
+            $writerSqlArr[] = ['wechatAccount', '=', $data['wechatAccount']];
+        }
+
+        // 写手id
+        if (isset($data['writerId']) && $data['writerId']) {
+            $writerSqlArr[] = ['writerId', '=', $data['writerId']];
+        }
+
+        $writer = Writer::where($writerSqlArr)->skip($offset)->take($limit)->get()->toArray();
+
+        // todo 根据写手信息查询订单
+        foreach ($writer as $item) {
+
+        }
+
+        // sql语句处理
+        $orderSqlArr = [];
+        // 默认开始时间
+        if (isset($data['pStartData']) && $data['pStartData']) {
+            $pStartTime = strtotime($data['pStartData']);
+        }
+        else {
+            $pStartTime = strtotime("2022-01-01");
+        }
+
+        // 默认结束时间
+        if (isset($data['pEndData']) && $data['pEndData']) {
+            $pEndTime = strtotime($data['pEndData']);
+        }
+        else {
+            $pEndTime = time();
+        }
+
+        $orderSqlArr[] = ['shop_id', '=', $shopId];
+        $orderSqlArr[] = ['paymentTime', '>=', $pStartTime];
+        $orderSqlArr[] = ['paymentTime', '<=', $pEndTime];
+
+        // 确认收货时间
+        if (isset($data['rStartData']) && $data['rStartData'] && isset($data['rEndData']) && $data['rEndData']) {
+            $orderSqlArr[] = ['receivingTime', '>=', $data['rStartData']];
+            $orderSqlArr[] = ['receivingTime', '<=', $data['rEndData']];
+        }
+
+        // 结算状态
+        if (isset($data['settleState']) && $data['settleState']) {
+            $orderSqlArr[] = ['settleState', '=', $data['settleState']];
+        }
+
+        return oaUsersController::result();
     }
 
     // 写手报表上传已结算订单
     public function uploadSettled(Request $request)
     {
+        $token = $request->header('Authorization');
+        // 用户未登陆
+        if (!$data = oaUsersController::getUserIdOfToken($token)) {
+            return oaUsersController::result([],-1, 'err_token');
+        }
+
+        if (empty($request['fileData'])) {
+            return oaUsersController::result([],-1, 'no_data');
+        }
+
+        $data = [
+
+        ];
 
     }
 
@@ -469,6 +727,12 @@ class businessController extends Controller
 
     // 客服报表批量修改状态
     public function updateAllOrderState(Request $request)
+    {
+
+    }
+
+    // 客服报表导出
+    public function exportCustomer(Request $request)
     {
 
     }
