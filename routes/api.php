@@ -46,7 +46,7 @@ Route::post('/initPwd', 'oa\oaUsersController@initPwd')->name('initPwd');
 // 删除(token,用户唯一id(uId))
 Route::post('/delUser', 'oa\oaUsersController@delUser')->name('delUser');
 // 用户权限修改(token,用户唯一id(uId)，权限(json格式)(powerJson))
-Route::get('/updatePower', 'oa\oaUsersController@updatePower')->name('updatePower');
+Route::post('/updatePower', 'oa\oaUsersController@updatePower')->name('updatePower');
 // 添加店铺(token,店铺名称(shop_name)，公司名称(company_name)，备注(remarks))
 Route::post('/addShop', 'oa\oaUsersController@addShop')->name('addShop');
 // 编辑店铺(token,店铺ID(shop_id)，店铺名称(shop_name)，公司名称(company_name)，备注(remarks))
@@ -59,6 +59,8 @@ Route::get('/getUsers', 'oa\oaUsersController@getUsers')->name('getUsers');
 Route::get('/getShops', 'oa\oaUsersController@getShops')->name('getShops');
 // 商店查询(店铺名(shop_name))
 Route::get('/searchShop', 'oa\oaUsersController@searchShop')->name('searchShop');
+// 根据用户获取权限(user_id)
+Route::get('/getPowerOfUser', 'oa\oaUsersController@getPowerOfUser')->name('getPowerOfUser');
 
 // 角色添加(名称(role_name), 备注(remarks), role(1,2,3,4,5), 权限(数组)(menu))
 Route::post('/addRole', 'oa\oaUsersController@addRole')->name('addRole');

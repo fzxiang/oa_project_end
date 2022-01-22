@@ -306,18 +306,11 @@ class oaUsersController extends Controller
         // 删除旧权限
         $delBool = DB::table('user_power')->where('user_id', '=', $request['uId'])->delete();
 
-        $relt = [
-            'success' => $delBool
-        ];
-        if (!$delBool) {
-            return self::result($relt, -1, 'err_sql');
-        }
-
         // 更新权限
         $time = date('Y-m-d H:i:s');
         $arr = [];
         $jsonConf = $request['powerJson'] ?? [];
-        $powerJson = $request['powerJson'] ? json_decode($jsonConf, true) : [];
+        $powerJson = $request['powerJson'] ?? [];
         if ($powerJson) {
             foreach ($powerJson as $conf) {
                 $sqlArr = [
@@ -364,6 +357,25 @@ class oaUsersController extends Controller
         ]);
 
         $relt = $shop;
+        return self::result($relt);
+    }
+
+    // 根据商店获取权限
+    public function getPowerOfUser(Request $request)
+    {
+        $token = $request->header('Authorization');
+        // 用户未登陆
+        if (!$data = self::getUserIdOfToken($token)) {
+            return self::result([],-1, 'err_token');
+        }
+
+        if (!$request['user_id']) {
+            return self::result([],-1, 'err_param');
+        }
+
+        $userPowers = DB::table('user_power')->where('user_id', '=', $request['user_id'])->get()->toArray();
+        $relt = $this->powerFormat($userPowers);
+
         return self::result($relt);
     }
 
