@@ -74,6 +74,7 @@ Route::get('/getRoleList', 'oa\oaUsersController@getRoleList')->name('getRoleLis
 // 用户店铺选择(token, 店铺ID(shop_id))
 Route::post('/selectShop', 'oa\oaUsersController@selectShop')->name('selectShop');
 
+/*******所有业务操作header带上对应选择的店铺*******/
 /**************业务逻辑操作(我的订单)(以下操作均需要上传token)*************/
 // 添加订单(订单信息(orderInfo(json格式)))
 Route::post('/addOrder', 'oa\businessController@addOrder')->name('addOrder');
@@ -85,7 +86,7 @@ Route::post('/checkOrder', 'oa\businessController@checkOrder')->name('checkOrder
 Route::post('/uploadOrderFile', 'oa\businessController@uploadOrderFile')->name('uploadOrderFile');
 // 导出
 Route::any('/exportOrder', 'oa\businessController@exportOrder')->name('exportOrder');
-// 检索(json格式(shop_id, pageNumber(第几页), pageSize(每页几条数据), taoBaoId(淘宝编号), orderId(发单号), memberName(会员名),
+// 检索(searchParams json格式(shop_id, pageNumber(第几页), pageSize(每页几条数据), taoBaoId(淘宝编号), orderId(发单号), memberName(会员名),
 // settleStatus(结算状态), pStartData, pEndData, rStartData, rEndData))
 Route::get('/searchOrder', 'oa\businessController@searchOrder')->name('searchOrder');
 

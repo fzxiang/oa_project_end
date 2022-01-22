@@ -11,7 +11,7 @@ class Writer extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'writerNum', 'name', 'alipayAccount', 'qqAccount', 'wechatAccount', 'writerSituation', 'writerQuality',
+        'shop_id', 'writerNum', 'name', 'alipayAccount', 'qqAccount', 'wechatAccount', 'writerSituation', 'writerQuality',
     ];
 
 }

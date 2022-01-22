@@ -15,6 +15,7 @@ class CreateWriterTable extends Migration
     {
         Schema::create('writer', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger('shop_id')->default(0)->comment('商店ID');
             $table->string('writerNum')->default('')->comment('写手手机号');
             $table->string('name')->default('')->comment('写手名');
             $table->string('alipayAccount')->default('')->comment('写手支付宝');
@@ -23,6 +24,7 @@ class CreateWriterTable extends Migration
             $table->string('writerSituation')->default('')->comment('写手情况');
             $table->string('writerQuality')->default('')->comment('写手质量');
             $table->unique(['writerNum'], 'unique1');
+            $table->index(['shop_id'], 'index1');
         });
     }
 

@@ -15,6 +15,7 @@ class CreateOrderTable extends Migration
     {
         Schema::create('order', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger('shop_id')->default(0)->comment('商店ID');
             $table->string('invoice')->default('')->comment('发单号');
             $table->bigInteger('acceptUser')->default(0)->comment('接单客服ID');
             $table->string('aliOrder')->default('')->comment('淘宝订单编号');
@@ -27,6 +28,7 @@ class CreateOrderTable extends Migration
             $table->integer('paymentTime')->default(0)->comment('订单付款时间');
             $table->integer('receivingTime')->default(0)->comment('订单收货时间');
             $table->index(['paymentTime','receivingTime'], 'index1');
+            $table->index(['shop_id'], 'index2');
             $table->unique(['aliOrder'], 'unique1');
         });
     }

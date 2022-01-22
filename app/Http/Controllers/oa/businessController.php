@@ -23,6 +23,8 @@ class businessController extends Controller
             return oaUsersController::result([],-1, 'err_param');
         }
 
+        $shopId = 1;
+
         $orderInfo = [
             'order' => [
                 'aliOrder'          => '192103299123', // 淘宝订单编号
@@ -65,6 +67,7 @@ class businessController extends Controller
             return oaUsersController::result([],-1, 'err_param');
         }
         $order = Order::create([
+            'shop_id'           => $shopId,
             'acceptUser'        => $data['user_id'],
             'aliOrder'          => $orderData['aliOrder'],
             'invoice'           => $orderData['invoice'],
@@ -81,6 +84,7 @@ class businessController extends Controller
             $writerOrderArr = [];
             foreach ($writerData as $item) {
                 $writer = Writer::create([
+                    'shop_id'           => $shopId,
                     'writerNum'         => $item['writerNum'] ?: 0,
                     'name'              => $item['name'] ?? '',
                     'alipayAccount'     => $item['alipayAccount'] ?? '',
@@ -91,6 +95,7 @@ class businessController extends Controller
                 ]);
 
                 $writerOrderArr[] = [
+                    'shop_id'           => $shopId,
                     'writerId' => $writer['id'],
                     'orderId' => $order['id'],
                     'writerPrice' => $item['writerPrice'] ?: 0,
@@ -116,6 +121,8 @@ class businessController extends Controller
         if (!$request['orderInfo']) {
             return oaUsersController::result([],-1, 'err_param');
         }
+
+        $shopId = 1;
 
         $orderInfo = [
             'order' => [
@@ -174,7 +181,8 @@ class businessController extends Controller
         ]);
 
         // 清空该订单写手信息
-        $delNum = DB::table('writer_order')->where('orderId', '=', $orderData['id'])->delete();
+        $delNum = DB::table('writer_order')->where('orderId', '=', $orderData['id'])
+            ->where('shop_id', '=', $shopId)->delete();
 
         // 更新写手信息
         $writerData = $orderInfo['writer'];
@@ -210,6 +218,7 @@ class businessController extends Controller
                     ]);
 
                     $writerOrderArr[] = [
+                        'shop_id'           => $shopId,
                         'writerId' => $item['id'],
                         'orderId' => $orderData['id'],
                         'writerPrice' => $item['writerPrice'] ?: 0,
@@ -285,21 +294,25 @@ class businessController extends Controller
             return oaUsersController::result([],-1, 'no_data');
         }
 
+        $shopId = 1;
+
         $failData = [];
         switch ($request['type']) {
             case 1:
                 // 上传总览附件
-                $failData = $this->overviewData($request['fileData']);
+                $failData = $this->overviewData($request['fileData'], $shopId);
                 break;
             case 2:
                 // 上传退款附件
-                $failData = $this->refundData($request['fileData']);
+                $failData = $this->refundData($request['fileData'], $shopId);
                 break;
         }
+
+        return oaUsersController::result($failData);
     }
 
     // 上传总览附件
-    private function overviewData($datas)
+    private function overviewData($datas, $shopId)
     {
         $datas = [
             [
@@ -326,16 +339,65 @@ class businessController extends Controller
         // 上传附件数据处理
         foreach ($datas as $data) {
             // 更新数据
-            $num = Order::where('aliOrder', '=', $data['aliOrder'])->update([
-                'taobaoPrice' => '',
+            $num = Order::where([['aliOrder', '=', $data['aliOrder'], ['shop_id', '=', $shopId]]])->update([
+                'taobaoPrice' => $data['paymentMer'],
+                'paymentTime' => $data['paymentTime'],
+                'receivingTime' => $data['confirmTime'],
             ]);
+
+            if (!$num) {
+                $failData[] = $data['aliOrder'];
+            }
         }
+
+        return $failData;
     }
 
     // 上传退款附件
-    private function refundData($datas)
+    private function refundData($datas, $shopId)
     {
+        $datas = [
+            [
+                'aliOrder' => '14700238239489', // 订单编号
+                'refundState' => '退款成功', // 退款状态
+                'refundMod' => '售中退款', // 售中或售后
+                'actualPayment' => 120, // 买家实际支付金额
+                'refundMoney' => 120, // 买家退款金额
+            ],
+            [
+                'aliOrder' => '14700238239489', // 订单编号
+                'refundState' => '退款失败', // 退款状态
+                'refundMod' => '售中退款', // 售中或售后
+                'actualPayment' => 382, // 买家实际支付金额
+                'refundMoney' => 0, // 买家退款金额
+            ],
+            [
+                'aliOrder' => '14700238239489', // 订单编号
+                'refundState' => '退款成功', // 退款状态
+                'refundMod' => '售后退款', // 售中或售后
+                'actualPayment' => 778, // 买家实际支付金额
+                'refundMoney' => 938, // 买家退款金额
+            ],
+        ];
 
+        $failData = [];
+        foreach ($datas as $k => $data) {
+            if ($data['refundState'] != '退款成功') {
+                $failData[] = $data['aliOrder'];
+                continue;
+            }
+
+            if ($data['refundMod'] != '售后退款') {
+                continue;
+            }
+
+            $taobaoPrice = $data['actualPayment'] - $data['refundMoney'];
+            $num = Order::where([['aliOrder', '=', $data['aliOrder'], ['shop_id', '=', $shopId]]])->update([
+                'taobaoPrice' => $taobaoPrice,
+            ]);
+        }
+
+        return $failData;
     }
 
 
@@ -348,6 +410,18 @@ class businessController extends Controller
     // 我的订单检索
     public function searchOrder(Request $request)
     {
+        $token = $request->header('Authorization');
+        // 用户未登陆
+        if (!$data = oaUsersController::getUserIdOfToken($token)) {
+            return oaUsersController::result([],-1, 'err_token');
+        }
+
+        if (!$request['searchParams']) {
+            return oaUsersController::result([],-1, 'err_param');
+        }
+
+        $shopId = 1;
+
 
     }
 

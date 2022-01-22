@@ -11,7 +11,7 @@ class Order extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'invoice', 'acceptUser', 'aliOrder', 'settleState', 'memberName', 'taobaoPrice', 'customerContact',
+        'shop_id', 'invoice', 'acceptUser', 'aliOrder', 'settleState', 'memberName', 'taobaoPrice', 'customerContact',
         'orderOutline', 'remarks', 'paymentTime', 'receivingTime'
     ];
 
