@@ -21,11 +21,15 @@ class businessController extends Controller
             return oaUsersController::result([],-1, 'err_token');
         }
 
+        $shopId = $request->header('Shop');
+        if (!$shopId) {
+            return oaUsersController::result([],-1, 'err_shop');
+        }
+
         if (!$request['orderInfo']) {
             return oaUsersController::result([],-1, 'err_param');
         }
 
-        $shopId = 1;
         $shop = Shop::find($shopId);
         if (!$shop) {
             return oaUsersController::result([],-1, 'no_shop');
@@ -66,6 +70,8 @@ class businessController extends Controller
                 'remarks'           => '就佛啊文件佛啊疯哦弄安分阿福那饿啊发女挨饿发呢Ivan哦发你哦撒娇的决定把你饿啊v按哦饿哦啊v奥v哦扫v女哦啊我弄', // 备注
             ]
         ];
+
+        $orderInfo = $request['orderInfo'];
 
         // 添加订单数据
         $orderData = $orderInfo['order'];
@@ -124,11 +130,14 @@ class businessController extends Controller
             return oaUsersController::result([],-1, 'err_token');
         }
 
+        $shopId = $request->header('Shop');
+        if (!$shopId) {
+            return oaUsersController::result([],-1, 'err_shop');
+        }
+
         if (!$request['orderInfo']) {
             return oaUsersController::result([],-1, 'err_param');
         }
-
-        $shopId = 1;
 
         $orderInfo = [
             'order' => [
@@ -168,6 +177,8 @@ class businessController extends Controller
                 'remarks'           => '次擦你到家发哦嗯发哦违法哦饿哦啊减肥', // 备注
             ]
         ];
+
+        $orderInfo = $request['orderInfo'];
 
         // 添加订单数据
         $orderData = $orderInfo['order'];
@@ -292,6 +303,11 @@ class businessController extends Controller
             return oaUsersController::result([],-1, 'err_token');
         }
 
+        $shopId = $request->header('Shop');
+        if (!$shopId) {
+            return oaUsersController::result([],-1, 'err_shop');
+        }
+
         if (!$request['type']) {
             return oaUsersController::result([],-1, 'err_type');
         }
@@ -299,8 +315,6 @@ class businessController extends Controller
         if (empty($request['fileData'])) {
             return oaUsersController::result([],-1, 'no_data');
         }
-
-        $shopId = 1;
 
         $failData = [];
         switch ($request['type']) {
@@ -320,26 +334,26 @@ class businessController extends Controller
     // 上传总览附件
     private function overviewData($datas, $shopId)
     {
-        $datas = [
-            [
-                'aliOrder' => '282103299149', // 订单编号
-                'paymentMer' => 100, // 打款商家金额
-                'confirmTime' => strtotime("2022-01-01 12:00:00"), // 确认收货时间
-                'paymentTime' => strtotime("2022-01-02 14:00:00"), // 确认付款时间
-            ],
-            [
-                'aliOrder' => '192103299124', // 订单编号
-                'paymentMer' => 50, // 打款商家金额
-                'confirmTime' => strtotime("2022-01-03 08:00:00"), // 确认收货时间
-                'paymentTime' => strtotime("2022-01-04 15:00:00"), // 确认付款时间
-            ],
-            [
-                'aliOrder' => '14700238239489', // 订单编号
-                'paymentMer' => 0, // 打款商家金额
-                'confirmTime' => strtotime("2022-01-05 08:00:00"), // 确认收货时间
-                'paymentTime' => strtotime("2022-01-06 08:00:00"), // 确认付款时间
-            ],
-        ];
+//        $datas = [
+//            [
+//                'aliOrder' => '282103299149', // 订单编号
+//                'paymentMer' => 100, // 打款商家金额
+//                'confirmTime' => strtotime("2022-01-01 12:00:00"), // 确认收货时间
+//                'paymentTime' => strtotime("2022-01-02 14:00:00"), // 确认付款时间
+//            ],
+//            [
+//                'aliOrder' => '192103299124', // 订单编号
+//                'paymentMer' => 50, // 打款商家金额
+//                'confirmTime' => strtotime("2022-01-03 08:00:00"), // 确认收货时间
+//                'paymentTime' => strtotime("2022-01-04 15:00:00"), // 确认付款时间
+//            ],
+//            [
+//                'aliOrder' => '14700238239489', // 订单编号
+//                'paymentMer' => 0, // 打款商家金额
+//                'confirmTime' => strtotime("2022-01-05 08:00:00"), // 确认收货时间
+//                'paymentTime' => strtotime("2022-01-06 08:00:00"), // 确认付款时间
+//            ],
+//        ];
 
         $failData = [];
         // 上传附件数据处理
@@ -364,29 +378,29 @@ class businessController extends Controller
     // 上传退款附件
     private function refundData($datas, $shopId)
     {
-        $datas = [
-            [
-                'aliOrder' => '282103299149', // 订单编号
-                'refundState' => '退款成功', // 退款状态
-                'refundMod' => '售后退款', // 售中或售后
-                'actualPayment' => 30, // 买家实际支付金额
-                'refundMoney' => 30, // 买家退款金额
-            ],
-            [
-                'aliOrder' => '192103299124', // 订单编号
-                'refundState' => '退款失败', // 退款状态
-                'refundMod' => '售中退款', // 售中或售后
-                'actualPayment' => 40, // 买家实际支付金额
-                'refundMoney' => 0, // 买家退款金额
-            ],
-            [
-                'aliOrder' => '14700238239489', // 订单编号
-                'refundState' => '退款成功', // 退款状态
-                'refundMod' => '售后退款', // 售中或售后
-                'actualPayment' => 778, // 买家实际支付金额
-                'refundMoney' => 938, // 买家退款金额
-            ],
-        ];
+//        $datas = [
+//            [
+//                'aliOrder' => '282103299149', // 订单编号
+//                'refundState' => '退款成功', // 退款状态
+//                'refundMod' => '售后退款', // 售中或售后
+//                'actualPayment' => 30, // 买家实际支付金额
+//                'refundMoney' => 30, // 买家退款金额
+//            ],
+//            [
+//                'aliOrder' => '192103299124', // 订单编号
+//                'refundState' => '退款失败', // 退款状态
+//                'refundMod' => '售中退款', // 售中或售后
+//                'actualPayment' => 40, // 买家实际支付金额
+//                'refundMoney' => 0, // 买家退款金额
+//            ],
+//            [
+//                'aliOrder' => '14700238239489', // 订单编号
+//                'refundState' => '退款成功', // 退款状态
+//                'refundMod' => '售后退款', // 售中或售后
+//                'actualPayment' => 778, // 买家实际支付金额
+//                'refundMoney' => 938, // 买家退款金额
+//            ],
+//        ];
 
         $failData = [];
         foreach ($datas as $k => $data) {
@@ -445,14 +459,17 @@ class businessController extends Controller
             return oaUsersController::result([],-1, 'err_token');
         }
 
+        $shopId = $request->header('Shop');
+        if (!$shopId) {
+            return oaUsersController::result([],-1, 'err_shop');
+        }
+
         if (!$request['searchParams']) {
             return oaUsersController::result([],-1, 'err_param');
         }
 
-        $shopId = 1;
-
         $data = [
-            'pageNumber' => 1, // 第几页
+            'page' => 1, // 第几页
             'pageSize' => 10, // 一页几条数据
             'aliOrder' => '', // 淘宝订单编号
             'invoice' => '', // 发单号
@@ -464,8 +481,10 @@ class businessController extends Controller
             'rEndTime' => 0, // 订单收货结束时间
         ];
 
+        $data = $request['searchParams'];
+
         // 页码，条数
-        $page = isset($data['pageNumber']) ? intval($data['pageNumber']) : 1;
+        $page = isset($data['page']) ? intval($data['page']) : 1;
         $limit = isset($data['pageSize']) ? intval($data['pageSize']) : 10;
         $page  = max(1, $page);
 
@@ -558,22 +577,27 @@ class businessController extends Controller
             return oaUsersController::result([],-1, 'err_token');
         }
 
+        $shopId = $request->header('Shop');
+        if (!$shopId) {
+            return oaUsersController::result([],-1, 'err_shop');
+        }
+
         if (!$request['searchParams']) {
             return oaUsersController::result([],-1, 'err_param');
         }
 
-        $shopId = 1;
-
         $data = [
-            'pageNumber' => 1, // 第几页
+            'page' => 1, // 第几页
             'pageSize' => 10, // 一页几条数据
-            'writerNum' => '15280392932', // 写手手机号
-            'qqAccount' => 'zy239301', // 写手qq
-            'wechatAccount' => 'jiosjd', // 写手微信
+            'writerNum' => '', // 写手手机号
+            'qqAccount' => '', // 写手qq
+            'wechatAccount' => '', // 写手微信
         ];
 
+        $data = $request['searchParams'];
+
         // 页码，条数
-        $page = isset($data['pageNumber']) ? intval($data['pageNumber']) : 1;
+        $page = isset($data['page']) ? intval($data['page']) : 1;
         $limit = isset($data['pageSize']) ? intval($data['pageSize']) : 10;
         $page  = max(1, $page);
 
@@ -615,11 +639,14 @@ class businessController extends Controller
             return oaUsersController::result([],-1, 'err_token');
         }
 
+        $shopId = $request->header('Shop');
+        if (!$shopId) {
+            return oaUsersController::result([],-1, 'err_shop');
+        }
+
         if (!$request['id'] || !$request['writerInfo']) {
             return oaUsersController::result([],-1, 'err_param');
         }
-
-        $shopId = 1;
 
         $data = [
             'name' => 'dadan', // 写手名
@@ -628,7 +655,9 @@ class businessController extends Controller
             'alipayAccount' => '102932934@qq.com', // 写手支付宝
         ];
 
-        $num = Writer::where([['id', '=', $request['id'], ['shop_id', '=', $shopId]]])->update([
+        $data = $request['writerInfo'];
+
+        $num = Writer::where([['id', '=', $request['id']], ['shop_id', '=', $shopId]])->update([
             'name' => $data['name'],
             'qqAccount' => $data['qqAccount'],
             'wechatAccount' => $data['wechatAccount'],
@@ -647,14 +676,17 @@ class businessController extends Controller
             return oaUsersController::result([],-1, 'err_token');
         }
 
+        $shopId = $request->header('Shop');
+        if (!$shopId) {
+            return oaUsersController::result([],-1, 'err_shop');
+        }
+
         if (!$request['searchParams']) {
             return oaUsersController::result([],-1, 'err_param');
         }
 
-        $shopId = 1;
-
         $data = [
-            'pageNumber' => 1, // 第几页
+            'page' => 1, // 第几页
             'pageSize' => 10, // 一页几条数据
             'writerNum' => '140294402340', // 写手手机号
             'qqAccount' => '109284929@qq.com', // 写手qq号
@@ -667,8 +699,10 @@ class businessController extends Controller
             'rEndTime' => 0, // 订单收货结束时间
         ];
 
+        $data = $request['searchParams'];
+
         // 页码，条数
-        $page = isset($data['pageNumber']) ? intval($data['pageNumber']) : 1;
+        $page = isset($data['page']) ? intval($data['page']) : 1;
         $limit = isset($data['pageSize']) ? intval($data['pageSize']) : 10;
         $page  = max(1, $page);
 
@@ -741,13 +775,14 @@ class businessController extends Controller
             $rEndTime = strtotime($data['rEndTime']);
         }
 
+        $settleState = $data['settleState'] ?? 0;
         // 符合条件数据拼接
         foreach ($writerOrders as $item) {
             // 遍历查询订单
             $order = Order::find($item->orderId);
 
             // 状态不符合
-            if ($data['settleState'] && $data['settleState'] != $order['settleState']) {
+            if ($settleState && $settleState != $order['settleState']) {
                 continue;
             }
 
@@ -768,7 +803,13 @@ class businessController extends Controller
 
             $jsonInfo[$item->writerId]['childOrder'][] = [
                 'id' => $order['id'],
-
+                'invoice' => $order['invoice'],
+                'acceptUser' => $order['acceptUser'],
+                'aliOrder' => $order['aliOrder'],
+                'settleState' => $order['settleState'],
+                'taobaoPrice' => $order['taobaoPrice'],
+                'paymentTime' => $order['paymentTime'],
+                'receivingTime' => $order['receivingTime'],
             ];
         }
 
@@ -782,6 +823,11 @@ class businessController extends Controller
         // 用户未登陆
         if (!$data = oaUsersController::getUserIdOfToken($token)) {
             return oaUsersController::result([],-1, 'err_token');
+        }
+
+        $shopId = $request->header('Shop');
+        if (!$shopId) {
+            return oaUsersController::result([],-1, 'err_shop');
         }
 
         if (empty($request['fileData'])) {
@@ -835,19 +881,24 @@ class businessController extends Controller
             return oaUsersController::result([],-1, 'err_token');
         }
 
+        $shopId = $request->header('Shop');
+        if (!$shopId) {
+            return oaUsersController::result([],-1, 'err_shop');
+        }
+
         if (!$request['writerId'] || !$request['searchParams']) {
             return oaUsersController::result([],-1, 'err_param');
         }
 
-        $shopId = 1;
-
         $data = [
-            'settleState' => 1, // 结算状态(1:已结算，2:未结算, 3:暂缓结算)
+            'settleState' => 0, // 结算状态(1:已结算，2:未结算, 3:暂缓结算)
             'pStartTime' => 0, // 订单付款开始时间
             'pEndTime' => 0, // 订单付款结束时间
             'rStartTime' => 0, // 订单收货开始时间
             'rEndTime' => 0, // 订单收货结束时间
         ];
+
+        $data = $request['searchParams'];
 
         // sql语句处理
         // 默认开始时间
@@ -874,13 +925,17 @@ class businessController extends Controller
         }
 
         // 查询当前写手所有订单ID
-        $writerOrders = DB::table('writer_order')->where('writerId', '=', $request['writerId'])->get()->toArray();
+        $writerOrders = DB::table('writer_order')->where('writerId', '=', $request['writerId'])
+            ->where('shop_id', '=', $shopId)
+            ->get()->toArray();
+
+        $settleState = $data['settleState'] ?? 0;
         foreach ($writerOrders as $item) {
             // 遍历查询订单
-            $order = Order::find($item->id);
+            $order = Order::find($item->orderId);
 
             // 状态不符合
-            if ($data['settleState'] && $data['settleState'] != $order['settleState']) {
+            if ($settleState && $settleState != $order['settleState']) {
                 continue;
             }
 
@@ -894,9 +949,15 @@ class businessController extends Controller
                 continue;
             }
 
-            // 符合条件订单修改状态(已结算)
-            $order->settleState = 1;
+            $order['settleState'] = 1;
             $order->save();
+
+            // 写手对应订单结算状态
+            $num = DB::table('writer_order')->where('writerId', '=', $item->writerId)
+                ->where('orderId', '=', $item->orderId)
+                ->update([
+                    'wSettleState' => 1,
+                ]);
         }
 
         return oaUsersController::result();
@@ -911,22 +972,27 @@ class businessController extends Controller
             return oaUsersController::result([],-1, 'err_token');
         }
 
+        $shopId = $request->header('Shop');
+        if (!$shopId) {
+            return oaUsersController::result([],-1, 'err_shop');
+        }
+
         if (!$request['searchParams']) {
             return oaUsersController::result([],-1, 'err_param');
         }
 
-        $shopId = 1;
-
         $data = [
-            'pageNumber' => 1, // 第几页
+            'page' => 1, // 第几页
             'pageSize' => 10, // 一页几条数据
             'customerId' => 15, // 客服ID
-            'settleState' => 1, // 结算状态(1:已结算，2:未结算, 3:暂缓结算)
+            'settleState' => 0, // 结算状态(1:已结算，2:未结算, 3:暂缓结算)
             'pStartTime' => 0, // 订单付款开始时间
             'pEndTime' => 0, // 订单付款结束时间
             'rStartTime' => 0, // 订单收货开始时间
             'rEndTime' => 0, // 订单收货结束时间
         ];
+
+        $data = $request['searchParams'];
 
         $relt = $this->kefuCheckSearch($shopId, $data);
 
@@ -941,7 +1007,7 @@ class businessController extends Controller
         }
 
         // 页码，条数
-        $page = isset($data['pageNumber']) ? intval($data['pageNumber']) : 1;
+        $page = isset($data['page']) ? intval($data['page']) : 1;
         $limit = isset($data['pageSize']) ? intval($data['pageSize']) : 10;
         $page  = max(1, $page);
 
@@ -1000,22 +1066,28 @@ class businessController extends Controller
             return oaUsersController::result([],-1, 'err_token');
         }
 
+        $shopId = $request->header('Shop');
+        if (!$shopId) {
+            return oaUsersController::result([],-1, 'err_shop');
+        }
+
         if ($request['state'] || !$request['searchParams']) {
             return oaUsersController::result([],-1, 'err_param');
         }
 
-        $shopId = 1;
-
         $data = [
-            'pageNumber' => 1, // 第几页
+            'page' => 1, // 第几页
             'pageSize' => 10, // 一页几条数据
             'customerId' => 15, // 客服ID
-            'settleState' => 1, // 结算状态(1:已结算，2:未结算, 3:暂缓结算)
+            'settleState' => 0, // 结算状态(1:已结算，2:未结算, 3:暂缓结算)
             'pStartTime' => 0, // 订单付款开始时间
             'pEndTime' => 0, // 订单付款结束时间
             'rStartTime' => 0, // 订单收货开始时间
             'rEndTime' => 0, // 订单收货结束时间
         ];
+
+        $data = $request['searchParams'];
+
         $orders = $this->kefuCheckSearch($shopId, $data);
         $ids = array_column($orders, 'id');
 
@@ -1055,7 +1127,11 @@ class businessController extends Controller
         }
 
         $order = Order::find($request['orderId']);
-        $order->settleState = $request['state'];
+        if (empty($order)) {
+            oaUsersController::result([], -1, 'no_data');
+        }
+
+        $order['settleState'] = $request['state'];
 
         $order->save();
 
@@ -1071,18 +1147,36 @@ class businessController extends Controller
             return oaUsersController::result([],-1, 'err_token');
         }
 
+        $shopId = $request->header('Shop');
+        if (!$shopId) {
+            return oaUsersController::result([],-1, 'err_shop');
+        }
+
         if (!$request['orderId']) {
             return oaUsersController::result([],-1, 'err_param');
         }
 
-        $orderWriters = DB::table('writer_order')->where('orderId', '=', $request['orderId'])->get()->toArray();
+        $orderWriters = DB::table('writer_order')->where('orderId', '=', $request['orderId'])
+            ->where('shop_id', '=', $shopId)
+            ->get()->toArray();
 
         $writerInfo = [];
         foreach ($orderWriters as $item) {
             $writer = Writer::find($item->writerId);
+            if (empty($writer)) {
+                continue;
+            }
 
-            $writerInfo[] = [
+            $writerInfo[$item->writerId] = [
                 'id' => $writer['id'],
+                'writerNum' => $writer['writerNum'],
+                'name' => $writer['name'],
+                'alipayAccount' => $writer['alipayAccount'],
+                'qqAccount' => $writer['qqAccount'],
+                'wechatAccount' => $writer['wechatAccount'],
+                'writerSituation' => $writer['writerSituation'],
+                'writerQuality' => $writer['writerQuality'],
+                'compensateState' => $item->compensateState,
             ];
         }
 
@@ -1098,18 +1192,35 @@ class businessController extends Controller
             return oaUsersController::result([],-1, 'err_token');
         }
 
+        $shopId = $request->header('Shop');
+        if (!$shopId) {
+            return oaUsersController::result([],-1, 'err_shop');
+        }
+
         if (!$request['writerId']) {
             return oaUsersController::result([],-1, 'err_param');
         }
 
-        $orderWriters = DB::table('writer_order')->where('orderId', '=', $request['orderId'])->get()->toArray();
+        $orderWriters = DB::table('writer_order')->where('orderId', '=', $request['orderId'])
+            ->where('shop_id', '=', $shopId)
+            ->get()->toArray();
 
         $orderInfo = [];
         foreach ($orderWriters as $item) {
             $order = Order::find($item->orderId);
+            if (empty($order)) {
+                continue;
+            }
 
             $orderInfo[] = [
                 'id' => $order['id'],
+                'invoice' => $order['invoice'],
+                'acceptUser' => $order['acceptUser'],
+                'aliOrder' => $order['aliOrder'],
+                'settleState' => $order['settleState'],
+                'taobaoPrice' => $order['taobaoPrice'],
+                'paymentTime' => $order['paymentTime'],
+                'receivingTime' => $order['receivingTime'],
             ];
         }
 
