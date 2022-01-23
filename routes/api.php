@@ -121,7 +121,7 @@ Route::get('/searchCustomer', 'oa\businessController@searchCustomer')->name('sea
 // customerId(客服),pStartData, pEndData, rStartData, rEndData))
 Route::post('/updateAllOrderState', 'oa\businessController@updateAllOrderState')->name('updateAllOrderState');
 // 客服报表导出(searchParams json格式)(同检索)
-Route::post('/exportCustomer', 'oa\businessController@exportCustomer')->name('exportCustomer');
+Route::any('/exportCustomer', 'oa\businessController@exportCustomer')->name('exportCustomer');
 
 // 更新单个单子状态(orderId(单号ID), status(1：已结算，2：未结算，3：暂缓结算))
 Route::post('/updateOneOrderState', 'oa\businessController@updateOneOrderState')->name('updateOneOrderState');

@@ -12,7 +12,7 @@ class Order extends Model
 
     protected $fillable = [
         'shop_id', 'invoice', 'acceptUser', 'aliOrder', 'settleState', 'memberName', 'taobaoPrice', 'customerContact',
-        'orderOutline', 'remarks', 'paymentTime', 'receivingTime'
+        'orderOutline', 'remarks', 'paymentTime', 'receivingTime', 'overviewFilePrice'
     ];
 
 }

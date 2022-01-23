@@ -343,6 +343,7 @@ class businessController extends Controller
                 'taobaoPrice' => $data['paymentMer'],
                 'paymentTime' => $data['paymentTime'],
                 'receivingTime' => $data['confirmTime'],
+                'overviewFilePrice' => $data['paymentMer'],
             ]);
 
             if (!$num) {
@@ -383,7 +384,6 @@ class businessController extends Controller
         $failData = [];
         foreach ($datas as $k => $data) {
             if ($data['refundState'] != '退款成功') {
-                $failData[] = $data['aliOrder'];
                 continue;
             }
 
@@ -391,19 +391,36 @@ class businessController extends Controller
                 continue;
             }
 
-            $taobaoPrice = $data['actualPayment'] - $data['refundMoney'];
-            $num = Order::where([['aliOrder', '=', $data['aliOrder'], ['shop_id', '=', $shopId]]])->update([
+            // 获取打款商家金额
+            $order = Order::where('aliOrder', '=', $data['aliOrder'])->get()->toArray();
+            $overviewFilePrice = $order['overviewFilePrice'] ?: 0;
+
+            if ($overviewFilePrice < $data['refundMoney']) {
+                $failData[] = $data['aliOrder'];
+                continue;
+            }
+
+            $taobaoPrice = $overviewFilePrice - $data['refundMoney'];
+            $num = Order::where([['aliOrder', '=', $data['aliOrder']], [['shop_id', '=', $shopId]]])->update([
                 'taobaoPrice' => $taobaoPrice,
             ]);
         }
-
         return $failData;
     }
 
 
-    // 导出
+    // 我的订单导出
     public function exportOrder(Request $request)
     {
+        // 导出字断
+        $fileField = [
+            '店铺名称', '客服ID', '接单客服', '淘宝订单号', '会员名', '打款商家金额', '买家退款金额', '买家实际支付金额',
+            '总表(打款商家金额)-退款表(买家退款金额)', "客服填写价格", "最终对比价格", "订单概要", "订单付款时间", "确认收货时间",
+            '写手名 01', '写手QQ 01', '写手手机号 01', '写手派单价 01', '写手支付宝 01',
+            '写手名 02', '写手QQ 02', '写手手机号 02', '写手派单价 02', '写手支付宝 02',
+            '写手名 03', '写手QQ 03', '写手手机号 03', '写手派单价 03', '写手支付宝 03',
+        ];
+
 
     }
 
@@ -495,6 +512,18 @@ class businessController extends Controller
 
         $relt = $order;
         return oaUsersController::result($relt);
+    }
+
+    // 写手对应订单补偿状态
+    public function updateOrderRedress(Request $request)
+    {
+        $token = $request->header('Authorization');
+        // 用户未登陆
+        if (!$data = oaUsersController::getUserIdOfToken($token)) {
+            return oaUsersController::result([],-1, 'err_token');
+        }
+
+
     }
 
     // 写手总览检索
@@ -702,7 +731,24 @@ class businessController extends Controller
         }
 
         $data = [
-
+            [
+                'alipayAccount' => '1302942304', // 收款方支付宝账号
+                'name' => '张静', // 收款方姓名
+                'price' => 43, // 金额
+                'invoice' => 'jx-zn1213', // 单号
+            ],
+            [
+                'alipayAccount' => '1869239322', // 收款方支付宝账号
+                'name' => '张静', // 收款方姓名
+                'price' => 25, // 金额
+                'invoice' => 'jx-zn1213', // 单号
+            ],
+            [
+                'alipayAccount' => '1524534532', // 收款方支付宝账号
+                'name' => '张静', // 收款方姓名
+                'price' => 546, // 金额
+                'invoice' => 'jx-zn1213', // 单号
+            ],
         ];
 
     }
@@ -710,6 +756,11 @@ class businessController extends Controller
     // 写手报表订单导出
     public function exportWriter(Request $request)
     {
+        $token = $request->header('Authorization');
+        // 用户未登陆
+        if (!$data = oaUsersController::getUserIdOfToken($token)) {
+            return oaUsersController::result([],-1, 'err_token');
+        }
 
     }
 
@@ -717,23 +768,53 @@ class businessController extends Controller
     public function quickWriterOrderStatus(Request $request)
     {
 
+        $token = $request->header('Authorization');
+        // 用户未登陆
+        if (!$data = oaUsersController::getUserIdOfToken($token)) {
+            return oaUsersController::result([],-1, 'err_token');
+        }
+
+        $fileField = [
+            '序号', '收款方支付宝账号', '收款方姓名', '金额', '备注',
+        ];
+
+
     }
 
     // 客服报表检索
     public function searchCustomer(Request $request)
     {
+        $token = $request->header('Authorization');
+        // 用户未登陆
+        if (!$data = oaUsersController::getUserIdOfToken($token)) {
+            return oaUsersController::result([],-1, 'err_token');
+        }
 
     }
 
     // 客服报表批量修改状态
     public function updateAllOrderState(Request $request)
     {
+        $token = $request->header('Authorization');
+        // 用户未登陆
+        if (!$data = oaUsersController::getUserIdOfToken($token)) {
+            return oaUsersController::result([],-1, 'err_token');
+        }
 
     }
 
     // 客服报表导出
     public function exportCustomer(Request $request)
     {
+        $token = $request->header('Authorization');
+        // 用户未登陆
+        if (!$data = oaUsersController::getUserIdOfToken($token)) {
+            return oaUsersController::result([],-1, 'err_token');
+        }
+
+        $fileField = [
+            '发单号', '接单客服', '淘宝订单编号', '会员名', '淘宝价格', '写手派单价格', '结算状态', '订单付款时间', '确认收货时间',
+        ];
 
     }
 
@@ -741,6 +822,12 @@ class businessController extends Controller
     // 更新单个单子状态
     public function updateOneOrderState(Request $request)
     {
+        $token = $request->header('Authorization');
+        // 用户未登陆
+        if (!$data = oaUsersController::getUserIdOfToken($token)) {
+            return oaUsersController::result([],-1, 'err_token');
+        }
+
 
     }
 
