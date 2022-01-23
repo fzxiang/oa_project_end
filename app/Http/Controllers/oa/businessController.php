@@ -1177,6 +1177,7 @@ class businessController extends Controller
                 'writerSituation' => $writer['writerSituation'],
                 'writerQuality' => $writer['writerQuality'],
                 'compensateState' => $item->compensateState,
+                'wSettleState' => $item->wSettleState,
             ];
         }
 
