@@ -4,7 +4,9 @@ namespace App\Http\Controllers\oa;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Models\Shop;
 use App\Models\Writer;
+use http\Params;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -24,21 +26,25 @@ class businessController extends Controller
         }
 
         $shopId = 1;
+        $shop = Shop::find($shopId);
+        if (!$shop) {
+            return oaUsersController::result([],-1, 'no_shop');
+        }
 
         $orderInfo = [
             'order' => [
-                'aliOrder'          => '192103299123', // 淘宝订单编号
-                'invoice'           => 'ZY23JAJ', // 发单号
-                'memberName'        => '即大奖哦', // 会员名
-                'taobaoPrice'       => '172', // 淘宝价格
-                'customerContact'   => 'zj132034', // 客户微信或QQ
-                'orderOutline'      => '垃圾订单', // 订单概要
+                'aliOrder'          => '192103299124', // 淘宝订单编号
+                'invoice'           => 'Zw24352', // 发单号
+                'memberName'        => '呢大衣', // 会员名
+                'taobaoPrice'       => '44', // 淘宝价格
+                'customerContact'   => 'zj132044', // 客户微信或QQ
+                'orderOutline'      => '糟糕订单', // 订单概要
             ],
             'writer' => [
                 [
-                'writerNum'         => '15282383293', // 写手手机号
-                'name'              => 'fasf', // 写手名
-                'writerPrice'       => '238', // 写手派单价
+                'writerNum'         => '15282383333', // 写手手机号
+                'name'              => 'zix', // 写手名
+                'writerPrice'       => '665', // 写手派单价
                 'alipayAccount'     => '234453fe', // 写手支付宝
                 'qqAccount'         => '323030ajfe', // 写手qq
                 'wechatAccount'     => 'fowajie2323', // 写手微信
@@ -46,9 +52,9 @@ class businessController extends Controller
                 'writerQuality'     => 0, // 写手质量(1：好，2：中，3：差)
                 ],
                 [
-                'writerNum'         => '15282383293', // 写手手机号
-                'name'              => 'fasf', // 写手名
-                'writerPrice'       => '238', // 写手派单价
+                'writerNum'         => '15282384444', // 写手手机号
+                'name'              => 'liming', // 写手名
+                'writerPrice'       => '323', // 写手派单价
                 'alipayAccount'     => '234453fe', // 写手支付宝
                 'qqAccount'         => '323030ajfe', // 写手qq
                 'wechatAccount'     => 'fowajie2323', // 写手微信
@@ -57,7 +63,7 @@ class businessController extends Controller
                 ],
             ],
             'other' => [
-                'remarks'           => '就佛啊文件佛啊', // 备注
+                'remarks'           => '就佛啊文件佛啊疯哦弄安分阿福那饿啊发女挨饿发呢Ivan哦发你哦撒娇的决定把你饿啊v按哦饿哦啊v奥v哦扫v女哦啊我弄', // 备注
             ]
         ];
 
@@ -126,9 +132,9 @@ class businessController extends Controller
 
         $orderInfo = [
             'order' => [
-                'id'                => 1,
-                'aliOrder'          => '192103299123', // 淘宝订单编号
-                'invoice'           => 'ZY23JAJ', // 发单号
+                'id'                => 5,
+                'aliOrder'          => '282103299149', // 淘宝订单编号
+                'invoice'           => 'ZY293948', // 发单号
                 'memberName'        => '即大奖哦', // 会员名
                 'taobaoPrice'       => '172', // 淘宝价格
                 'customerContact'   => 'zj132034', // 客户微信或QQ
@@ -137,7 +143,7 @@ class businessController extends Controller
             'writer' => [
                 [
                     'id'                => 1,
-                    'writerNum'         => '15282383293', // 写手手机号
+                    'writerNum'         => '15282445555', // 写手手机号
                     'name'              => 'fasf', // 写手名
                     'writerPrice'       => '238', // 写手派单价
                     'alipayAccount'     => '234453fe', // 写手支付宝
@@ -148,9 +154,9 @@ class businessController extends Controller
                 ],
                 [
                     'id'                => 2,
-                    'writerNum'         => '15282383293', // 写手手机号
+                    'writerNum'         => '15282386666', // 写手手机号
                     'name'              => 'fasf', // 写手名
-                    'writerPrice'       => '238', // 写手派单价
+                    'writerPrice'       => '333', // 写手派单价
                     'alipayAccount'     => '234453fe', // 写手支付宝
                     'qqAccount'         => '323030ajfe', // 写手qq
                     'wechatAccount'     => 'fowajie2323', // 写手微信
@@ -159,7 +165,7 @@ class businessController extends Controller
                 ],
             ],
             'other' => [
-                'remarks'           => '就佛啊文件佛啊', // 备注
+                'remarks'           => '次擦你到家发哦嗯发哦违法哦饿哦啊减肥', // 备注
             ]
         ];
 
@@ -316,39 +322,40 @@ class businessController extends Controller
     {
         $datas = [
             [
-                'aliOrder' => '14700238239423', // 订单编号
+                'aliOrder' => '282103299149', // 订单编号
                 'paymentMer' => 100, // 打款商家金额
-                'confirmTime' => '23424', // 确认收货时间
-                'paymentTime' => '435802', // 确认付款时间
+                'confirmTime' => strtotime("2022-01-01 12:00:00"), // 确认收货时间
+                'paymentTime' => strtotime("2022-01-02 14:00:00"), // 确认付款时间
             ],
             [
-                'aliOrder' => '1470023824304', // 订单编号
+                'aliOrder' => '192103299124', // 订单编号
                 'paymentMer' => 50, // 打款商家金额
-                'confirmTime' => '567', // 确认收货时间
-                'paymentTime' => '24345', // 确认付款时间
+                'confirmTime' => strtotime("2022-01-03 08:00:00"), // 确认收货时间
+                'paymentTime' => strtotime("2022-01-04 15:00:00"), // 确认付款时间
             ],
             [
                 'aliOrder' => '14700238239489', // 订单编号
                 'paymentMer' => 0, // 打款商家金额
-                'confirmTime' => '14324', // 确认收货时间
-                'paymentTime' => '8675802', // 确认付款时间
+                'confirmTime' => strtotime("2022-01-05 08:00:00"), // 确认收货时间
+                'paymentTime' => strtotime("2022-01-06 08:00:00"), // 确认付款时间
             ],
         ];
 
         $failData = [];
         // 上传附件数据处理
         foreach ($datas as $data) {
+            $order = Order::where([['aliOrder', '=', $data['aliOrder']], ['shop_id', '=', $shopId]])->get()->toArray();
+            if (!$order) {
+                $failData[] = $data['aliOrder'];
+            }
+
             // 更新数据
-            $num = Order::where([['aliOrder', '=', $data['aliOrder'], ['shop_id', '=', $shopId]]])->update([
+            $num = Order::where([['aliOrder', '=', $data['aliOrder']], ['shop_id', '=', $shopId]])->update([
                 'taobaoPrice' => $data['paymentMer'],
                 'paymentTime' => $data['paymentTime'],
                 'receivingTime' => $data['confirmTime'],
                 'overviewFilePrice' => $data['paymentMer'],
             ]);
-
-            if (!$num) {
-                $failData[] = $data['aliOrder'];
-            }
         }
 
         return $failData;
@@ -359,17 +366,17 @@ class businessController extends Controller
     {
         $datas = [
             [
-                'aliOrder' => '14700238239489', // 订单编号
+                'aliOrder' => '282103299149', // 订单编号
                 'refundState' => '退款成功', // 退款状态
-                'refundMod' => '售中退款', // 售中或售后
-                'actualPayment' => 120, // 买家实际支付金额
-                'refundMoney' => 120, // 买家退款金额
+                'refundMod' => '售后退款', // 售中或售后
+                'actualPayment' => 30, // 买家实际支付金额
+                'refundMoney' => 30, // 买家退款金额
             ],
             [
-                'aliOrder' => '14700238239489', // 订单编号
+                'aliOrder' => '192103299124', // 订单编号
                 'refundState' => '退款失败', // 退款状态
                 'refundMod' => '售中退款', // 售中或售后
-                'actualPayment' => 382, // 买家实际支付金额
+                'actualPayment' => 40, // 买家实际支付金额
                 'refundMoney' => 0, // 买家退款金额
             ],
             [
@@ -393,7 +400,12 @@ class businessController extends Controller
 
             // 获取打款商家金额
             $order = Order::where('aliOrder', '=', $data['aliOrder'])->get()->toArray();
-            $overviewFilePrice = $order['overviewFilePrice'] ?: 0;
+            if (!$order) {
+                $failData[] = $data['aliOrder'];
+                continue;
+            }
+
+            $overviewFilePrice = $order[0]['overviewFilePrice'] ?: 0;
 
             if ($overviewFilePrice < $data['refundMoney']) {
                 $failData[] = $data['aliOrder'];
@@ -401,7 +413,7 @@ class businessController extends Controller
             }
 
             $taobaoPrice = $overviewFilePrice - $data['refundMoney'];
-            $num = Order::where([['aliOrder', '=', $data['aliOrder']], [['shop_id', '=', $shopId]]])->update([
+            $num = Order::where([['aliOrder', '=', $data['aliOrder']], ['shop_id', '=', $shopId]])->update([
                 'taobaoPrice' => $taobaoPrice,
             ]);
         }
@@ -442,14 +454,14 @@ class businessController extends Controller
         $data = [
             'pageNumber' => 1, // 第几页
             'pageSize' => 10, // 一页几条数据
-            'aliOrder' => '140294402340', // 淘宝订单编号
-            'invoice' => 'zy239301', // 发单号
-            'memberName' => 'jiosjd', // 会员名
-            'settleState' => 1, // 结算状态(1:已结算，2:未结算, 3:暂缓结算)
-            'pStartDate' => 0, // 订单付款开始时间
-            'pEndDate' => 0, // 订单付款结束时间
-            'rStartDate' => 0, // 订单收货开始时间
-            'rEndDate' => 0, // 订单收货结束时间
+            'aliOrder' => '', // 淘宝订单编号
+            'invoice' => '', // 发单号
+            'memberName' => '', // 会员名
+            'settleState' => 0, // 结算状态(1:已结算，2:未结算, 3:暂缓结算)
+            'pStartTime' => 0, // 订单付款开始时间
+            'pEndTime' => 0, // 订单付款结束时间
+            'rStartTime' => 0, // 订单收货开始时间
+            'rEndTime' => 0, // 订单收货结束时间
         ];
 
         // 页码，条数
@@ -463,16 +475,16 @@ class businessController extends Controller
         // sql语句处理
         $sqlArr = [];
         // 默认开始时间
-        if (isset($data['pStartData']) && $data['pStartData']) {
-            $pStartTime = strtotime($data['pStartData']);
+        if (isset($data['pStartTime']) && $data['pStartTime']) {
+            $pStartTime = strtotime($data['pStartTime']);
         }
         else {
             $pStartTime = strtotime("2022-01-01");
         }
 
         // 默认结束时间
-        if (isset($data['pEndData']) && $data['pEndData']) {
-            $pEndTime = strtotime($data['pEndData']);
+        if (isset($data['pEndTime']) && $data['pEndTime']) {
+            $pEndTime = strtotime($data['pEndTime']);
         }
         else {
             $pEndTime = time();
@@ -483,9 +495,9 @@ class businessController extends Controller
         $sqlArr[] = ['paymentTime', '<=', $pEndTime];
 
         // 确认收货时间
-        if (isset($data['rStartData']) && $data['rStartData'] && isset($data['rEndData']) && $data['rEndData']) {
-            $sqlArr[] = ['receivingTime', '>=', $data['rStartData']];
-            $sqlArr[] = ['receivingTime', '<=', $data['rEndData']];
+        if (isset($data['rStartTime']) && $data['rStartTime'] && isset($data['rEndTime']) && $data['rEndTime']) {
+            $sqlArr[] = ['receivingTime', '>=', $data['rStartTime']];
+            $sqlArr[] = ['receivingTime', '<=', $data['rEndTime']];
         }
 
         // 淘宝订单编号
@@ -523,7 +535,18 @@ class businessController extends Controller
             return oaUsersController::result([],-1, 'err_token');
         }
 
+        if (!$request['orderId'] || !$request['writerId']) {
+            return oaUsersController::result([],-1, 'err_param');
+        }
 
+        $state = intval($request['state']);
+        $num = DB::table('writer_order')->where('writerId', '=', $request['writerId'])
+            ->where('orderId', '=', $request['orderId'])
+            ->update([
+                'compensateState' => $state,
+            ]);
+
+        return oaUsersController::result($num);
     }
 
     // 写手总览检索
@@ -638,10 +661,10 @@ class businessController extends Controller
             'wechatAccount' => 'zy239301', // 写手微信号
             'writerId' => 1, // 写手ID
             'settleState' => 1, // 结算状态(1:已结算，2:未结算, 3:暂缓结算)
-            'pStartData' => 0, // 订单付款开始时间
-            'pEndData' => 0, // 订单付款结束时间
-            'rStartData' => 0, // 订单收货开始时间
-            'rEndData' => 0, // 订单收货结束时间
+            'pStartTime' => 0, // 订单付款开始时间
+            'pEndTime' => 0, // 订单付款结束时间
+            'rStartTime' => 0, // 订单收货开始时间
+            'rEndTime' => 0, // 订单收货结束时间
         ];
 
         // 页码，条数
@@ -653,7 +676,7 @@ class businessController extends Controller
         $offset = $limit * ($page - 1);
 
         $writerSqlArr = [];
-        $writerSqlArr[] = ['shop_id', '<=', $shopId];
+        $writerSqlArr[] = ['shop_id', '=', $shopId];
         // 写手手机号
         if (isset($data['writerNum']) && $data['writerNum']) {
             $writerSqlArr[] = ['writerNum', '=', $data['writerNum']];
@@ -676,45 +699,80 @@ class businessController extends Controller
 
         $writer = Writer::where($writerSqlArr)->skip($offset)->take($limit)->get()->toArray();
 
-        // todo 根据写手信息查询订单
+        // 获取对应写手所有订单ID
+        $jsonInfo = [];
+        $writerIds = [];
         foreach ($writer as $item) {
-
+            $writerIds[] = $item['id'];
+            $jsonInfo[$item['id']] = [
+                'id' => $item['id'],
+                'writerNum' => $item['writerNum'],
+                'name' => $item['name'],
+                'alipayAccount' => $item['alipayAccount'],
+                'qqAccount' => $item['qqAccount'],
+                'wechatAccount' => $item['wechatAccount'],
+                'writerSituation' => $item['writerSituation'],
+                'writerQuality' => $item['writerQuality'],
+                'childOrder' => [],
+            ];
         }
+        $writerOrders = DB::table('writer_order')->whereIn('writerId', $writerIds)->get()->toArray();
 
-        // sql语句处理
-        $orderSqlArr = [];
         // 默认开始时间
-        if (isset($data['pStartData']) && $data['pStartData']) {
-            $pStartTime = strtotime($data['pStartData']);
+        if (isset($data['pStartTime']) && $data['pStartTime']) {
+            $pStartTime = strtotime($data['pStartTime']);
         }
         else {
             $pStartTime = strtotime("2022-01-01");
         }
 
         // 默认结束时间
-        if (isset($data['pEndData']) && $data['pEndData']) {
-            $pEndTime = strtotime($data['pEndData']);
+        if (isset($data['pEndTime']) && $data['pEndTime']) {
+            $pEndTime = strtotime($data['pEndTime']);
         }
         else {
             $pEndTime = time();
         }
 
-        $orderSqlArr[] = ['shop_id', '=', $shopId];
-        $orderSqlArr[] = ['paymentTime', '>=', $pStartTime];
-        $orderSqlArr[] = ['paymentTime', '<=', $pEndTime];
-
         // 确认收货时间
-        if (isset($data['rStartData']) && $data['rStartData'] && isset($data['rEndData']) && $data['rEndData']) {
-            $orderSqlArr[] = ['receivingTime', '>=', $data['rStartData']];
-            $orderSqlArr[] = ['receivingTime', '<=', $data['rEndData']];
+        $rStartTime = $rEndTime = 0;
+        if (isset($data['rStartTime']) && isset($data['rEndTime'])) {
+            $rStartTime = strtotime($data['rStartTime']);
+            $rEndTime = strtotime($data['rEndTime']);
         }
 
-        // 结算状态
-        if (isset($data['settleState']) && $data['settleState']) {
-            $orderSqlArr[] = ['settleState', '=', $data['settleState']];
+        // 符合条件数据拼接
+        foreach ($writerOrders as $item) {
+            // 遍历查询订单
+            $order = Order::find($item->orderId);
+
+            // 状态不符合
+            if ($data['settleState'] && $data['settleState'] != $order['settleState']) {
+                continue;
+            }
+
+            // 付款时间不符合
+            if ($order['paymentTime'] < $pStartTime || $order['paymentTime'] > $pEndTime) {
+                continue;
+            }
+
+            // 收货时间不符合
+            if (($rStartTime && $order['receivingTime'] < $rStartTime) || ($rEndTime && $order['receivingTime'] > $rEndTime)) {
+                continue;
+            }
+
+            // 符合条件订单
+            if (!array_key_exists($item->writerId, $jsonInfo)) {
+                continue;
+            }
+
+            $jsonInfo[$item->writerId]['childOrder'][] = [
+                'id' => $order['id'],
+
+            ];
         }
 
-        return oaUsersController::result();
+        return oaUsersController::result($jsonInfo);
     }
 
     // 写手报表上传已结算订单
@@ -762,23 +820,86 @@ class businessController extends Controller
             return oaUsersController::result([],-1, 'err_token');
         }
 
+        $fileField = [
+            '序号', '收款方支付宝账号', '收款方姓名', '金额', '备注',
+        ];
+
     }
 
     // 写手报表订单全部结算
     public function quickWriterOrderStatus(Request $request)
     {
-
         $token = $request->header('Authorization');
         // 用户未登陆
         if (!$data = oaUsersController::getUserIdOfToken($token)) {
             return oaUsersController::result([],-1, 'err_token');
         }
 
-        $fileField = [
-            '序号', '收款方支付宝账号', '收款方姓名', '金额', '备注',
+        if (!$request['writerId'] || !$request['searchParams']) {
+            return oaUsersController::result([],-1, 'err_param');
+        }
+
+        $shopId = 1;
+
+        $data = [
+            'settleState' => 1, // 结算状态(1:已结算，2:未结算, 3:暂缓结算)
+            'pStartTime' => 0, // 订单付款开始时间
+            'pEndTime' => 0, // 订单付款结束时间
+            'rStartTime' => 0, // 订单收货开始时间
+            'rEndTime' => 0, // 订单收货结束时间
         ];
 
+        // sql语句处理
+        // 默认开始时间
+        if (isset($data['pStartTime']) && $data['pStartTime']) {
+            $pStartTime = strtotime($data['pStartTime']);
+        }
+        else {
+            $pStartTime = strtotime("2022-01-01");
+        }
 
+        // 默认结束时间
+        if (isset($data['pEndTime']) && $data['pEndTime']) {
+            $pEndTime = strtotime($data['pEndTime']);
+        }
+        else {
+            $pEndTime = time();
+        }
+
+        // 确认收货时间
+        $rStartTime = $rEndTime = 0;
+        if (isset($data['rStartTime']) && isset($data['rEndTime'])) {
+            $rStartTime = strtotime($data['rStartTime']);
+            $rEndTime = strtotime($data['rEndTime']);
+        }
+
+        // 查询当前写手所有订单ID
+        $writerOrders = DB::table('writer_order')->where('writerId', '=', $request['writerId'])->get()->toArray();
+        foreach ($writerOrders as $item) {
+            // 遍历查询订单
+            $order = Order::find($item->id);
+
+            // 状态不符合
+            if ($data['settleState'] && $data['settleState'] != $order['settleState']) {
+                continue;
+            }
+
+            // 付款时间不符合
+            if ($order['paymentTime'] < $pStartTime || $order['paymentTime'] > $pEndTime) {
+                continue;
+            }
+
+            // 收货时间不符合
+            if (($rStartTime && $order['receivingTime'] < $rStartTime) || ($rEndTime && $order['receivingTime'] > $rEndTime)) {
+                continue;
+            }
+
+            // 符合条件订单修改状态(已结算)
+            $order->settleState = 1;
+            $order->save();
+        }
+
+        return oaUsersController::result();
     }
 
     // 客服报表检索
@@ -790,6 +911,84 @@ class businessController extends Controller
             return oaUsersController::result([],-1, 'err_token');
         }
 
+        if (!$request['searchParams']) {
+            return oaUsersController::result([],-1, 'err_param');
+        }
+
+        $shopId = 1;
+
+        $data = [
+            'pageNumber' => 1, // 第几页
+            'pageSize' => 10, // 一页几条数据
+            'customerId' => 15, // 客服ID
+            'settleState' => 1, // 结算状态(1:已结算，2:未结算, 3:暂缓结算)
+            'pStartTime' => 0, // 订单付款开始时间
+            'pEndTime' => 0, // 订单付款结束时间
+            'rStartTime' => 0, // 订单收货开始时间
+            'rEndTime' => 0, // 订单收货结束时间
+        ];
+
+        $relt = $this->kefuCheckSearch($shopId, $data);
+
+        return oaUsersController::result($relt);
+    }
+
+    private function kefuCheckSearch($shopId, $params)
+    {
+        $data = $params ?? [];
+        if (empty($data)) {
+            return [];
+        }
+
+        // 页码，条数
+        $page = isset($data['pageNumber']) ? intval($data['pageNumber']) : 1;
+        $limit = isset($data['pageSize']) ? intval($data['pageSize']) : 10;
+        $page  = max(1, $page);
+
+        // 跳过的条数
+        $offset = $limit * ($page - 1);
+
+        // sql语句处理
+        $sqlArr = [];
+        // 默认开始时间
+        if (isset($data['pStartTime']) && $data['pStartTime']) {
+            $pStartTime = strtotime($data['pStartTime']);
+        }
+        else {
+            $pStartTime = strtotime("2022-01-01");
+        }
+
+        // 默认结束时间
+        if (isset($data['pEndTime']) && $data['pEndTime']) {
+            $pEndTime = strtotime($data['pEndTime']);
+        }
+        else {
+            $pEndTime = time();
+        }
+
+        $sqlArr[] = ['shop_id', '=', $shopId];
+        $sqlArr[] = ['paymentTime', '>=', $pStartTime];
+        $sqlArr[] = ['paymentTime', '<=', $pEndTime];
+
+        // 确认收货时间
+        if (isset($data['rStartTime']) && $data['rStartTime'] && isset($data['rEndTime']) && $data['rEndTime']) {
+            $sqlArr[] = ['receivingTime', '>=', $data['rStartTime']];
+            $sqlArr[] = ['receivingTime', '<=', $data['rEndTime']];
+        }
+
+        // 客服ID
+        if (isset($data['customerId']) && $data['customerId']) {
+            $sqlArr[] = ['acceptUser', '=', $data['customerId']];
+        }
+
+        // 结算状态
+        if (isset($data['settleState']) && $data['settleState']) {
+            $sqlArr[] = ['settleState', '=', $data['settleState']];
+        }
+
+        $order = Order::where($sqlArr)->skip($offset)->take($limit)->get()->toArray();
+
+        return $order;
     }
 
     // 客服报表批量修改状态
@@ -801,6 +1000,30 @@ class businessController extends Controller
             return oaUsersController::result([],-1, 'err_token');
         }
 
+        if ($request['state'] || !$request['searchParams']) {
+            return oaUsersController::result([],-1, 'err_param');
+        }
+
+        $shopId = 1;
+
+        $data = [
+            'pageNumber' => 1, // 第几页
+            'pageSize' => 10, // 一页几条数据
+            'customerId' => 15, // 客服ID
+            'settleState' => 1, // 结算状态(1:已结算，2:未结算, 3:暂缓结算)
+            'pStartTime' => 0, // 订单付款开始时间
+            'pEndTime' => 0, // 订单付款结束时间
+            'rStartTime' => 0, // 订单收货开始时间
+            'rEndTime' => 0, // 订单收货结束时间
+        ];
+        $orders = $this->kefuCheckSearch($shopId, $data);
+        $ids = array_column($orders, 'id');
+
+        $num = Order::whereIn('id', $ids)->update([
+            'settleState' => $request['state'],
+        ]);
+
+        return oaUsersController::result($num);
     }
 
     // 客服报表导出
@@ -818,7 +1041,6 @@ class businessController extends Controller
 
     }
 
-
     // 更新单个单子状态
     public function updateOneOrderState(Request $request)
     {
@@ -828,7 +1050,70 @@ class businessController extends Controller
             return oaUsersController::result([],-1, 'err_token');
         }
 
+        if (!$request['orderId'] || !$request['state']) {
+            return oaUsersController::result([],-1, 'err_param');
+        }
 
+        $order = Order::find($request['orderId']);
+        $order->settleState = $request['state'];
+
+        $order->save();
+
+        return oaUsersController::result();
+    }
+
+    // 根据订单ID拉取写手信息
+    public function getWritersOfOrder(Request $request)
+    {
+        $token = $request->header('Authorization');
+        // 用户未登陆
+        if (!$data = oaUsersController::getUserIdOfToken($token)) {
+            return oaUsersController::result([],-1, 'err_token');
+        }
+
+        if (!$request['orderId']) {
+            return oaUsersController::result([],-1, 'err_param');
+        }
+
+        $orderWriters = DB::table('writer_order')->where('orderId', '=', $request['orderId'])->get()->toArray();
+
+        $writerInfo = [];
+        foreach ($orderWriters as $item) {
+            $writer = Writer::find($item->writerId);
+
+            $writerInfo[] = [
+                'id' => $writer['id'],
+            ];
+        }
+
+        return oaUsersController::result($writerInfo);
+    }
+
+    // 根据写手ID拉取订单信息
+    public function getOrdersOfWriter(Request $request)
+    {
+        $token = $request->header('Authorization');
+        // 用户未登陆
+        if (!$data = oaUsersController::getUserIdOfToken($token)) {
+            return oaUsersController::result([],-1, 'err_token');
+        }
+
+        if (!$request['writerId']) {
+            return oaUsersController::result([],-1, 'err_param');
+        }
+
+        $orderWriters = DB::table('writer_order')->where('orderId', '=', $request['orderId'])->get()->toArray();
+
+        $orderInfo = [];
+        foreach ($orderWriters as $item) {
+            $order = Order::find($item->orderId);
+
+            $orderInfo[] = [
+                'id' => $order['id'],
+            ];
+        }
+
+        return oaUsersController::result($orderInfo);
     }
 
 }

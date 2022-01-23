@@ -19,7 +19,7 @@ class CreateOrderTable extends Migration
             $table->string('invoice')->default('')->comment('发单号');
             $table->bigInteger('acceptUser')->default(0)->comment('接单客服ID');
             $table->string('aliOrder')->default('')->comment('淘宝订单编号');
-            $table->integer('settleState')->default(0)->comment('客服结算状态 1:已结算,2:未结算,3:暂缓结算');
+            $table->integer('settleState')->default(2)->comment('客服结算状态 1:已结算,2:未结算,3:暂缓结算');
             $table->string('memberName')->default('')->comment('会员名');
             $table->integer('taobaoPrice')->default(0)->comment('淘宝价格');
             $table->string('customerContact')->default('')->comment('客户微信或QQ');

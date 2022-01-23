@@ -16,6 +16,8 @@ class oaUsersController extends Controller
 {
     public function __construct()
     {
+        date_default_timezone_set('Asia/Shanghai');
+
 //        $this->middleware('auth', [
 //            'except' => ['store']
 //        ]);
@@ -151,6 +153,10 @@ class oaUsersController extends Controller
         $formatData = [];
         foreach ($datas as $data) {
             $item['menu'] = json_decode($data->menu);
+            if (empty($item['menu'])) {
+                continue;
+            }
+
             $item['shop'] = $data->shop_id;
             $item['userId'] = $data->user_id;
             // 店铺
@@ -470,6 +476,8 @@ class oaUsersController extends Controller
         foreach ($data as $k => $item) {
             $role = Role::find($item['role_id']);
             $data[$k]['role_name'] = $role['role_name'] ?? '';
+            $data[$k]['created_at'] = date('Y-m-d H:i:s', strtotime($item['created_at']));
+            $data[$k]['updated_at'] = date('Y-m-d H:i:s', strtotime($item['updated_at']));
         }
 
         $relt = $data;
@@ -486,6 +494,11 @@ class oaUsersController extends Controller
         }
 
         $data = Shop::all()->toArray();
+
+        foreach ($data as $k => $item) {
+            $data[$k]['created_at'] = date('Y-m-d H:i:s', strtotime($item['created_at']));
+            $data[$k]['updated_at'] = date('Y-m-d H:i:s', strtotime($item['updated_at']));
+        }
 
         $relt = $data;
         return self::result($relt);
@@ -592,6 +605,8 @@ class oaUsersController extends Controller
 
         foreach ($data as $k => $item) {
             $data[$k]['menu'] = json_decode($item['menu']);
+            $data[$k]['created_at'] = date('Y-m-d H:i:s', strtotime($item['created_at']));
+            $data[$k]['updated_at'] = date('Y-m-d H:i:s', strtotime($item['updated_at']));
         }
 
         $relt = $data;
