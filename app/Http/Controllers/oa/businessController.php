@@ -501,15 +501,12 @@ class businessController extends Controller
             return oaUsersController::result([],-1, 'err_shop');
         }
 
-        dd($request['searchParams']);
-        $searchParams = json_decode($request['searchParams']);
-        Log::info('test:', $searchParams);
+        $request['searchParams'] = json_decode($request['searchParams']);
 
+        dd($request['searchParams']);
         if (!$request['searchParams']) {
             return oaUsersController::result([],-1, 'err_param');
         }
-
-        Log::info('test:', $request['searchParams']);
 
         $data = [
             'page' => 1, // 第几页
