@@ -25,6 +25,9 @@ Route::get('/test', 'testController@test')->name('test');
 
 Route::get('/testGzencode', 'oa\oaUsersController@testGzencode')->name('testGzencode');
 Route::any('/exportTest', 'oa\oaUsersController@exportTest')->name('exportTest');
+Route::any('/exportExcelTest', 'oa\oaUsersController@exportExcelTest')->name('exportExcelTest');
+
+Route::get('/dataToHashSave', 'oa\businessController@dataToHashSave')->name('dataToHashSave');
 
 
 
@@ -134,3 +137,4 @@ Route::get('/getUsersOfPower', 'oa\oaUsersController@getUsersOfPower')->name('ge
 Route::post('/getWritersOfOrder', 'oa\businessController@getWritersOfOrder')->name('getWritersOfOrder');
 // 根据写手ID拉去订单信息(writerId(写手唯一ID))(客服管理-写手报表中的单子下拉是本身已经下发的，不要用这条协议拉订单数据)
 Route::post('/getOrdersOfWriter', 'oa\businessController@getOrdersOfWriter')->name('getOrdersOfWriter');
+

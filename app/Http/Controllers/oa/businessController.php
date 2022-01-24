@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\oa;
 
 use App\Http\Controllers\Controller;
+use App\Libs\TokenSsl;
+use App\Models\HashOrderMaping;
 use App\Models\Order;
 use App\Models\Shop;
 use App\Models\Writer;
@@ -12,6 +14,40 @@ use Illuminate\Support\Facades\DB;
 
 class businessController extends Controller
 {
+    // 根据hash值获取订单
+    private function getOrderIdsOfHash($hash)
+    {
+        $hashOrder = HashOrderMaping::find($hash);
+        if (empty($hashOrder)) {
+            return [];
+        }
+
+        return json_decode($hashOrder['orderIds']);
+    }
+
+    // 订单生成hash落库
+    private function dataToHashSave($data)
+    {
+        $data = sort($data);
+        $strData = json_encode($data);
+        $hash = TokenSsl::generateHash($strData);
+
+        // 库里存在该hash不能重复插入
+        $hashOrder = HashOrderMaping::find($hash);
+        if ($hashOrder) {
+            return $hash;
+        }
+
+        // 不存在该hash数据落库
+        $curTime = time();
+        $hashData = HashOrderMaping::create([
+            'strHash' => $hash,
+            'orderIds' => $strData,
+            'operate' => $curTime,
+        ]);
+        return $hash;
+    }
+
     // 添加订单
     public function addOrder(Request $request)
     {
@@ -834,27 +870,69 @@ class businessController extends Controller
             return oaUsersController::result([],-1, 'no_data');
         }
 
-        $data = [
+        $datas = [
             [
-                'alipayAccount' => '1302942304', // 收款方支付宝账号
+                'alipayAccount' => '234453fe', // 收款方支付宝账号
                 'name' => '张静', // 收款方姓名
                 'price' => 43, // 金额
-                'invoice' => 'jx-zn1213', // 单号
+                'invoice' => '6a9a03c1', // 单号
             ],
             [
-                'alipayAccount' => '1869239322', // 收款方支付宝账号
+                'alipayAccount' => '234453fe2', // 收款方支付宝账号
                 'name' => '张静', // 收款方姓名
                 'price' => 25, // 金额
-                'invoice' => 'jx-zn1213', // 单号
+                'invoice' => '91f86f0e', // 单号
             ],
             [
-                'alipayAccount' => '1524534532', // 收款方支付宝账号
+                'alipayAccount' => '234453fe1', // 收款方支付宝账号
                 'name' => '张静', // 收款方姓名
                 'price' => 546, // 金额
-                'invoice' => 'jx-zn1213', // 单号
+                'invoice' => '6a9a03c1', // 单号
             ],
         ];
 
+        $datas = $request['fileData'];
+
+        $failData = [];
+        foreach ($datas as $data) {
+            if (!$data['invoice']) {
+                $failData[] = $data['alipayAccount'];
+                continue;
+            }
+
+            // 订单号解析
+            $orderIds = $this->getOrderIdsOfHash($data['invoice']);
+            if (empty($orderIds)) {
+                $failData[] = $data['alipayAccount'];
+                continue;
+            }
+
+            // 写手信息获取
+            $writer = Writer::where([['shop_id', '=', $shopId], ['alipayAccount', '=', $data['alipayAccount']]])->get()->toArray();
+            if (empty($writer)) {
+                $failData[] = $data['alipayAccount'];
+                continue;
+            }
+            $writer = $writer[0];
+            $writerId = $writer['id'];
+
+            // 订单处理
+            foreach ($orderIds as $orderId) {
+                // 写手结算状态
+                $writerNum = DB::table('writer_order')->where('writerId', '=', $writerId)
+                    ->where('orderId', '=', $orderId)
+                    ->update([
+                        'wSettleState' => 1,
+                    ]);
+
+                // 订单结算状态
+                $order = Order::find($orderId);
+                $order['settleState'] = 1;
+                $order->save();
+            }
+        }
+
+        return oaUsersController::result($failData);
     }
 
     // 写手报表订单导出
@@ -869,6 +947,7 @@ class businessController extends Controller
         $fileField = [
             '序号', '收款方支付宝账号', '收款方姓名', '金额', '备注',
         ];
+
 
     }
 

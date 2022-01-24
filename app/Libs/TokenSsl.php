@@ -41,5 +41,10 @@ class TokenSsl
         return openssl_decrypt($decodeStr, 'AES-128-ECB', $key, OPENSSL_RAW_DATA);
     }
 
+    // 生成hash值
+    public static function generateHash($str)
+    {
+        return hash('crc32', $str, false);
+    }
 
 }

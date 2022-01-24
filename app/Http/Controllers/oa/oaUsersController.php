@@ -12,6 +12,8 @@ use Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
+use Excel;
+
 class oaUsersController extends Controller
 {
     public function __construct()
@@ -703,7 +705,7 @@ class oaUsersController extends Controller
         $title = urlencode($title); // 转码中文，防止乱码 需要前端将文件名进行解码
 
         header('Content-Type: application/vnd.ms-excel');   //header设置
-        header("Content-Disposition: attachment;filename=" . $title . ".csv");
+        header("Content-Disposition: attachment;filename=" . $title . ".xlsx");
 //        header("Content-Type: application/vnd.ms-excel; charset=UTF-8");
         header('Cache-Control: max-age=0');
 
@@ -794,6 +796,23 @@ class oaUsersController extends Controller
             return false;
         }
 
+    }
+
+    public function exportExcelTest()
+    {
+        $cellData = [
+            ['学号','姓名','成绩'],
+            ['10001','AAAAA','99'],
+            ['10002','BBBBB','92'],
+            ['10003','CCCCC','95'],
+            ['10004','DDDDD','89'],
+            ['10005','EEEEE','96'],
+        ];
+        Excel::create('学生成绩',function($excel) use ($cellData){
+            $excel->sheet('score', function($sheet) use ($cellData){
+                $sheet->rows($cellData);
+            });
+        })->export('xls');
     }
 
 }

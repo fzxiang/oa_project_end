@@ -23,7 +23,8 @@ class CreateWriterTable extends Migration
             $table->string('wechatAccount')->default('')->comment('写手微信');
             $table->string('writerSituation')->default('')->comment('写手情况');
             $table->string('writerQuality')->default('')->comment('写手质量');
-            $table->unique(['writerNum'], 'unique1');
+            $table->unique(['shop_id', 'writerNum'], 'unique1');
+            $table->unique(['shop_id', 'alipayAccount'], 'unique2');
             $table->index(['shop_id'], 'index1');
         });
     }
