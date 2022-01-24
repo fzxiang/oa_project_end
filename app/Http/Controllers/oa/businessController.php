@@ -503,7 +503,6 @@ class businessController extends Controller
 
         $request['searchParams'] = json_decode($request['searchParams']);
 
-        dd($request['searchParams']);
         if (!$request['searchParams']) {
             return oaUsersController::result([],-1, 'err_param');
         }
@@ -622,6 +621,7 @@ class businessController extends Controller
             return oaUsersController::result([],-1, 'err_shop');
         }
 
+        $request['searchParams'] = json_decode($request['searchParams']);
         if (!$request['searchParams']) {
             return oaUsersController::result([],-1, 'err_param');
         }
@@ -721,6 +721,7 @@ class businessController extends Controller
             return oaUsersController::result([],-1, 'err_shop');
         }
 
+        $request['searchParams'] = json_decode($request['searchParams']);
         if (!$request['searchParams']) {
             return oaUsersController::result([],-1, 'err_param');
         }
@@ -1059,6 +1060,8 @@ class businessController extends Controller
         if (!$shopId) {
             return oaUsersController::result([],-1, 'err_shop');
         }
+
+        $request['searchParams'] = json_decode($request['searchParams']);
 
         if (!$request['searchParams']) {
             return oaUsersController::result([],-1, 'err_param');
