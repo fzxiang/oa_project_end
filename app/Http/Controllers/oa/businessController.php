@@ -501,6 +501,7 @@ class businessController extends Controller
             return oaUsersController::result([],-1, 'err_shop');
         }
 
+        dd($request['searchParams']);
         $searchParams = json_decode($request['searchParams']);
         Log::info('test:', $searchParams);
 
