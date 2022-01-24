@@ -11,6 +11,7 @@ use App\Models\Writer;
 use http\Params;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class businessController extends Controller
 {
@@ -503,6 +504,8 @@ class businessController extends Controller
         if (!$request['searchParams']) {
             return oaUsersController::result([],-1, 'err_param');
         }
+
+        Log::info('test:', $request['searchParams']);
 
         $data = [
             'page' => 1, // 第几页
