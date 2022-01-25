@@ -23,14 +23,14 @@ class businessController extends Controller
             return [];
         }
 
-        return json_decode($hashOrder['orderIds']);
+        return json_decode($hashOrder['orderIds'], true);
     }
 
     // 订单生成hash落库
     private function dataToHashSave($data)
     {
         $data = sort($data);
-        $strData = json_encode($data);
+        $strData = json_encode($data, true);
         $hash = TokenSsl::generateHash($strData);
 
         // 库里存在该hash不能重复插入
@@ -490,18 +490,19 @@ class businessController extends Controller
     // 我的订单检索
     public function searchOrder(Request $request)
     {
-        $token = $request->header('Authorization');
-        // 用户未登陆
-        if (!$data = oaUsersController::getUserIdOfToken($token)) {
-            return oaUsersController::result([],-1, 'err_token');
-        }
+//        $token = $request->header('Authorization');
+//        // 用户未登陆
+//        if (!$data = oaUsersController::getUserIdOfToken($token)) {
+//            return oaUsersController::result([],-1, 'err_token');
+//        }
+//
+//        $shopId = $request->header('Shop');
+//        if (!$shopId) {
+//            return oaUsersController::result([],-1, 'err_shop');
+//        }
 
-        $shopId = $request->header('Shop');
-        if (!$shopId) {
-            return oaUsersController::result([],-1, 'err_shop');
-        }
-
-        $request['searchParams'] = json_decode($request['searchParams']);
+        $shopId = 1;
+        $request['searchParams'] = json_decode($request['searchParams'], true);
 
         if (!$request['searchParams']) {
             return oaUsersController::result([],-1, 'err_param');
@@ -621,7 +622,7 @@ class businessController extends Controller
             return oaUsersController::result([],-1, 'err_shop');
         }
 
-        $request['searchParams'] = json_decode($request['searchParams']);
+        $request['searchParams'] = json_decode($request['searchParams'], true);
         if (!$request['searchParams']) {
             return oaUsersController::result([],-1, 'err_param');
         }
@@ -721,7 +722,7 @@ class businessController extends Controller
             return oaUsersController::result([],-1, 'err_shop');
         }
 
-        $request['searchParams'] = json_decode($request['searchParams']);
+        $request['searchParams'] = json_decode($request['searchParams'], true);
         if (!$request['searchParams']) {
             return oaUsersController::result([],-1, 'err_param');
         }
@@ -1061,7 +1062,7 @@ class businessController extends Controller
             return oaUsersController::result([],-1, 'err_shop');
         }
 
-        $request['searchParams'] = json_decode($request['searchParams']);
+        $request['searchParams'] = json_decode($request['searchParams'], true);
 
         if (!$request['searchParams']) {
             return oaUsersController::result([],-1, 'err_param');
