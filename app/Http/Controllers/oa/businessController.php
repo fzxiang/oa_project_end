@@ -2,16 +2,22 @@
 
 namespace App\Http\Controllers\oa;
 
+use App\Exports\CostomerSerRepotExport;
+use App\Exports\MyOrderExport;
+use App\Exports\TestExport;
 use App\Http\Controllers\Controller;
 use App\Libs\TokenSsl;
 use App\Models\HashOrderMaping;
 use App\Models\Order;
 use App\Models\Shop;
+use App\Models\User;
 use App\Models\Writer;
 use http\Params;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+
+use Excel;
 
 class businessController extends Controller
 {
@@ -30,7 +36,7 @@ class businessController extends Controller
     private function dataToHashSave($data)
     {
         $data = sort($data);
-        $strData = json_encode($data, true);
+        $strData = json_encode($data);
         $hash = TokenSsl::generateHash($strData);
 
         // 库里存在该hash不能重复插入
@@ -122,6 +128,7 @@ class businessController extends Controller
             'invoice'           => $orderData['invoice'],
             'memberName'        => $orderData['memberName'] ?? '',
             'taobaoPrice'       => $orderData['taobaoPrice'] ?: 0,
+            'serWritePrice'     => $orderData['taobaoPrice'] ?: 0,
             'customerContact'   => $orderData['customerContact'] ?? '',
             'orderOutline'      => $orderData['orderOutline'] ?? '',
             'remarks'           => $orderInfo['other']['remarks'] ?? '',
@@ -229,6 +236,7 @@ class businessController extends Controller
             'invoice'           => $orderData['invoice'],
             'memberName'        => $orderData['memberName'] ?? '',
             'taobaoPrice'       => $orderData['taobaoPrice'] ?: 0,
+            'serWritePrice'     => $orderData['taobaoPrice'] ?: 0,
             'customerContact'   => $orderData['customerContact'] ?? '',
             'orderOutline'      => $orderData['orderOutline'] ?? '',
             'remarks'           => $orderInfo['other']['remarks'] ?? '',
@@ -375,18 +383,21 @@ class businessController extends Controller
 //            [
 //                'aliOrder' => '282103299149', // 订单编号
 //                'paymentMer' => 100, // 打款商家金额
+//                'actualPaymentPrice' => 100, // 买家实际支付金额
 //                'confirmTime' => strtotime("2022-01-01 12:00:00"), // 确认收货时间
 //                'paymentTime' => strtotime("2022-01-02 14:00:00"), // 确认付款时间
 //            ],
 //            [
 //                'aliOrder' => '192103299124', // 订单编号
 //                'paymentMer' => 50, // 打款商家金额
+//                'actualPaymentPrice' => 50, // 买家实际支付金额
 //                'confirmTime' => strtotime("2022-01-03 08:00:00"), // 确认收货时间
 //                'paymentTime' => strtotime("2022-01-04 15:00:00"), // 确认付款时间
 //            ],
 //            [
 //                'aliOrder' => '14700238239489', // 订单编号
 //                'paymentMer' => 0, // 打款商家金额
+//                'actualPaymentPrice' => 0, // 买家实际支付金额
 //                'confirmTime' => strtotime("2022-01-05 08:00:00"), // 确认收货时间
 //                'paymentTime' => strtotime("2022-01-06 08:00:00"), // 确认付款时间
 //            ],
@@ -406,6 +417,7 @@ class businessController extends Controller
                 'paymentTime' => $data['paymentTime'],
                 'receivingTime' => $data['confirmTime'],
                 'overviewFilePrice' => $data['paymentMer'],
+                'actualPaymentPrice' => $data['actualPaymentPrice'],
             ]);
         }
 
@@ -466,6 +478,7 @@ class businessController extends Controller
             $taobaoPrice = $overviewFilePrice - $data['refundMoney'];
             $num = Order::where([['aliOrder', '=', $data['aliOrder']], ['shop_id', '=', $shopId]])->update([
                 'taobaoPrice' => $taobaoPrice,
+                'refundPrice' => $data['refundMoney'],
             ]);
         }
         return $failData;
@@ -475,16 +488,158 @@ class businessController extends Controller
     // 我的订单导出
     public function exportOrder(Request $request)
     {
+        $token = $request->header('Authorization');
+        // 用户未登陆
+        if (!$data = oaUsersController::getUserIdOfToken($token)) {
+            return oaUsersController::result([],-1, 'err_token');
+        }
+
+        $shopId = $request->header('Shop');
+        if (!$shopId) {
+            return oaUsersController::result([],-1, 'err_shop');
+        }
+
+        $request['searchParams'] = json_decode($request['searchParams'], true);
+
+        if (!$request['searchParams']) {
+            return oaUsersController::result([],-1, 'err_param');
+        }
+
+        $userId = $data['user_id'];
+        $userName = $data['username'];
+
+        $shopId = 1;
+        $data = [
+            'page' => 1, // 第几页
+            'pageSize' => 10, // 一页几条数据
+            'aliOrder' => '', // 淘宝订单编号
+            'invoice' => '', // 发单号
+            'memberName' => '', // 会员名
+            'settleState' => 0, // 结算状态(1:已结算，2:未结算, 3:暂缓结算)
+            'pStartTime' => 0, // 订单付款开始时间
+            'pEndTime' => 0, // 订单付款结束时间
+            'rStartTime' => 0, // 订单收货开始时间
+            'rEndTime' => 0, // 订单收货结束时间
+        ];
+
+        $data = $request['searchParams'];
+
+        // 页码，条数
+        $page = isset($data['page']) ? intval($data['page']) : 1;
+        $limit = isset($data['pageSize']) ? intval($data['pageSize']) : 10;
+        $page  = max(1, $page);
+
+        // 跳过的条数
+        $offset = $limit * ($page - 1);
+
+        // sql语句处理
+        $sqlArr = [];
+        // 默认开始时间
+        if (isset($data['pStartTime']) && $data['pStartTime']) {
+            $pStartTime = strtotime($data['pStartTime']);
+        }
+        else {
+            $pStartTime = strtotime("2022-01-01");
+        }
+
+        // 默认结束时间
+        if (isset($data['pEndTime']) && $data['pEndTime']) {
+            $pEndTime = strtotime($data['pEndTime']);
+        }
+        else {
+            $pEndTime = time();
+        }
+
+        $sqlArr[] = ['shop_id', '=', $shopId];
+        $sqlArr[] = ['paymentTime', '>=', $pStartTime];
+        $sqlArr[] = ['paymentTime', '<=', $pEndTime];
+
+        // 确认收货时间
+        if (isset($data['rStartTime']) && $data['rStartTime'] && isset($data['rEndTime']) && $data['rEndTime']) {
+            $sqlArr[] = ['receivingTime', '>=', $data['rStartTime']];
+            $sqlArr[] = ['receivingTime', '<=', $data['rEndTime']];
+        }
+
+        // 淘宝订单编号
+        if (isset($data['aliOrder']) && $data['aliOrder']) {
+            $sqlArr[] = ['aliOrder', '=', $data['aliOrder']];
+        }
+
+        // 发单号
+        if (isset($data['invoice']) && $data['invoice']) {
+            $sqlArr[] = ['invoice', '=', $data['invoice']];
+        }
+
+        // 会员名
+        if (isset($data['memberName']) && $data['memberName']) {
+            $sqlArr[] = ['memberName', '=', $data['memberName']];
+        }
+
+        // 结算状态
+        if (isset($data['settleState']) && $data['settleState']) {
+            $sqlArr[] = ['settleState', '=', $data['settleState']];
+        }
+
+        $order = Order::where($sqlArr)->skip($offset)->take($limit)->get()->toArray();
+
+        $data = [];
         // 导出字断
         $fileField = [
             '店铺名称', '客服ID', '接单客服', '淘宝订单号', '会员名', '打款商家金额', '买家退款金额', '买家实际支付金额',
             '总表(打款商家金额)-退款表(买家退款金额)', "客服填写价格", "最终对比价格", "订单概要", "订单付款时间", "确认收货时间",
-            '写手名 01', '写手QQ 01', '写手手机号 01', '写手派单价 01', '写手支付宝 01',
-            '写手名 02', '写手QQ 02', '写手手机号 02', '写手派单价 02', '写手支付宝 02',
-            '写手名 03', '写手QQ 03', '写手手机号 03', '写手派单价 03', '写手支付宝 03',
+            '写手名 01', '写手QQ 01', '写手手机号 01', '写手派单价 01', '写手支付宝 01', '写手情况 01', '写手质量 01',
+            '写手名 02', '写手QQ 02', '写手手机号 02', '写手派单价 02', '写手支付宝 02', '写手情况 02', '写手质量 02',
+            '写手名 03', '写手QQ 03', '写手手机号 03', '写手派单价 03', '写手支付宝 03', '写手情况 03', '写手质量 03',
         ];
 
+        $curTime = time();
 
+        $data[] = $fileField;
+
+        $shop = Shop::find($shopId)->toArray();
+
+        foreach ($order as $item) {
+            $user = User::find($order['acceptUser'])->toArray();
+
+            $itemData = [
+                $shop['shop_name'],
+                $item['acceptUser'],
+                $user['username'],
+                $item['aliOrder'],
+                $item['memberName'],
+                $item['overviewFilePrice'],
+                $item['refundPrice'],
+                $item['actualPaymentPrice'],
+                $item['taobaoPrice'],
+                $item['serWritePrice'],
+                $item['taobaoPrice'],
+                $item['orderOutline'],
+                date('Y-m-d H:i:s', $item['paymentTime']),
+                date('Y-m-d H:i:s', $item['receivingTime']),
+            ];
+
+            // 写手信息查询
+            $writerOrders = DB::table('writer_order')->where('orderId', '=', $item['id'])
+                ->where('shop_id', '=', $shop['shop_id'])
+                ->get()->toArray();
+
+            foreach ($writerOrders as $writerOrder) {
+                $writerId = $writerOrder->writerId;
+
+                $writer = Writer::find($writerId)->toArray();
+                $itemData[] = $writer['name'];
+                $itemData[] = $writer['qqAccount'];
+                $itemData[] = $writer['writerNum'];
+                $itemData[] = $writerOrder->writerPrice;
+                $itemData[] = $writer['alipayAccount'];
+                $itemData[] = $writer['writerSituation'];
+                $itemData[] = $writer['writerQuality'];
+            }
+
+            $data[] = $itemData;
+        }
+
+        return Excel::download(new MyOrderExport($data), '我的订单导出.xlsx');
     }
 
     // 我的订单检索
@@ -1187,16 +1342,73 @@ class businessController extends Controller
     // 客服报表导出
     public function exportCustomer(Request $request)
     {
-        $token = $request->header('Authorization');
-        // 用户未登陆
-        if (!$data = oaUsersController::getUserIdOfToken($token)) {
-            return oaUsersController::result([],-1, 'err_token');
-        }
+//        $token = $request->header('Authorization');
+//        // 用户未登陆
+//        if (!$data = oaUsersController::getUserIdOfToken($token)) {
+//            return oaUsersController::result([],-1, 'err_token');
+//        }
+//
+//        $shopId = $request->header('Shop');
+//        if (!$shopId) {
+//            return oaUsersController::result([],-1, 'err_shop');
+//        }
+//
+//        $request['searchParams'] = json_decode($request['searchParams'], true);
+//
+//        if (!$request['searchParams']) {
+//            return oaUsersController::result([],-1, 'err_param');
+//        }
+
+        $shopId = 1;
+        $data = [
+            'page' => 1, // 第几页
+            'pageSize' => 10, // 一页几条数据
+            'customerId' => 15, // 客服ID
+            'settleState' => 0, // 结算状态(1:已结算，2:未结算, 3:暂缓结算)
+            'pStartTime' => 0, // 订单付款开始时间
+            'pEndTime' => 0, // 订单付款结束时间
+            'rStartTime' => 0, // 订单收货开始时间
+            'rEndTime' => 0, // 订单收货结束时间
+        ];
+
+//        $data = $request['searchParams'];
+
+        $relt = $this->kefuCheckSearch($shopId, $data);
 
         $fileField = [
             '发单号', '接单客服', '淘宝订单编号', '会员名', '淘宝价格', '写手派单价格', '结算状态', '订单付款时间', '确认收货时间',
         ];
 
+        $fileDatas = [];
+        $fileDatas[] = ['客服报表'];
+        $fileDatas[] = $fileField;
+
+        foreach ($relt as $order) {
+            $user = User::find($order['acceptUser'])->toArray();
+
+            $writerOrders = DB::table('writer_order')->where('orderId', '=', $order['id'])
+                ->where('shop_id', '=', $shopId)
+                ->get()->toArray();
+            // 派单总价格
+            $writerPrice = 0;
+            foreach ($writerOrders as $item) {
+                $writerPrice += $item->writerPrice ?? 0;
+            }
+
+            $fileDatas[] = [
+                $order['invoice'],
+                $user['username'],
+                $order['aliOrder'],
+                $order['memberName'],
+                $order['taobaoPrice'],
+                $writerPrice,
+                $order['settleState'],
+                date('Y-m-d H:i:s', $order['paymentTime']),
+                date('Y-m-d H:i:s', $order['receivingTime']),
+            ];
+        }
+
+        return Excel::download(new CostomerSerRepotExport($fileDatas), '客服报表导出.xlsx');
     }
 
     // 更新单个单子状态

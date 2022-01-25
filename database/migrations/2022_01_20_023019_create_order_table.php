@@ -28,6 +28,9 @@ class CreateOrderTable extends Migration
             $table->integer('paymentTime')->default(0)->comment('订单付款时间');
             $table->integer('receivingTime')->default(0)->comment('订单收货时间');
             $table->integer('overviewFilePrice')->default(0)->comment('总览附件打款商家金额');
+            $table->integer('actualPaymentPrice')->default(0)->comment('买家实际支付金额');
+            $table->integer('refundPrice')->default(0)->comment('买家退款金额');
+            $table->integer('serWritePrice')->default(0)->comment('客服填写价格');
             $table->index(['paymentTime','receivingTime'], 'index1');
             $table->index(['shop_id'], 'index2');
             $table->unique(['aliOrder'], 'unique1');

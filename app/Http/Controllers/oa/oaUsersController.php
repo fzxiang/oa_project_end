@@ -801,7 +801,7 @@ class oaUsersController extends Controller
 
     public function exportExcelTest()
     {
-        return Excel::download(new TestExport, 'test.xlsx');
+        return Excel::download(new TestExport(), 'test.xlsx');
     }
 
 }
