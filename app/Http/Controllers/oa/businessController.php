@@ -490,18 +490,17 @@ class businessController extends Controller
     // 我的订单检索
     public function searchOrder(Request $request)
     {
-//        $token = $request->header('Authorization');
-//        // 用户未登陆
-//        if (!$data = oaUsersController::getUserIdOfToken($token)) {
-//            return oaUsersController::result([],-1, 'err_token');
-//        }
-//
-//        $shopId = $request->header('Shop');
-//        if (!$shopId) {
-//            return oaUsersController::result([],-1, 'err_shop');
-//        }
+        $token = $request->header('Authorization');
+        // 用户未登陆
+        if (!$data = oaUsersController::getUserIdOfToken($token)) {
+            return oaUsersController::result([],-1, 'err_token');
+        }
 
-        $shopId = 1;
+        $shopId = $request->header('Shop');
+        if (!$shopId) {
+            return oaUsersController::result([],-1, 'err_shop');
+        }
+
         $request['searchParams'] = json_decode($request['searchParams'], true);
 
         if (!$request['searchParams']) {
