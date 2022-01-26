@@ -5,6 +5,7 @@ namespace App\Http\Controllers\oa;
 use App\Exports\CostomerSerRepotExport;
 use App\Exports\MyOrderExport;
 use App\Exports\TestExport;
+use App\Exports\WriterRepotExport;
 use App\Http\Controllers\Controller;
 use App\Libs\TokenSsl;
 use App\Models\HashOrderMaping;
@@ -35,7 +36,11 @@ class businessController extends Controller
     // 订单生成hash落库
     private function dataToHashSave($data)
     {
-        $data = sort($data);
+        if (empty($data)) {
+            return '';
+        }
+
+        sort($data);
         $strData = json_encode($data);
         $hash = TokenSsl::generateHash($strData);
 
@@ -735,7 +740,38 @@ class businessController extends Controller
 
         $order = Order::where($sqlArr)->skip($offset)->take($limit)->get()->toArray();
 
-        $relt = $order;
+        foreach ($order as $k => $item) {
+            $writerOrder = DB::table('writer_order')->where('orderId', '=', $item['id'])
+                ->where('shop_id', '=', $shopId)->get()->toArray();
+
+            $orderWriterPrice = 0;
+            foreach ($writerOrder as $obj) {
+                $orderWriterPrice += $obj->writerPrice;
+            }
+
+            $order[$k]['writerTotalPrice'] = $orderWriterPrice;
+        }
+
+        // 所有订单
+        $totalOrders = Order::where($sqlArr)->get()->toArray();
+        // 计算总价格
+        $taobaoTotalPrice = 0;  // 淘宝总价格
+        $writerTotalPrice = 0;  // 写手总价格
+        foreach ($totalOrders as $item) {
+            $taobaoTotalPrice += $item['taobaoPrice'];
+            $writerOrder = DB::table('writer_order')->where('orderId', '=', $item['id'])
+                ->where('shop_id', '=', $shopId)->get()->toArray();
+
+            foreach ($writerOrder as $obj) {
+                $writerTotalPrice += $obj->writerPrice;
+            }
+        }
+
+        $relt = [
+            'orders' => $order,
+            'tbTotalPrice' => $taobaoTotalPrice,
+            'writerTotalPrice' => $writerTotalPrice,
+        ];
         return oaUsersController::result($relt);
     }
 
@@ -897,6 +933,20 @@ class businessController extends Controller
 
         $data = $request['searchParams'];
 
+        $jsonInfo = $this->writerReportSearch($shopId, $data);
+        $priceInfo = $this->writerReportSearchTotalPrice($shopId, $data);
+
+        $relt = [
+            'list' => $jsonInfo,
+            'totalPrice' => $priceInfo['totalPrice'],
+            'settlePrice' => $priceInfo['settlePrice'],
+            'noSettlePrice' => $priceInfo['noSettlePrice']
+        ];
+        return oaUsersController::result($relt);
+    }
+
+    private function writerReportSearch($shopId, $data)
+    {
         // 页码，条数
         $page = isset($data['page']) ? intval($data['page']) : 1;
         $limit = isset($data['pageSize']) ? intval($data['pageSize']) : 10;
@@ -924,7 +974,7 @@ class businessController extends Controller
 
         // 写手id
         if (isset($data['writerId']) && $data['writerId']) {
-            $writerSqlArr[] = ['writerId', '=', $data['writerId']];
+            $writerSqlArr[] = ['id', '=', $data['writerId']];
         }
 
         $writer = Writer::where($writerSqlArr)->skip($offset)->take($limit)->get()->toArray();
@@ -972,6 +1022,8 @@ class businessController extends Controller
         }
 
         $settleState = $data['settleState'] ?? 0;
+
+        $writerOrderInfos = [];
         // 符合条件数据拼接
         foreach ($writerOrders as $item) {
             // 遍历查询订单
@@ -1002,14 +1054,150 @@ class businessController extends Controller
                 'invoice' => $order['invoice'],
                 'acceptUser' => $order['acceptUser'],
                 'aliOrder' => $order['aliOrder'],
-                'settleState' => $order['settleState'],
+                'wSettleState' => $item->wSettleState,
                 'taobaoPrice' => $order['taobaoPrice'],
+                'writerPrice' => $item->writerPrice,
                 'paymentTime' => $order['paymentTime'],
                 'receivingTime' => $order['receivingTime'],
             ];
+
+            $curOrderNum = $writerOrderInfos[$item->writerId]['count'] ?? 0;
+            $curWriterPrice = $writerOrderInfos[$item->writerId]['price'] ?? 0;
+            $writerOrderInfos[$item->writerId] = [
+                'count' => $curOrderNum + 1,
+                'price' => $curWriterPrice + $item->writerPrice,
+            ];
         }
 
-        return oaUsersController::result($jsonInfo);
+        // 写手对应订单处理
+        foreach ($writerOrderInfos as $key => $item) {
+            // 订单数
+            $jsonInfo[$key]['orderNum'] = $item['count'];
+            // 总金额
+            $jsonInfo[$key]['totalWriterPrice'] = $item['price'];
+        }
+
+        return $jsonInfo;
+    }
+
+    private function writerReportSearchTotalPrice($shopId, $data)
+    {
+        // 页码，条数
+        $page = isset($data['page']) ? intval($data['page']) : 1;
+        $limit = isset($data['pageSize']) ? intval($data['pageSize']) : 10;
+        $page  = max(1, $page);
+
+        // 跳过的条数
+        $offset = $limit * ($page - 1);
+
+        $writerSqlArr = [];
+        $writerSqlArr[] = ['shop_id', '=', $shopId];
+        // 写手手机号
+        if (isset($data['writerNum']) && $data['writerNum']) {
+            $writerSqlArr[] = ['writerNum', '=', $data['writerNum']];
+        }
+
+        // 写手qq
+        if (isset($data['qqAccount']) && $data['qqAccount']) {
+            $writerSqlArr[] = ['qqAccount', '=', $data['qqAccount']];
+        }
+
+        // 写手微信
+        if (isset($data['wechatAccount']) && $data['wechatAccount']) {
+            $writerSqlArr[] = ['wechatAccount', '=', $data['wechatAccount']];
+        }
+
+        // 写手id
+        if (isset($data['writerId']) && $data['writerId']) {
+            $writerSqlArr[] = ['id', '=', $data['writerId']];
+        }
+
+        $writer = Writer::where($writerSqlArr)->get()->toArray();
+
+        // 获取对应写手所有订单ID
+        $jsonInfo = [];
+        $writerIds = [];
+        foreach ($writer as $item) {
+            $writerIds[] = $item['id'];
+            $jsonInfo[$item['id']] = [
+                'id' => $item['id'],
+                'writerNum' => $item['writerNum'],
+                'name' => $item['name'],
+                'alipayAccount' => $item['alipayAccount'],
+                'qqAccount' => $item['qqAccount'],
+                'wechatAccount' => $item['wechatAccount'],
+                'writerSituation' => $item['writerSituation'],
+                'writerQuality' => $item['writerQuality'],
+                'childOrder' => [],
+            ];
+        }
+        $writerOrders = DB::table('writer_order')->whereIn('writerId', $writerIds)->get()->toArray();
+
+        // 默认开始时间
+        if (isset($data['pStartTime']) && $data['pStartTime']) {
+            $pStartTime = strtotime($data['pStartTime']);
+        }
+        else {
+            $pStartTime = strtotime("2022-01-01");
+        }
+
+        // 默认结束时间
+        if (isset($data['pEndTime']) && $data['pEndTime']) {
+            $pEndTime = strtotime($data['pEndTime']);
+        }
+        else {
+            $pEndTime = time();
+        }
+
+        // 确认收货时间
+        $rStartTime = $rEndTime = 0;
+        if (isset($data['rStartTime']) && isset($data['rEndTime'])) {
+            $rStartTime = strtotime($data['rStartTime']);
+            $rEndTime = strtotime($data['rEndTime']);
+        }
+
+        $settleState = $data['settleState'] ?? 0;
+
+        $writerOrderInfos = [];
+        // 符合条件数据拼接
+        $writerTotalPrice = 0;
+        $isSettlePrice = 0;
+        $noSettlePrice = 0;
+
+        foreach ($writerOrders as $item) {
+            // 遍历查询订单
+            $order = Order::find($item->orderId);
+
+            // 状态不符合
+            if ($settleState && $settleState != $order['settleState']) {
+                continue;
+            }
+
+            // 付款时间不符合
+            if ($order['paymentTime'] < $pStartTime || $order['paymentTime'] > $pEndTime) {
+                continue;
+            }
+
+            // 收货时间不符合
+            if (($rStartTime && $order['receivingTime'] < $rStartTime) || ($rEndTime && $order['receivingTime'] > $rEndTime)) {
+                continue;
+            }
+
+            // 符合条件订单
+            if (!array_key_exists($item->writerId, $jsonInfo)) {
+                continue;
+            }
+
+            $writerTotalPrice += $item->writerPrice;
+            if ($item->wSettleState == 1) {
+                $isSettlePrice += $item->writerPrice;
+            }else{
+                $noSettlePrice += $item->writerPrice;
+            }
+
+        }
+
+        return ['totalPrice' => $writerTotalPrice, 'settlePrice' => $isSettlePrice, 'noSettlePrice' => $noSettlePrice];
     }
 
     // 写手报表上传已结算订单
@@ -1098,17 +1286,68 @@ class businessController extends Controller
     // 写手报表订单导出
     public function exportWriter(Request $request)
     {
-        $token = $request->header('Authorization');
-        // 用户未登陆
-        if (!$data = oaUsersController::getUserIdOfToken($token)) {
-            return oaUsersController::result([],-1, 'err_token');
-        }
+//        $token = $request->header('Authorization');
+//        // 用户未登陆
+//        if (!$data = oaUsersController::getUserIdOfToken($token)) {
+//            return oaUsersController::result([],-1, 'err_token');
+//        }
+//
+//        $shopId = $request->header('Shop');
+//        if (!$shopId) {
+//            return oaUsersController::result([],-1, 'err_shop');
+//        }
+//
+//        $request['searchParams'] = json_decode($request['searchParams'], true);
+//        if (!$request['searchParams']) {
+//            return oaUsersController::result([],-1, 'err_param');
+//        }
 
+        $shopId = 1;
+        $data = [
+            'page' => 1, // 第几页
+            'pageSize' => 10, // 一页几条数据
+//            'writerNum' => '140294402340', // 写手手机号
+//            'qqAccount' => '109284929@qq.com', // 写手qq号
+//            'wechatAccount' => 'zy239301', // 写手微信号
+//            'writerId' => 1, // 写手ID
+//            'settleState' => 1, // 结算状态(1:已结算，2:未结算, 3:暂缓结算)
+            'pStartTime' => 0, // 订单付款开始时间
+            'pEndTime' => 0, // 订单付款结束时间
+            'rStartTime' => 0, // 订单收货开始时间
+            'rEndTime' => 0, // 订单收货结束时间
+        ];
+
+//        $data = $request['searchParams'];
+
+        $jsonInfo = $this->writerReportSearch($shopId, $data);
+
+        $fileDatas = [];
         $fileField = [
             '序号', '收款方支付宝账号', '收款方姓名', '金额', '备注',
         ];
 
+        $fileDatas[] = $fileField;
 
+        foreach ($jsonInfo as $key => $item) {
+            // 获取该写手检索后查询出来的所有订单ID
+            $writerIds = [];
+            foreach ($item['childOrder'] as $child) {
+                $writerIds[] = $child['id'];
+            }
+
+            // 所有ID转成hash存储
+            $hashSql = $this->dataToHashSave($writerIds);
+
+            $fileDatas[] = [
+                $item['id'],
+                $item['alipayAccount'],
+                $item['name'],
+                $item['totalWriterPrice'],
+                $hashSql,
+            ];
+        }
+
+        return Excel::download(new WriterRepotExport($fileDatas), '写手报表导出.xlsx');
     }
 
     // 写手报表订单全部结算
@@ -1235,7 +1474,15 @@ class businessController extends Controller
 
         $data = $request['searchParams'];
 
-        $relt = $this->kefuCheckSearch($shopId, $data);
+        $order = $this->kefuCheckSearch($shopId, $data);
+
+        $priceInfo = $this->kefuCheckSearchPrice($shopId, $data);
+
+        $relt = [
+            'list' => $order,
+            'tbTotalPrice' => $priceInfo['tbTotalPrice'],
+            'writerTotalPrice' => $priceInfo['writerTotalPrice'],
+        ];
 
         return oaUsersController::result($relt);
     }
@@ -1295,7 +1542,90 @@ class businessController extends Controller
 
         $order = Order::where($sqlArr)->skip($offset)->take($limit)->get()->toArray();
 
+        foreach ($order as $k => $item) {
+            $writerOrder = DB::table('writer_order')->where('orderId', '=', $item['id'])
+                ->where('shop_id', '=', $shopId)->get()->toArray();
+
+            $orderWriterPrice = 0;
+            foreach ($writerOrder as $obj) {
+                $orderWriterPrice += $obj->writerPrice;
+            }
+
+            $order[$k]['writerTotalPrice'] = $orderWriterPrice;
+        }
+
         return $order;
+    }
+
+    private function kefuCheckSearchPrice($shopId, $params)
+    {
+        $data = $params ?? [];
+        if (empty($data)) {
+            return [];
+        }
+
+        // 页码，条数
+        $page = isset($data['page']) ? intval($data['page']) : 1;
+        $limit = isset($data['pageSize']) ? intval($data['pageSize']) : 10;
+        $page  = max(1, $page);
+
+        // 跳过的条数
+        $offset = $limit * ($page - 1);
+
+        // sql语句处理
+        $sqlArr = [];
+        // 默认开始时间
+        if (isset($data['pStartTime']) && $data['pStartTime']) {
+            $pStartTime = strtotime($data['pStartTime']);
+        }
+        else {
+            $pStartTime = strtotime("2022-01-01");
+        }
+
+        // 默认结束时间
+        if (isset($data['pEndTime']) && $data['pEndTime']) {
+            $pEndTime = strtotime($data['pEndTime']);
+        }
+        else {
+            $pEndTime = time();
+        }
+
+        $sqlArr[] = ['shop_id', '=', $shopId];
+        $sqlArr[] = ['paymentTime', '>=', $pStartTime];
+        $sqlArr[] = ['paymentTime', '<=', $pEndTime];
+
+        // 确认收货时间
+        if (isset($data['rStartTime']) && $data['rStartTime'] && isset($data['rEndTime']) && $data['rEndTime']) {
+            $sqlArr[] = ['receivingTime', '>=', $data['rStartTime']];
+            $sqlArr[] = ['receivingTime', '<=', $data['rEndTime']];
+        }
+
+        // 客服ID
+        if (isset($data['customerId']) && $data['customerId']) {
+            $sqlArr[] = ['acceptUser', '=', $data['customerId']];
+        }
+
+        // 结算状态
+        if (isset($data['settleState']) && $data['settleState']) {
+            $sqlArr[] = ['settleState', '=', $data['settleState']];
+        }
+
+        // 所有订单
+        $totalOrders = Order::where($sqlArr)->get()->toArray();
+        // 计算总价格
+        $taobaoTotalPrice = 0;  // 淘宝总价格
+        $writerTotalPrice = 0;  // 写手总价格
+        foreach ($totalOrders as $item) {
+            $taobaoTotalPrice += $item['taobaoPrice'];
+            $writerOrder = DB::table('writer_order')->where('orderId', '=', $item['id'])
+                ->where('shop_id', '=', $shopId)->get()->toArray();
+
+            foreach ($writerOrder as $obj) {
+                $writerTotalPrice += $obj->writerPrice;
+            }
+        }
+
+        return ['tbTotalPrice' => $taobaoTotalPrice, 'writerTotalPrice' => $writerTotalPrice];
     }
 
     // 客服报表批量修改状态
@@ -1342,24 +1672,23 @@ class businessController extends Controller
     // 客服报表导出
     public function exportCustomer(Request $request)
     {
-//        $token = $request->header('Authorization');
-//        // 用户未登陆
-//        if (!$data = oaUsersController::getUserIdOfToken($token)) {
-//            return oaUsersController::result([],-1, 'err_token');
-//        }
-//
-//        $shopId = $request->header('Shop');
-//        if (!$shopId) {
-//            return oaUsersController::result([],-1, 'err_shop');
-//        }
-//
-//        $request['searchParams'] = json_decode($request['searchParams'], true);
-//
-//        if (!$request['searchParams']) {
-//            return oaUsersController::result([],-1, 'err_param');
-//        }
+        $token = $request->header('Authorization');
+        // 用户未登陆
+        if (!$data = oaUsersController::getUserIdOfToken($token)) {
+            return oaUsersController::result([],-1, 'err_token');
+        }
 
-        $shopId = 1;
+        $shopId = $request->header('Shop');
+        if (!$shopId) {
+            return oaUsersController::result([],-1, 'err_shop');
+        }
+
+        $request['searchParams'] = json_decode($request['searchParams'], true);
+
+        if (!$request['searchParams']) {
+            return oaUsersController::result([],-1, 'err_param');
+        }
+
         $data = [
             'page' => 1, // 第几页
             'pageSize' => 10, // 一页几条数据
@@ -1371,7 +1700,7 @@ class businessController extends Controller
             'rEndTime' => 0, // 订单收货结束时间
         ];
 
-//        $data = $request['searchParams'];
+        $data = $request['searchParams'];
 
         $relt = $this->kefuCheckSearch($shopId, $data);
 
@@ -1524,6 +1853,35 @@ class businessController extends Controller
         }
 
         return oaUsersController::result($orderInfo);
+    }
+
+    // 写手关联订单查询
+    public function getWriterInfo(Request $request)
+    {
+        if (!$request['writerNum']) {
+            return oaUsersController::result([],-1, 'err_param');
+        }
+
+        $writer = Writer::where('writerNum', '=', $request['writerNum'])->get()->toArray();
+
+        $info = [];
+        foreach ($writer as $item) {
+            $writerOrders = DB::table('writer_order')->where('writerId', '=', $item['id'])
+                ->get()->toArray();
+
+            foreach ($writerOrders as $writerOrder) {
+                $info[] = [
+                    'writerId' => $writerOrder->writerId,
+                    'orderId' => $writerOrder->orderId,
+                    'shop_id' => $writerOrder->shop_id,
+                    'writerPrice' => $writerOrder->writerPrice,
+                    'wSettleState' => $writerOrder->wSettleState,
+                    'compensateState' => $writerOrder->compensateState,
+                ];
+            }
+        }
+
+        return oaUsersController::result($info);
     }
 
 }

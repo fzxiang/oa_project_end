@@ -138,3 +138,7 @@ Route::post('/getWritersOfOrder', 'oa\businessController@getWritersOfOrder')->na
 // 根据写手ID拉去订单信息(writerId(写手唯一ID))(客服管理-写手报表中的单子下拉是本身已经下发的，不要用这条协议拉订单数据)
 Route::post('/getOrdersOfWriter', 'oa\businessController@getOrdersOfWriter')->name('getOrdersOfWriter');
 
+
+/***********写手信息**********/
+// 写手关联订单查询(写手手机号(writerNum))
+Route::get('/getWriterInfo', 'oa\businessController@getWriterInfo')->name('getWriterInfo');
