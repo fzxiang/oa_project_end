@@ -1326,6 +1326,8 @@ class businessController extends Controller
             '序号', '收款方支付宝账号', '收款方姓名', '金额', '备注',
         ];
 
+        $fileDatas[] = ['支付宝批量付款文件模板（前两行请勿删除）', '','','','','', '填写说明：'];
+
         $fileDatas[] = $fileField;
 
         foreach ($jsonInfo as $key => $item) {
@@ -1346,6 +1348,68 @@ class businessController extends Controller
                 $hashSql,
             ];
         }
+
+        for ($i = 1; $i < 16; ++$i) {
+            if (empty($fileDatas[$i])) {
+                $fileDatas[$i] = ['', '', '', '', ''];
+            }
+        }
+
+        $fileDatas[1][] = '';
+        $fileDatas[1][] = '注意事项';
+        $fileDatas[1][] = '1.请勿删除或增加列';
+        $fileDatas[2][] = '';
+        $fileDatas[2][] = '';
+        $fileDatas[2][] = '2.请勿删除表头，即文件头两行';
+        $fileDatas[3][] = '';
+        $fileDatas[3][] = '';
+        $fileDatas[3][] = '3.一个文件可以包含3000笔明细，超过3000笔可分多个文件上传；每次可以上传一个文件';
+        $fileDatas[4][] = '';
+        $fileDatas[4][] = '';
+        $fileDatas[4][] = '4.上传文件目前支持的Excel版本为1997-2003版本，csv文件无要求';
+        $fileDatas[5][] = '';
+        $fileDatas[5][] = '';
+        $fileDatas[5][] = '5.系统不支持同名文件上传，会提示重复上传，修改文件名后重新上传即可';
+        $fileDatas[6][] = '';
+        $fileDatas[6][] = '';
+        $fileDatas[6][] = '6.金额一列如果出现"明细金额异常"报错，请先复制金额到txt文本中，从text文本复制到Excel，另外还可通过Excel，text函数进行格式转换';
+        $fileDatas[7] = ['','',''];
+        $fileDatas[8] = ['','',''];
+        $fileDatas[9][] = '';
+        $fileDatas[9][] = '填写说明';
+        $fileDatas[9][] = '字断名称';
+        $fileDatas[9][] = '是否可选项';
+        $fileDatas[9][] = '填写说明（1个汉字占2个字节，1个标点符号/数字/英文字母占1个字节）';
+        $fileDatas[10][] = '';
+        $fileDatas[10][] = '';
+        $fileDatas[10][] = '文件名命名';
+        $fileDatas[10][] = '必输项';
+        $fileDatas[10][] = '最大长度100个字节，支持中文、英文、数字、下划线（_）、中划线（-）。';
+        $fileDatas[11][] = '';
+        $fileDatas[11][] = '';
+        $fileDatas[11][] = '序号';
+        $fileDatas[11][] = '必输项';
+        $fileDatas[11][] = '最大长度64个字节，不可重复，必须为数字。';
+        $fileDatas[12][] = '';
+        $fileDatas[12][] = '';
+        $fileDatas[12][] = '收款方支付宝账号';
+        $fileDatas[12][] = '必输项';
+        $fileDatas[12][] = '最大长度100个字节，收款人实名认证的支付宝登录邮箱或手机账户登录名，支持个人/企业支付宝支付宝账户收款。';
+        $fileDatas[13][] = '';
+        $fileDatas[13][] = '';
+        $fileDatas[13][] = '收款方实名认证名称';
+        $fileDatas[13][] = '必输项';
+        $fileDatas[13][] = '最大长度100个字节，收款人支付宝账户实名认证的名称。个人账户为姓名，企业账户为企业名称';
+        $fileDatas[14][] = '';
+        $fileDatas[14][] = '';
+        $fileDatas[14][] = '付款金额';
+        $fileDatas[14][] = '必输项';
+        $fileDatas[14][] = '最大长度13位，须为正确表示金额的数字，精确到两位小数';
+        $fileDatas[15][] = '';
+        $fileDatas[15][] = '';
+        $fileDatas[15][] = '备注';
+        $fileDatas[15][] = '选输项';
+        $fileDatas[15][] = '最大长度100个字节，可输入附言或工号';
 
         return Excel::download(new WriterRepotExport($fileDatas), '写手报表导出.xlsx');
     }
