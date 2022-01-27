@@ -416,14 +416,15 @@ class businessController extends Controller
                 $failData[] = $data['aliOrder'];
             }
 
+            $updates = [];
+            isset($data['paymentMer']) && $updates['taobaoPrice'] = $data['paymentMer'];
+            isset($data['paymentTime']) && $updates['paymentTime'] = $data['paymentTime'];
+            isset($data['confirmTime']) && $updates['receivingTime'] = $data['confirmTime'];
+            isset($data['paymentMer']) && $updates['overviewFilePrice'] = $data['paymentMer'];
+            isset($data['actualPaymentPrice']) && $updates['actualPaymentPrice'] = $data['actualPaymentPrice'];
+
             // 更新数据
-            $num = Order::where([['aliOrder', '=', $data['aliOrder']], ['shop_id', '=', $shopId]])->update([
-                'taobaoPrice' => $data['paymentMer'],
-                'paymentTime' => $data['paymentTime'],
-                'receivingTime' => $data['confirmTime'],
-                'overviewFilePrice' => $data['paymentMer'],
-                'actualPaymentPrice' => $data['actualPaymentPrice'],
-            ]);
+            $num = Order::where([['aliOrder', '=', $data['aliOrder']], ['shop_id', '=', $shopId]])->update($updates);
         }
 
         return $failData;
@@ -510,10 +511,6 @@ class businessController extends Controller
             return oaUsersController::result([],-1, 'err_param');
         }
 
-        $userId = $data['user_id'];
-        $userName = $data['username'];
-
-        $shopId = 1;
         $data = [
             'page' => 1, // 第几页
             'pageSize' => 10, // 一页几条数据
@@ -604,7 +601,7 @@ class businessController extends Controller
         $shop = Shop::find($shopId)->toArray();
 
         foreach ($order as $item) {
-            $user = User::find($order['acceptUser'])->toArray();
+            $user = User::find($item['acceptUser'])->toArray();
 
             $itemData = [
                 $shop['shop_name'],
@@ -1286,38 +1283,38 @@ class businessController extends Controller
     // 写手报表订单导出
     public function exportWriter(Request $request)
     {
-//        $token = $request->header('Authorization');
-//        // 用户未登陆
-//        if (!$data = oaUsersController::getUserIdOfToken($token)) {
-//            return oaUsersController::result([],-1, 'err_token');
-//        }
-//
-//        $shopId = $request->header('Shop');
-//        if (!$shopId) {
-//            return oaUsersController::result([],-1, 'err_shop');
-//        }
-//
-//        $request['searchParams'] = json_decode($request['searchParams'], true);
-//        if (!$request['searchParams']) {
-//            return oaUsersController::result([],-1, 'err_param');
-//        }
+        $token = $request->header('Authorization');
+        // 用户未登陆
+        if (!$data = oaUsersController::getUserIdOfToken($token)) {
+            return oaUsersController::result([],-1, 'err_token');
+        }
+
+        $shopId = $request->header('Shop');
+        if (!$shopId) {
+            return oaUsersController::result([],-1, 'err_shop');
+        }
+
+        $request['searchParams'] = json_decode($request['searchParams'], true);
+        if (!$request['searchParams']) {
+            return oaUsersController::result([],-1, 'err_param');
+        }
 
         $shopId = 1;
         $data = [
             'page' => 1, // 第几页
             'pageSize' => 10, // 一页几条数据
-//            'writerNum' => '140294402340', // 写手手机号
-//            'qqAccount' => '109284929@qq.com', // 写手qq号
-//            'wechatAccount' => 'zy239301', // 写手微信号
-//            'writerId' => 1, // 写手ID
-//            'settleState' => 1, // 结算状态(1:已结算，2:未结算, 3:暂缓结算)
+            'writerNum' => '140294402340', // 写手手机号
+            'qqAccount' => '109284929@qq.com', // 写手qq号
+            'wechatAccount' => 'zy239301', // 写手微信号
+            'writerId' => 1, // 写手ID
+            'settleState' => 1, // 结算状态(1:已结算，2:未结算, 3:暂缓结算)
             'pStartTime' => 0, // 订单付款开始时间
             'pEndTime' => 0, // 订单付款结束时间
             'rStartTime' => 0, // 订单收货开始时间
             'rEndTime' => 0, // 订单收货结束时间
         ];
 
-//        $data = $request['searchParams'];
+        $data = $request['searchParams'];
 
         $jsonInfo = $this->writerReportSearch($shopId, $data);
 

@@ -98,20 +98,24 @@ class MyOrderExport implements FromCollection, WithColumnFormatting, ShouldAutoS
                         ]
                     ],
                     'fill' => [
-                        'fillType' => Fill::FILL_GRADIENT_LINEAR, //线性填充，类似渐变
+                        'fillType' => Fill::FILL_SOLID,
                         'rotation' => 45, //渐变角度
                         'startColor' => [
-                            'rgb' => '54AE54' //初始颜色
+                            'rgb' => 'D9D9D9' //初始颜色
                         ],
                         //结束颜色，如果需要单一背景色，请和初始颜色保持一致
                         'endColor' => [
-                            'argb' => '54AE54'
+                            'argb' => 'D9D9D9'
                         ]
                     ]
                 ]);
 
                 //合并单元格
 //                $event->sheet->getDelegate()->mergeCells('A1:B1');
+
+                // 设置 A1:D4 范围内文本自动换行
+                $event->sheet->getDelegate()->getStyle('A1:AZ'.$count)
+                    ->getAlignment()->setWrapText(true);
             }
         ];
     }

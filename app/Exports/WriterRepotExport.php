@@ -67,23 +67,28 @@ class WriterRepotExport implements FromCollection, WithColumnFormatting, ShouldA
                     $event->sheet->getDelegate()->getRowDimension($i)->setRowHeight(30);
                 }
                 //设置区域单元格字体、颜色、背景等，其他设置请查看 applyFromArray 方法，提供了注释
-                $event->sheet->getDelegate()->getStyle('A1:E10')->applyFromArray([
-                    'font' => [
-                        'name' => 'Arial',
-                        'bold' => true,
-                        'italic' => false,
-                        'strikethrough' => false,
-                        'color' => [
-                            'rgb' => '000000'
+                $event->sheet->getDelegate()->getStyle('A1:E'.$count)->applyFromArray([
+//                    'font' => [
+//                        'name' => 'Arial',
+//                        'bold' => true,
+//                        'italic' => false,
+//                        'strikethrough' => false,
+//                        'color' => [
+//                            'rgb' => '000000'
+//                        ]
+//                    ],
+                    'borders' => [
+                        'outline' => [
+                            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                            'color' => ['argb' => '000000'],
+                        ],
+                        'inside' => [
+                            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                            'color' => ['argb' => '000000'],
                         ]
                     ],
-                    'borders' => [
-                        'allBorders' => [
-                            'style' => Border::BORDER_THICK
-                        ]
-                    ]
 //                    'fill' => [
-//                        'fillType' => Fill::FILL_GRADIENT_LINEAR, //线性填充，类似渐变
+//                        'fillType' => Fill::FILL_SOLID,
 //                        'rotation' => 45, //渐变角度
 //                        'startColor' => [
 //                            'rgb' => '54AE54' //初始颜色
@@ -92,7 +97,20 @@ class WriterRepotExport implements FromCollection, WithColumnFormatting, ShouldA
 //                        'endColor' => [
 //                            'argb' => '54AE54'
 //                        ]
-//                    ]
+//                    ],
+                ]);
+                //设置区域单元格字体、颜色、背景等，其他设置请查看 applyFromArray 方法，提供了注释
+                $event->sheet->getDelegate()->getStyle('G1:J16')->applyFromArray([
+                    'borders' => [
+                        'outline' => [
+                            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                            'color' => ['argb' => '000000'],
+                        ],
+                        'inside' => [
+                            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                            'color' => ['argb' => '000000'],
+                        ]
+                    ],
                 ]);
 
                 //合并单元格
@@ -111,7 +129,9 @@ class WriterRepotExport implements FromCollection, WithColumnFormatting, ShouldA
                 $event->sheet->getDelegate()->getStyle('A1:J3000')->getAlignment()->setVertical('center');
 //                $event->sheet->getDelegate()->getStyle('A1:I1')->getAlignment()->setHorizontal('center');
 
-                // 边框填充
+                // 设置 A1:D4 范围内文本自动换行
+                $event->sheet->getDelegate()->getStyle('A1:J'.$count)
+                    ->getAlignment()->setWrapText(true);
             }
         ];
     }
