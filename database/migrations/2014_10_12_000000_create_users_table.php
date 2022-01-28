@@ -22,7 +22,7 @@ class CreateUsersTable extends Migration
             $table->bigInteger('role_id')->default(0)->comment('所属角色ID');
             $table->rememberToken();
             $table->timestamps();
-            $table->unique(['name'], 'user_account_req');
+            $table->unique(['username'], 'user_account_req');
         });
     }
 
