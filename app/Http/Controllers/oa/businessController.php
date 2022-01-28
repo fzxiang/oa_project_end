@@ -409,12 +409,18 @@ class businessController extends Controller
 //        ];
 
         $failData = [];
+        $oldTime = time();
+
+        $sqlUpdates = [];
+
+        DB::beginTransaction();
         // 上传附件数据处理
         foreach ($datas as $data) {
-            $order = Order::where([['aliOrder', '=', $data['aliOrder']], ['shop_id', '=', $shopId]])->get()->toArray();
-            if (!$order) {
-                $failData[] = $data['aliOrder'];
-            }
+//            $order = Order::where([['aliOrder', '=', $data['aliOrder']], ['shop_id', '=', $shopId]])->get()->toArray();
+//            if (!$order) {
+//                $failData[] = $data['aliOrder'];
+//                continue;
+//            }
 
             $updates = [];
             isset($data['paymentMer']) && $updates['taobaoPrice'] = $data['paymentMer'];
@@ -423,9 +429,23 @@ class businessController extends Controller
             isset($data['paymentMer']) && $updates['overviewFilePrice'] = $data['paymentMer'];
             isset($data['actualPaymentPrice']) && $updates['actualPaymentPrice'] = $data['actualPaymentPrice'];
 
+            $sqlUpdates[] = $updates;
             // 更新数据
             $num = Order::where([['aliOrder', '=', $data['aliOrder']], ['shop_id', '=', $shopId]])->update($updates);
+
+//            DB::table('order')->where('aliOrder', '=', $data['aliOrder'])
+//                ->where('shop_id', '=', $shopId)->update($updates);
+
+            if (!$num) {
+                $failData[] = $data['aliOrder'];
+            }
         }
+
+        DB::commit();
+
+        $newTime = time();
+        $aaa = $newTime - $oldTime;
+        $str = '开始时间：'.$oldTime.', 结束时间：'.$newTime.', 时间差：'.$aaa.'秒';
 
         return $failData;
     }
