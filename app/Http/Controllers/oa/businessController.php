@@ -714,7 +714,8 @@ class businessController extends Controller
             $pStartTime = strtotime($data['pStartTime']);
         }
         else {
-            $pStartTime = strtotime("2022-01-01");
+//            $pStartTime = strtotime("2022-01-01");
+            $pStartTime = 0;
         }
 
         // 默认结束时间
@@ -722,12 +723,13 @@ class businessController extends Controller
             $pEndTime = strtotime($data['pEndTime']);
         }
         else {
-            $pEndTime = time();
+//            $pEndTime = time();
+            $pEndTime = 0;
         }
 
         $sqlArr[] = ['shop_id', '=', $shopId];
-        $sqlArr[] = ['paymentTime', '>=', $pStartTime];
-        $sqlArr[] = ['paymentTime', '<=', $pEndTime];
+        $pStartTime && $sqlArr[] = ['paymentTime', '>=', $pStartTime];
+        $pEndTime && $sqlArr[] = ['paymentTime', '<=', $pEndTime];
 
         // 确认收货时间
         if (isset($data['rStartTime']) && $data['rStartTime'] && isset($data['rEndTime']) && $data['rEndTime']) {
