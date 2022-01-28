@@ -773,6 +773,7 @@ class businessController extends Controller
 
         // 所有订单
         $totalOrders = Order::where($sqlArr)->get()->toArray();
+        $count = Order::where($sqlArr)->count();
         // 计算总价格
         $taobaoTotalPrice = 0;  // 淘宝总价格
         $writerTotalPrice = 0;  // 写手总价格
@@ -787,9 +788,10 @@ class businessController extends Controller
         }
 
         $relt = [
-            'orders' => $order,
+            'items' => $order,
             'tbTotalPrice' => $taobaoTotalPrice,
             'writerTotalPrice' => $writerTotalPrice,
+            'total' => $count,
         ];
         return oaUsersController::result($relt);
     }
@@ -875,8 +877,13 @@ class businessController extends Controller
         }
 
         $writer = Writer::where($sqlArr)->skip($offset)->take($limit)->get()->toArray();
+        $count  = Writer::where($sqlArr)->count();
 
-        $relt = $writer;
+        $relt = [
+            'items' => $writer,
+            'total' => $count,
+        ];
+
         return oaUsersController::result($relt);
     }
 
@@ -956,11 +963,13 @@ class businessController extends Controller
         $priceInfo = $this->writerReportSearchTotalPrice($shopId, $data);
 
         $relt = [
-            'list' => $jsonInfo,
+            'items' => $jsonInfo,
             'totalPrice' => $priceInfo['totalPrice'],
             'settlePrice' => $priceInfo['settlePrice'],
-            'noSettlePrice' => $priceInfo['noSettlePrice']
+            'noSettlePrice' => $priceInfo['noSettlePrice'],
+            'total' => $priceInfo['count'],
         ];
+
         return oaUsersController::result($relt);
     }
 
@@ -1133,6 +1142,8 @@ class businessController extends Controller
 
         $writer = Writer::where($writerSqlArr)->get()->toArray();
 
+        $count = Writer::where($writerSqlArr)->count();
+
         // 获取对应写手所有订单ID
         $jsonInfo = [];
         $writerIds = [];
@@ -1216,7 +1227,13 @@ class businessController extends Controller
 
         }
 
-        return ['totalPrice' => $writerTotalPrice, 'settlePrice' => $isSettlePrice, 'noSettlePrice' => $noSettlePrice];
+        $infos = [
+            'totalPrice' => $writerTotalPrice,
+            'settlePrice' => $isSettlePrice,
+            'noSettlePrice' => $noSettlePrice,
+            'count' => $count,
+        ];
+        return $infos;
     }
 
     // 写手报表上传已结算订单
@@ -1565,6 +1582,7 @@ class businessController extends Controller
             'list' => $order,
             'tbTotalPrice' => $priceInfo['tbTotalPrice'],
             'writerTotalPrice' => $priceInfo['writerTotalPrice'],
+            'total' => $priceInfo['count'],
         ];
 
         return oaUsersController::result($relt);
@@ -1695,6 +1713,8 @@ class businessController extends Controller
 
         // 所有订单
         $totalOrders = Order::where($sqlArr)->get()->toArray();
+
+        $count = Order::where($sqlArr)->get()->toArray();
         // 计算总价格
         $taobaoTotalPrice = 0;  // 淘宝总价格
         $writerTotalPrice = 0;  // 写手总价格
@@ -1708,7 +1728,12 @@ class businessController extends Controller
             }
         }
 
-        return ['tbTotalPrice' => $taobaoTotalPrice, 'writerTotalPrice' => $writerTotalPrice];
+        $infos = [
+            'tbTotalPrice' => $taobaoTotalPrice,
+            'writerTotalPrice' => $writerTotalPrice,
+            'count' => $count,
+        ];
+        return $infos;
     }
 
     // 客服报表批量修改状态
