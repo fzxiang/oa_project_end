@@ -933,12 +933,13 @@ class businessController extends Controller
 
         $data = $request['writerInfo'];
 
-        $num = Writer::where([['id', '=', $request['id']], ['shop_id', '=', $shopId]])->update([
-            'name' => $data['name'],
-            'qqAccount' => $data['qqAccount'],
-            'wechatAccount' => $data['wechatAccount'],
-            'alipayAccount' => $data['alipayAccount'],
-        ]);
+        $sqlUpdates = [];
+        isset($data['name']) && $sqlUpdates['name'] = $data['name'];
+        isset($data['qqAccount']) && $sqlUpdates['qqAccount'] = $data['qqAccount'];
+        isset($data['wechatAccount']) && $sqlUpdates['wechatAccount'] = $data['wechatAccount'];
+        isset($data['alipayAccount']) && $sqlUpdates['alipayAccount'] = $data['alipayAccount'];
+
+        $num = Writer::where([['id', '=', $request['id']], ['shop_id', '=', $shopId]])->update($sqlUpdates);
 
         return oaUsersController::result($num);
     }
