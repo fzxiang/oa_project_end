@@ -136,7 +136,7 @@ class oaUsersController extends Controller
         $selectedId = $userDB->shop_id;
         if (!$userDB->shop_id) {
             $shop = Shop::find(1);
-            $selectedId = $shop['shop_id'] ?? 0;
+            $shop && $selectedId = $shop['shop_id'];
         }
 
         $relt = [
