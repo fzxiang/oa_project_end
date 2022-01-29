@@ -1579,7 +1579,7 @@ class businessController extends Controller
         $priceInfo = $this->kefuCheckSearchPrice($shopId, $data);
 
         $relt = [
-            'list' => $order,
+            'items' => $order,
             'tbTotalPrice' => $priceInfo['tbTotalPrice'],
             'writerTotalPrice' => $priceInfo['writerTotalPrice'],
             'total' => $priceInfo['count'],
@@ -1902,7 +1902,7 @@ class businessController extends Controller
                 continue;
             }
 
-            $writerInfo[$item->writerId] = [
+            $writerInfo[] = [
                 'id' => $writer['id'],
                 'writerNum' => $writer['writerNum'],
                 'name' => $writer['name'],
