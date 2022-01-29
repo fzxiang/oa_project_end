@@ -1887,11 +1887,11 @@ class businessController extends Controller
             return oaUsersController::result([],-1, 'err_shop');
         }
 
-        if (!$request['orderId']) {
+        if (!$request['id']) {
             return oaUsersController::result([],-1, 'err_param');
         }
 
-        $orderWriters = DB::table('writer_order')->where('orderId', '=', $request['orderId'])
+        $orderWriters = DB::table('writer_order')->where('orderId', '=', $request['id'])
             ->where('shop_id', '=', $shopId)
             ->get()->toArray();
 
@@ -1933,11 +1933,11 @@ class businessController extends Controller
             return oaUsersController::result([],-1, 'err_shop');
         }
 
-        if (!$request['writerId']) {
+        if (!$request['id']) {
             return oaUsersController::result([],-1, 'err_param');
         }
 
-        $orderWriters = DB::table('writer_order')->where('orderId', '=', $request['orderId'])
+        $orderWriters = DB::table('writer_order')->where('orderId', '=', $request['id'])
             ->where('shop_id', '=', $shopId)
             ->get()->toArray();
 
