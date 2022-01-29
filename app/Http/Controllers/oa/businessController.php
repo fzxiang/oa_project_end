@@ -887,6 +887,25 @@ class businessController extends Controller
         return oaUsersController::result($relt);
     }
 
+    // 写手总览检索
+    public function getAllWriter(Request $request)
+    {
+        $token = $request->header('Authorization');
+        // 用户未登陆
+        if (!$data = oaUsersController::getUserIdOfToken($token)) {
+            return oaUsersController::result([],-1, 'err_token');
+        }
+
+        $shopId = $request->header('Shop');
+        if (!$shopId) {
+            return oaUsersController::result([],-1, 'err_shop');
+        }
+
+        $writer = Writer::where('shop_id', '=', $shopId)->get()->toArray();
+
+        return oaUsersController::result($writer);
+    }
+
     // 写手信息编辑
     public function updateWriter(Request $request)
     {

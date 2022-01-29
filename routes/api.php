@@ -106,6 +106,9 @@ Route::get('/searchWriter', 'oa\businessController@searchWriter')->name('searchW
 // 写手信息编辑(id(写手唯一ID) writerInfo json格式)
 Route::post('/updateWriter', 'oa\businessController@updateWriter')->name('updateWriter');
 
+// 获取所有写手
+Route::get('/getAllWriter', 'oa\businessController@getAllWriter')->name('getAllWriter');
+
 /**************业务逻辑操作(客服管理)(以下操作均需要上传token)*************/
 // 写手报表检索(searchParams json格式(pageNumber(第几页), pageSize(每页几条数据), writerNum(手机号), qqAccount(qq号), wechatAccount(微信号),
 // writerId(写手ID), settleState(结算状态), pStartTime, pEndTime, rStartTime, rEndTime))
