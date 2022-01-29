@@ -1957,7 +1957,7 @@ class businessController extends Controller
             return oaUsersController::result([],-1, 'err_param');
         }
 
-        $orderWriters = DB::table('writer_order')->where('orderId', '=', $request['id'])
+        $orderWriters = DB::table('writer_order')->where('writerId', '=', $request['id'])
             ->where('shop_id', '=', $shopId)
             ->get()->toArray();
 
