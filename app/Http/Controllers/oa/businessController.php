@@ -515,12 +515,11 @@ class businessController extends Controller
     public function exportOrder(Request $request)
     {
 //        $token = $request->header('Authorization');
-        $token = $request['token'];
-        $token = json_decode($token, true);
-        // 用户未登陆
-        if (!$data = oaUsersController::getUserIdOfToken($token)) {
-            return oaUsersController::result([],-1, 'err_token');
-        }
+//        $token = $request['token'];
+//        // 用户未登陆
+//        if (!$data = oaUsersController::getUserIdOfToken($token)) {
+//            return oaUsersController::result([],-1, 'err_token');
+//        }
 
 //        $shopId = $request->header('Shop');
         $shopId = $request['shop'];
