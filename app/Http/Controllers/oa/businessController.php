@@ -516,6 +516,7 @@ class businessController extends Controller
     {
 //        $token = $request->header('Authorization');
         $token = $request['token'];
+        $token = json_decode($token, true);
         // 用户未登陆
         if (!$data = oaUsersController::getUserIdOfToken($token)) {
             return oaUsersController::result([],-1, 'err_token');
