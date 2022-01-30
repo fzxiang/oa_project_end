@@ -151,7 +151,7 @@ class businessController extends Controller
                     'alipayAccount'     => $item['alipayAccount'] ?? '',
                     'qqAccount'         => $item['qqAccount'] ?? '',
                     'wechatAccount'     => $item['wechatAccount'] ?? '',
-                    'writerSituation'   => $item['writerSituation'] ?? '',
+                    'writerSituation'   => intval($item['writerSituation']) ?? 0,
                     'writerQuality'     => $item['writerQuality'] ?? '',
                 ]);
 
@@ -263,7 +263,7 @@ class businessController extends Controller
                         'alipayAccount'     => $item['alipayAccount'] ?? '',
                         'qqAccount'         => $item['qqAccount'] ?? '',
                         'wechatAccount'     => $item['wechatAccount'] ?? '',
-                        'writerSituation'   => $item['writerSituation'] ?? '',
+                        'writerSituation'   => intval($item['writerSituation']) ?? 0,
                         'writerQuality'     => $item['writerQuality'] ?? '',
                     ]);
 
@@ -280,7 +280,7 @@ class businessController extends Controller
                         'alipayAccount'     => $item['alipayAccount'] ?? '',
                         'qqAccount'         => $item['qqAccount'] ?? '',
                         'wechatAccount'     => $item['wechatAccount'] ?? '',
-                        'writerSituation'   => $item['writerSituation'] ?? '',
+                        'writerSituation'   => intval($item['writerSituation']) ?? 0,
                         'writerQuality'     => $item['writerQuality'] ?? '',
                     ]);
 
@@ -561,7 +561,8 @@ class businessController extends Controller
             $pStartTime = strtotime($data['pStartTime']);
         }
         else {
-            $pStartTime = strtotime("2022-01-01");
+//            $pStartTime = strtotime("2022-01-01");
+            $pStartTime = 0;
         }
 
         // 默认结束时间
@@ -569,7 +570,8 @@ class businessController extends Controller
             $pEndTime = strtotime($data['pEndTime']);
         }
         else {
-            $pEndTime = time();
+//            $pEndTime = time();
+            $pEndTime = 0;
         }
 
         $sqlArr[] = ['shop_id', '=', $shopId];
@@ -1039,7 +1041,7 @@ class businessController extends Controller
                 'alipayAccount' => $item['alipayAccount'],
                 'qqAccount' => $item['qqAccount'],
                 'wechatAccount' => $item['wechatAccount'],
-                'writerSituation' => $item['writerSituation'],
+                'writerSituation' => intval($item['writerSituation']),
                 'writerQuality' => $item['writerQuality'],
                 'childOrder' => [],
             ];
@@ -1051,7 +1053,8 @@ class businessController extends Controller
             $pStartTime = strtotime($data['pStartTime']);
         }
         else {
-            $pStartTime = strtotime("2022-01-01");
+//            $pStartTime = strtotime("2022-01-01");
+            $pStartTime = 0;
         }
 
         // 默认结束时间
@@ -1059,7 +1062,8 @@ class businessController extends Controller
             $pEndTime = strtotime($data['pEndTime']);
         }
         else {
-            $pEndTime = time();
+//            $pEndTime = time();
+            $pEndTime = 0;
         }
 
         // 确认收货时间
@@ -1176,7 +1180,7 @@ class businessController extends Controller
                 'alipayAccount' => $item['alipayAccount'],
                 'qqAccount' => $item['qqAccount'],
                 'wechatAccount' => $item['wechatAccount'],
-                'writerSituation' => $item['writerSituation'],
+                'writerSituation' => intval($item['writerSituation']),
                 'writerQuality' => $item['writerQuality'],
                 'childOrder' => [],
             ];
@@ -1188,7 +1192,8 @@ class businessController extends Controller
             $pStartTime = strtotime($data['pStartTime']);
         }
         else {
-            $pStartTime = strtotime("2022-01-01");
+//            $pStartTime = strtotime("2022-01-01");
+            $pStartTime = 0;
         }
 
         // 默认结束时间
@@ -1196,7 +1201,8 @@ class businessController extends Controller
             $pEndTime = strtotime($data['pEndTime']);
         }
         else {
-            $pEndTime = time();
+//            $pEndTime = time();
+            $pEndTime = 0;
         }
 
         // 确认收货时间
@@ -1504,7 +1510,8 @@ class businessController extends Controller
             $pStartTime = strtotime($data['pStartTime']);
         }
         else {
-            $pStartTime = strtotime("2022-01-01");
+//            $pStartTime = strtotime("2022-01-01");
+            $pStartTime = 0;
         }
 
         // 默认结束时间
@@ -1512,7 +1519,8 @@ class businessController extends Controller
             $pEndTime = strtotime($data['pEndTime']);
         }
         else {
-            $pEndTime = time();
+//            $pEndTime = time();
+            $pEndTime = 0;
         }
 
         // 确认收货时间
@@ -1630,7 +1638,8 @@ class businessController extends Controller
             $pStartTime = strtotime($data['pStartTime']);
         }
         else {
-            $pStartTime = strtotime("2022-01-01");
+//            $pStartTime = strtotime("2022-01-01");
+            $pStartTime = 0;
         }
 
         // 默认结束时间
@@ -1638,7 +1647,8 @@ class businessController extends Controller
             $pEndTime = strtotime($data['pEndTime']);
         }
         else {
-            $pEndTime = time();
+//            $pEndTime = time();
+            $pEndTime = 0;
         }
 
         $sqlArr[] = ['shop_id', '=', $shopId];
@@ -1700,7 +1710,8 @@ class businessController extends Controller
             $pStartTime = strtotime($data['pStartTime']);
         }
         else {
-            $pStartTime = strtotime("2022-01-01");
+//            $pStartTime = strtotime("2022-01-01");
+            $pStartTime = 0;
         }
 
         // 默认结束时间
@@ -1708,7 +1719,8 @@ class businessController extends Controller
             $pEndTime = strtotime($data['pEndTime']);
         }
         else {
-            $pEndTime = time();
+//            $pEndTime = time();
+            $pEndTime = 0;
         }
 
         $sqlArr[] = ['shop_id', '=', $shopId];
@@ -1929,7 +1941,7 @@ class businessController extends Controller
                 'alipayAccount' => $writer['alipayAccount'],
                 'qqAccount' => $writer['qqAccount'],
                 'wechatAccount' => $writer['wechatAccount'],
-                'writerSituation' => $writer['writerSituation'],
+                'writerSituation' => intval($writer['writerSituation']),
                 'writerQuality' => $writer['writerQuality'],
                 'compensateState' => $item->compensateState,
                 'wSettleState' => $item->wSettleState,

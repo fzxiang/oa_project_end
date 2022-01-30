@@ -652,7 +652,7 @@ class oaUsersController extends Controller
             // 该客服存在该商店权限
             $hasShop = false;
             foreach ($userPowers as $item) {
-                if ($item->shop_id != $request['shop_id']) {
+                if ($item->shop_id != $shopId) {
                     continue;
                 }
                 $hasShop = true;
