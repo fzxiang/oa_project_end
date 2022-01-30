@@ -1109,10 +1109,11 @@ class businessController extends Controller
                 continue;
             }
 
+            $user = User::find($order['acceptUser']);
             $jsonInfo[$item->writerId]['childOrder'][] = [
                 'id' => $order['id'],
                 'invoice' => $order['invoice'],
-                'acceptUser' => $order['acceptUser'],
+                'acceptUser' => $user['username'],
                 'aliOrder' => $order['aliOrder'],
                 'wSettleState' => $item->wSettleState,
                 'taobaoPrice' => $order['taobaoPrice'],
@@ -1958,7 +1959,7 @@ class businessController extends Controller
                 'qqAccount' => $writer['qqAccount'],
                 'wechatAccount' => $writer['wechatAccount'],
                 'writerSituation' => intval($writer['writerSituation']),
-                'writerQuality' => $writer['writerQuality'],
+                'writerQuality' => intval($writer['writerQuality']),
                 'compensateState' => $item->compensateState,
                 'wSettleState' => $item->wSettleState,
             ];
