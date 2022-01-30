@@ -626,8 +626,9 @@ class oaUsersController extends Controller
             return self::result([],-1, 'err_token');
         }
 
-        if (!$request['shop_id']) {
-            return self::result([],-1, 'err_param');
+        $shopId = $request->header('Shop');
+        if (!$shopId) {
+            return self::result([],-1, 'err_shop');
         }
 
         $kefuArr = [3,4,5];

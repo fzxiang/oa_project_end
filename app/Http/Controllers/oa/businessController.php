@@ -1977,6 +1977,7 @@ class businessController extends Controller
                 'taobaoPrice' => $order['taobaoPrice'],
                 'paymentTime' => $order['paymentTime'],
                 'receivingTime' => $order['receivingTime'],
+                'writerPrice' => $item->writerPrice,
             ];
         }
 
