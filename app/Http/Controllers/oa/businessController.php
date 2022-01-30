@@ -1137,7 +1137,7 @@ class businessController extends Controller
             $jsonInfo[$key]['totalWriterPrice'] = $item['price'];
         }
 
-        return $jsonInfo;
+        return array_values($jsonInfo);
     }
 
     private function writerReportSearchTotalPrice($shopId, $data)
