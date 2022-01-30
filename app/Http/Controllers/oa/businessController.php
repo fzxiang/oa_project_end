@@ -1968,10 +1968,13 @@ class businessController extends Controller
                 continue;
             }
 
+            $userId = $order['acceptUser'] ?? 0;
+            $user = User::find($userId);
+
             $orderInfo[] = [
                 'id' => $order['id'],
                 'invoice' => $order['invoice'],
-                'acceptUser' => $order['acceptUser'],
+                'acceptUser' => $user['username'],
                 'aliOrder' => $order['aliOrder'],
                 'settleState' => $order['settleState'],
                 'taobaoPrice' => $order['taobaoPrice'],
