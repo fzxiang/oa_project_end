@@ -523,7 +523,6 @@ class businessController extends Controller
 
         $shopId = $request->header('Shop');
 //        $shopId = $request['shop'];
-        $shopId = urldecode($shopId);
         if (!$shopId) {
             return oaUsersController::result([],-1, 'err_shop');
         }
