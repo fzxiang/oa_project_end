@@ -1795,7 +1795,7 @@ class businessController extends Controller
             return oaUsersController::result([],-1, 'err_shop');
         }
 
-        if ($request['state'] || !$request['searchParams']) {
+        if (!$request['state'] || !$request['searchParams']) {
             return oaUsersController::result([],-1, 'err_param');
         }
 
