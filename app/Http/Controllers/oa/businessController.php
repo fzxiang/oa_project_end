@@ -516,20 +516,21 @@ class businessController extends Controller
     {
 //        $token = $request->header('Authorization');
 
-        dd($request['obj']);
-        $token = $request['token'];
+        $param = json_decode($request['obj'], true);
+
+        $token = $param['token'];
         // 用户未登陆
         if (!$data = oaUsersController::getUserIdOfToken($token)) {
             return oaUsersController::result([],-1, 'err_token');
         }
 
-        $shopId = $request->header('Shop');
+        $shopId = intval($param['shop']);
 //        $shopId = $request['shop'];
         if (!$shopId) {
             return oaUsersController::result([],-1, 'err_shop');
         }
 
-        $request['searchParams'] = json_decode($request['searchParams'], true);
+        $request['searchParams'] = $param['searchParams'];
 
         if (!$request['searchParams']) {
             return oaUsersController::result([],-1, 'err_param');
@@ -1356,24 +1357,26 @@ class businessController extends Controller
     public function exportWriter(Request $request)
     {
 //        $token = $request->header('Authorization');
-        $token = $request['token'];
+
+        $param = json_decode($request['obj'], true);
+
+        $token = $param['token'];
         // 用户未登陆
         if (!$data = oaUsersController::getUserIdOfToken($token)) {
             return oaUsersController::result([],-1, 'err_token');
         }
 
 //        $shopId = $request->header('Shop');
-        $shopId = $request['shop'];
+        $shopId = $param['shop'];
         if (!$shopId) {
             return oaUsersController::result([],-1, 'err_shop');
         }
 
-        $request['searchParams'] = json_decode($request['searchParams'], true);
+        $request['searchParams'] = $param['searchParams'];
         if (!$request['searchParams']) {
             return oaUsersController::result([],-1, 'err_param');
         }
 
-        $shopId = 1;
         $data = [
             'page' => 1, // 第几页
             'pageSize' => 10, // 一页几条数据
@@ -1822,19 +1825,21 @@ class businessController extends Controller
     public function exportCustomer(Request $request)
     {
 //        $token = $request->header('Authorization');
-        $token = $request['token'];
+        $param = json_decode($request['obj'], true);
+
+        $token = $param['token'];
         // 用户未登陆
         if (!$data = oaUsersController::getUserIdOfToken($token)) {
             return oaUsersController::result([],-1, 'err_token');
         }
 
 //        $shopId = $request->header('Shop');
-        $shopId = $request['shop'];
+        $shopId = $param['shop'];
         if (!$shopId) {
             return oaUsersController::result([],-1, 'err_shop');
         }
 
-        $request['searchParams'] = json_decode($request['searchParams'], true);
+        $request['searchParams'] = $param['searchParams'];
 
         if (!$request['searchParams']) {
             return oaUsersController::result([],-1, 'err_param');
