@@ -514,8 +514,10 @@ class businessController extends Controller
     // 我的订单导出
     public function exportOrder(Request $request)
     {
-        $token = $request->header('Authorization');
-//        $token = $request['token'];
+//        $token = $request->header('Authorization');
+
+        dd($request['obj']);
+        $token = $request['token'];
         // 用户未登陆
         if (!$data = oaUsersController::getUserIdOfToken($token)) {
             return oaUsersController::result([],-1, 'err_token');
@@ -1753,7 +1755,7 @@ class businessController extends Controller
         // 所有订单
         $totalOrders = Order::where($sqlArr)->get()->toArray();
 
-        $count = Order::where($sqlArr)->get()->toArray();
+        $count = Order::where($sqlArr)->count();
         // 计算总价格
         $taobaoTotalPrice = 0;  // 淘宝总价格
         $writerTotalPrice = 0;  // 写手总价格
