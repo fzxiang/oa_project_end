@@ -765,12 +765,15 @@ class businessController extends Controller
             $writerOrder = DB::table('writer_order')->where('orderId', '=', $item['id'])
                 ->where('shop_id', '=', $shopId)->get()->toArray();
 
+            $user = User::find($item['acceptUser']);
+
             $orderWriterPrice = 0;
             foreach ($writerOrder as $obj) {
                 $orderWriterPrice += $obj->writerPrice;
             }
 
             $order[$k]['writerTotalPrice'] = $orderWriterPrice;
+            $order[$k]['acceptUser'] = $user['username'];
         }
 
         // 所有订单
