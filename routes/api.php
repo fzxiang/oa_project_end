@@ -119,6 +119,8 @@ Route::post('/uploadSettled', 'oa\businessController@uploadSettled')->name('uplo
 Route::any('/exportWriter', 'oa\businessController@exportWriter')->name('exportWriter');
 // 写手报表订单全部结算(写手编号ID(writeId) searchParams(settleState(结算状态), pStartTime, pEndTime, rStartTime, rEndTime))
 Route::post('/quickWriterOrderStatus', 'oa\businessController@quickWriterOrderStatus')->name('quickWriterOrderStatus');
+// 写手报表单个订单结算(写手编号ID(writeId), 订单编号ID(orderId), state(1：已结算，2：未结算，3：暂缓结算))
+Route::post('/updateWriteOrderState', 'oa\businessController@updateWriteOrderState')->name('updateWriteOrderState');
 
 // 客服报表检索(searchParams json格式(pageNumber(第几页), pageSize(每页几条数据),settleStatus(结算状态),
 // customerId(客服),pStartTime, pEndTime, rStartTime, rEndTime))

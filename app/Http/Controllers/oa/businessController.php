@@ -1503,7 +1503,7 @@ class businessController extends Controller
             return oaUsersController::result([],-1, 'err_shop');
         }
 
-        if (!$request['writerId'] || !$request['searchParams']) {
+        if (!$request['writeId'] || !$request['searchParams']) {
             return oaUsersController::result([],-1, 'err_param');
         }
 
@@ -1578,6 +1578,32 @@ class businessController extends Controller
                     'wSettleState' => 1,
                 ]);
         }
+
+        return oaUsersController::result();
+    }
+
+    // 写手报表单个订单结算
+    public function updateWriteOrderState(Request $request)
+    {
+        $token = $request->header('Authorization');
+        // 用户未登陆
+        if (!$data = oaUsersController::getUserIdOfToken($token)) {
+            return oaUsersController::result([],-1, 'err_token');
+        }
+
+        $shopId = $request->header('Shop');
+        if (!$shopId) {
+            return oaUsersController::result([],-1, 'err_shop');
+        }
+
+        if (!$request['writeId'] || !$request['orderId'] || !$request['state']) {
+            return oaUsersController::result([],-1, 'err_param');
+        }
+
+        $num = DB::table('writer_order')->where('writerId', '=', $request['writeId'])
+            ->where('orderId', '=', $request['orderId'])->update([
+                'wSettleState' => $request['state']
+            ]);
 
         return oaUsersController::result();
     }
