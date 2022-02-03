@@ -1544,7 +1544,7 @@ class businessController extends Controller
         }
 
         // 查询当前写手所有订单ID
-        $writerOrders = DB::table('writer_order')->where('writerId', '=', $request['writerId'])
+        $writerOrders = DB::table('writer_order')->where('writerId', '=', $request['writeId'])
             ->where('shop_id', '=', $shopId)
             ->get()->toArray();
 
