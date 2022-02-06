@@ -1721,6 +1721,9 @@ class businessController extends Controller
                 $orderWriterPrice += $obj->writerPrice;
             }
 
+            $user = User::find($item['acceptUser']);
+
+            $order[$k]['acceptUser'] = $user['username'];
             $order[$k]['writerTotalPrice'] = $orderWriterPrice;
         }
 
