@@ -338,7 +338,7 @@ class businessController extends Controller
 
         $order = DB::table('order')->where('aliOrder', '=', $request['aliOrder'])->get()->toArray();
         if (!empty($order)) {
-            return oaUsersController::result([],-1, 'repeated_Num');
+            return oaUsersController::result([],-1, '订单编号重复');
         }
 
         return oaUsersController::result();
