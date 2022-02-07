@@ -50,7 +50,7 @@ class oaUsersController extends Controller
 
         if (!$ret = Auth::attempt($credentials)) {
             // 登陆失败（密码不匹配）
-            return 'false';
+            return self::result([], -1, '密码错误!');
         }
 
         $ret = Auth::user()->toArray();
