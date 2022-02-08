@@ -24,7 +24,6 @@ class CreateWriterTable extends Migration
             $table->string('writerSituation')->default('')->comment('写手情况');
             $table->string('writerQuality')->default('')->comment('写手质量');
             $table->unique(['shop_id', 'writerNum'], 'unique1');
-            $table->index(['shop_id', 'alipayAccount'], 'index2');
             $table->index(['shop_id'], 'index1');
         });
     }
