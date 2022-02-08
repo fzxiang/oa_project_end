@@ -144,6 +144,7 @@ class businessController extends Controller
         if (!empty($writerData)) {
             $writerOrderArr = [];
             foreach ($writerData as $item) {
+                $writerSituation = $item['writerSituation'] ?? 0;
                 $writer = Writer::create([
                     'shop_id'           => $shopId,
                     'writerNum'         => $item['writerNum'] ?: 0,
@@ -151,7 +152,7 @@ class businessController extends Controller
                     'alipayAccount'     => $item['alipayAccount'] ?? '',
                     'qqAccount'         => $item['qqAccount'] ?? '',
                     'wechatAccount'     => $item['wechatAccount'] ?? '',
-                    'writerSituation'   => intval($item['writerSituation']) ?? 0,
+                    'writerSituation'   => intval($writerSituation),
                     'writerQuality'     => $item['writerQuality'] ?? '',
                 ]);
 
@@ -256,6 +257,7 @@ class businessController extends Controller
         if (!empty($writerData)) {
             $writerOrderArr = [];
             foreach ($writerData as $item) {
+                $writerSituation = $item['writerSituation'] ?? 0;
                 if (!$item['id']) {
                     $writer = Writer::create([
                         'writerNum'         => $item['writerNum'] ?: 0,
@@ -263,7 +265,7 @@ class businessController extends Controller
                         'alipayAccount'     => $item['alipayAccount'] ?? '',
                         'qqAccount'         => $item['qqAccount'] ?? '',
                         'wechatAccount'     => $item['wechatAccount'] ?? '',
-                        'writerSituation'   => intval($item['writerSituation']) ?? 0,
+                        'writerSituation'   => intval($writerSituation),
                         'writerQuality'     => $item['writerQuality'] ?? '',
                     ]);
 
@@ -280,7 +282,7 @@ class businessController extends Controller
                         'alipayAccount'     => $item['alipayAccount'] ?? '',
                         'qqAccount'         => $item['qqAccount'] ?? '',
                         'wechatAccount'     => $item['wechatAccount'] ?? '',
-                        'writerSituation'   => intval($item['writerSituation']) ?? 0,
+                        'writerSituation'   => intval($writerSituation),
                         'writerQuality'     => $item['writerQuality'] ?? '',
                     ]);
 
