@@ -163,7 +163,7 @@ class businessController extends Controller
 
                 $writerOrderArr[] = [
                     'shop_id'           => $shopId,
-                    'writerId' => $writerSql['id'],
+                    'writerId' => $writerSql->id,
                     'orderId' => $order['id'],
                     'writerPrice' => $item['writerPrice'] ?: 0,
                 ];
