@@ -149,7 +149,7 @@ class businessController extends Controller
                 // 写手表无需重复添加同一个写手
                 $writerSql = Writer::where('writerNum', '=', $writerNum)->get()->toArray();
                 if (empty($writerSql)) {
-                    $writer = Writer::create([
+                    $writerSql = Writer::create([
                         'shop_id'           => $shopId,
                         'writerNum'         => $writerNum,
                         'name'              => $item['name'] ?? '',
@@ -163,7 +163,7 @@ class businessController extends Controller
 
                 $writerOrderArr[] = [
                     'shop_id'           => $shopId,
-                    'writerId' => $writer['id'],
+                    'writerId' => $writerSql['id'],
                     'orderId' => $order['id'],
                     'writerPrice' => $item['writerPrice'] ?: 0,
                 ];
