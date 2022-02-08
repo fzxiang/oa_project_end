@@ -145,16 +145,21 @@ class businessController extends Controller
             $writerOrderArr = [];
             foreach ($writerData as $item) {
                 $writerSituation = $item['writerSituation'] ?? 0;
-                $writer = Writer::create([
-                    'shop_id'           => $shopId,
-                    'writerNum'         => $item['writerNum'] ?: 0,
-                    'name'              => $item['name'] ?? '',
-                    'alipayAccount'     => $item['alipayAccount'] ?? '',
-                    'qqAccount'         => $item['qqAccount'] ?? '',
-                    'wechatAccount'     => $item['wechatAccount'] ?? '',
-                    'writerSituation'   => intval($writerSituation),
-                    'writerQuality'     => $item['writerQuality'] ?? '',
-                ]);
+                $writerNum = $item['writerNum'] ?: 0;
+                // 写手表无需重复添加同一个写手
+                $writerSql = Writer::where('writerNum', '=', $writerNum)->get()->toArray();
+                if (empty($writerSql)) {
+                    $writer = Writer::create([
+                        'shop_id'           => $shopId,
+                        'writerNum'         => $writerNum,
+                        'name'              => $item['name'] ?? '',
+                        'alipayAccount'     => $item['alipayAccount'] ?? '',
+                        'qqAccount'         => $item['qqAccount'] ?? '',
+                        'wechatAccount'     => $item['wechatAccount'] ?? '',
+                        'writerSituation'   => intval($writerSituation),
+                        'writerQuality'     => $item['writerQuality'] ?? '',
+                    ]);
+                }
 
                 $writerOrderArr[] = [
                     'shop_id'           => $shopId,
