@@ -139,6 +139,8 @@ class oaUsersController extends Controller
             $shop && $selectedId = $shop['shop_id'];
         }
 
+        $roleSql = Role::find($userDB->role_id);
+
         $relt = [
             'count' => $count,
             'permission' => $formatUserPowers,
@@ -147,6 +149,7 @@ class oaUsersController extends Controller
             'username' => $userDB->username,
             'realName' => $userDB->nickname,
             'role' => $userDB->role_id,
+            'roles' => $roleSql['role'] ?? 0,
             'selectedShop' => $selectedId,
         ];
         return self::result($relt);

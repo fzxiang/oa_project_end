@@ -688,6 +688,7 @@ class businessController extends Controller
             return oaUsersController::result([],-1, 'err_token');
         }
 
+        $user_id = $data['user_id'];
         $shopId = $request->header('Shop');
         if (!$shopId) {
             return oaUsersController::result([],-1, 'err_shop');
@@ -697,6 +698,17 @@ class businessController extends Controller
 
         if (!$request['searchParams']) {
             return oaUsersController::result([],-1, 'err_param');
+        }
+
+        $user = User::find($user_id);
+        $role_id = $user['role_id'] ?? 0;
+        $role = Role::find($role_id);
+        $rolePower = $role['role'];
+
+        $canSearchOtherOrder = true;
+        if ($rolePower > 3) {
+            // 普通客服不能查到其它客服订单
+            $canSearchOtherOrder = false;
         }
 
         $data = [
