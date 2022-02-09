@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use App\Libs\TokenSsl;
 use App\Models\HashOrderMaping;
 use App\Models\Order;
+use App\Models\Role;
 use App\Models\Shop;
 use App\Models\User;
 use App\Models\Writer;
@@ -700,17 +701,6 @@ class businessController extends Controller
             return oaUsersController::result([],-1, 'err_param');
         }
 
-        $user = User::find($user_id);
-        $role_id = $user['role_id'] ?? 0;
-        $role = Role::find($role_id);
-        $rolePower = $role['role'];
-
-        $canSearchOtherOrder = true;
-        if ($rolePower > 3) {
-            // 普通客服不能查到其它客服订单
-            $canSearchOtherOrder = false;
-        }
-
         $data = [
             'page' => 1, // 第几页
             'pageSize' => 10, // 一页几条数据
@@ -757,6 +747,9 @@ class businessController extends Controller
         $sqlArr[] = ['shop_id', '=', $shopId];
         $pStartTime && $sqlArr[] = ['paymentTime', '>=', $pStartTime];
         $pEndTime && $sqlArr[] = ['paymentTime', '<=', $pEndTime];
+
+        // 接单客服
+        $sqlArr[] = ['acceptUser', '=', $user_id];
 
         // 确认收货时间
         if (isset($data['rStartTime']) && $data['rStartTime'] && isset($data['rEndTime']) && $data['rEndTime']) {
