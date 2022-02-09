@@ -2004,6 +2004,7 @@ class businessController extends Controller
                 'writerQuality' => intval($writer['writerQuality']),
                 'compensateState' => $item->compensateState,
                 'wSettleState' => $item->wSettleState,
+                'writerPrice' => $item->writerPrice,
             ];
         }
 
