@@ -18,8 +18,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/foo', function (){
-    return [1,4,2,6,5,8,9];
+Route::get('/foo', function (Request $request){
+    return response('hello cookie1')->cookie('token1', '3333', 60);
 });
 Route::get('/test', 'testController@test')->name('test');
 

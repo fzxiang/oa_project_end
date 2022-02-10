@@ -666,6 +666,7 @@ class oaUsersController extends Controller
                 $dataInfo[] = [
                     'user_id' => $user['user_id'],
                     'username' => $user['username'],
+                    'nickname' => $user['nickname'],
                 ];
             }
         }
