@@ -146,7 +146,7 @@ class businessController extends Controller
             $writerOrderArr = [];
             foreach ($writerData as $item) {
                 $writerSituation = $item['writerSituation'] ?? 0;
-                $writerNum = $item['writerNum'] ?: 0;
+                $writerNum = $item['writerNum'] ?? 0;
                 // 写手表无需重复添加同一个写手
                 $writerSql = Writer::where([['writerNum', '=', $writerNum], ['shop_id', '=', $shopId]])->get()->toArray();
                 !empty($writerSql) && $writerSql = $writerSql[0];
