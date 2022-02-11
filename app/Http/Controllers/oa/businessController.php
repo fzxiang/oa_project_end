@@ -133,8 +133,8 @@ class businessController extends Controller
             'aliOrder'          => $orderData['aliOrder'],
             'invoice'           => $orderData['invoice'],
             'memberName'        => $orderData['memberName'] ?? '',
-            'taobaoPrice'       => $orderData['taobaoPrice'] ?: 0,
-            'serWritePrice'     => $orderData['taobaoPrice'] ?: 0,
+            'taobaoPrice'       => $orderData['taobaoPrice'] ?? 0,
+            'serWritePrice'     => $orderData['taobaoPrice'] ?? 0,
             'customerContact'   => $orderData['customerContact'] ?? '',
             'orderOutline'      => $orderData['orderOutline'] ?? '',
             'remarks'           => $orderInfo['other']['remarks'] ?? '',
@@ -167,7 +167,7 @@ class businessController extends Controller
                     'shop_id'           => $shopId,
                     'writerId' => $writerSql['id'],
                     'orderId' => $order['id'],
-                    'writerPrice' => $item['writerPrice'] ?: 0,
+                    'writerPrice' => $item['writerPrice'] ?? 0,
                 ];
             }
 
@@ -248,8 +248,8 @@ class businessController extends Controller
             'aliOrder'          => $orderData['aliOrder'],
             'invoice'           => $orderData['invoice'],
             'memberName'        => $orderData['memberName'] ?? '',
-            'taobaoPrice'       => $orderData['taobaoPrice'] ?: 0,
-            'serWritePrice'     => $orderData['taobaoPrice'] ?: 0,
+            'taobaoPrice'       => $orderData['taobaoPrice'] ?? 0,
+            'serWritePrice'     => $orderData['taobaoPrice'] ?? 0,
             'customerContact'   => $orderData['customerContact'] ?? '',
             'orderOutline'      => $orderData['orderOutline'] ?? '',
             'remarks'           => $orderInfo['other']['remarks'] ?? '',
@@ -297,7 +297,7 @@ class businessController extends Controller
                         'shop_id'           => $shopId,
                         'writerId' => $item['id'],
                         'orderId' => $orderData['id'],
-                        'writerPrice' => $item['writerPrice'] ?: 0,
+                        'writerPrice' => $item['writerPrice'] ?? 0,
                     ];
                 }
 
