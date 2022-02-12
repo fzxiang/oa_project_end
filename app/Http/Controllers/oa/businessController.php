@@ -2087,6 +2087,7 @@ class businessController extends Controller
                 $info[] = [
                     'writerId' => $writerOrder->writerId,
                     'orderId' => $writerOrder->orderId,
+                    'invoice' => $order['invoice'],
                     'acceptUser' => $user['nickname'],
                     'shop_id' => $writerOrder->shop_id,
                     'shop_name' => $shop['shop_name'],
