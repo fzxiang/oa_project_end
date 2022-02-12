@@ -145,6 +145,10 @@ class businessController extends Controller
         if (!empty($writerData)) {
             $writerOrderArr = [];
             foreach ($writerData as $item) {
+                if (empty($item)) {
+                    continue;
+                }
+
                 $writerSituation = $item['writerSituation'] ?? 0;
                 $writerNum = $item['writerNum'] ?? 0;
                 // 写手表无需重复添加同一个写手
@@ -265,7 +269,8 @@ class businessController extends Controller
             $writerOrderArr = [];
             foreach ($writerData as $item) {
                 $writerSituation = $item['writerSituation'] ?? 0;
-                if (!$item['id']) {
+                $clientId = $item['id'] ?? 0;
+                if (!$clientId) {
                     $writer = Writer::create([
                         'writerNum'         => $item['writerNum'] ?: 0,
                         'name'              => $item['name'] ?? '',
