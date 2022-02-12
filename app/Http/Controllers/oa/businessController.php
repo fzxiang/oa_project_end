@@ -2079,13 +2079,22 @@ class businessController extends Controller
                 ->get()->toArray();
 
             foreach ($writerOrders as $writerOrder) {
+                $shop = Shop::find($writerOrder->shop_id);
+
+                $order = Order::find($writerOrder->orderId);
+
+                $user = User::find($order['acceptUser']);
                 $info[] = [
                     'writerId' => $writerOrder->writerId,
                     'orderId' => $writerOrder->orderId,
+                    'acceptUser' => $user['nickname'],
                     'shop_id' => $writerOrder->shop_id,
+                    'shop_name' => $shop['shop_name'],
                     'writerPrice' => $writerOrder->writerPrice,
                     'wSettleState' => $writerOrder->wSettleState,
                     'compensateState' => $writerOrder->compensateState,
+                    'paymentTime' => $order['paymentTime'],
+                    'receivingTime' => $order['receivingTime'],
                 ];
             }
         }
