@@ -10,7 +10,7 @@ services:
 
   nginx:
     container_name: local-nginx
-    image: nginx:1.18.0
+    image: macbre/nginx-brotli
     ports:
       - "8100:80"
     volumes:
