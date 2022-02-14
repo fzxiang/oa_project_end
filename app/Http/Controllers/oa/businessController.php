@@ -330,7 +330,7 @@ class businessController extends Controller
 
         $mobile = $request['writerNum'];
         if (!preg_match("/^1[345678]\d{9}$/", $mobile)) {
-            return oaUsersController::result([],-1, 'err_number');
+            return oaUsersController::result([],-1, '手机号码不合法');
         }
 
         return oaUsersController::result();
