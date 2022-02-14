@@ -329,7 +329,7 @@ class businessController extends Controller
         }
 
         $mobile = $request['writerNum'];
-        if (!preg_match("/^1[34578]\d{9}$/", $mobile)) {
+        if (!preg_match("/^1[345678]\d{9}$/", $mobile)) {
             return oaUsersController::result([],-1, 'err_number');
         }
 
