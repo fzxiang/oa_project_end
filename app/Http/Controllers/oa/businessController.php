@@ -121,6 +121,26 @@ class businessController extends Controller
         ];
 
         $orderInfo = $request['orderInfo'];
+        $writerData = $orderInfo['writer'];
+
+        $repeatNum = 0;
+        $arrNum = [];
+        foreach ($writerData as $item) {
+            if (empty($item)) {
+                continue;
+            }
+            $writerNum = $item['writerNum'] ?? 0;
+
+            if (!empty($arrNum) && in_array($writerNum, $arrNum)) {
+                $repeatNum = $writerNum;
+                break;
+            }
+            $arrNum[] = $writerNum;
+        }
+
+        if ($repeatNum) {
+            return oaUsersController::result([],-1, '写手手机号重复：' . $repeatNum);
+        }
 
         // 添加订单数据
         $orderData = $orderInfo['order'];
@@ -141,7 +161,6 @@ class businessController extends Controller
         ]);
 
         // 添加写手数据
-        $writerData = $orderInfo['writer'];
         if (!empty($writerData)) {
             $writerOrderArr = [];
             foreach ($writerData as $item) {
@@ -240,6 +259,26 @@ class businessController extends Controller
         ];
 
         $orderInfo = $request['orderInfo'];
+        $writerData = $orderInfo['writer'];
+
+        $repeatNum = 0;
+        $arrNum = [];
+        foreach ($writerData as $item) {
+            if (empty($item)) {
+                continue;
+            }
+            $writerNum = $item['writerNum'] ?? 0;
+
+            if (!empty($arrNum) && in_array($writerNum, $arrNum)) {
+                $repeatNum = $writerNum;
+                break;
+            }
+            $arrNum[] = $writerNum;
+        }
+
+        if ($repeatNum) {
+            return oaUsersController::result([],-1, '写手手机号重复：' . $repeatNum);
+        }
 
         // 添加订单数据
         $orderData = $orderInfo['order'];
@@ -264,15 +303,18 @@ class businessController extends Controller
             ->where('shop_id', '=', $shopId)->delete();
 
         // 更新写手信息
-        $writerData = $orderInfo['writer'];
         if (!empty($writerData)) {
             $writerOrderArr = [];
             foreach ($writerData as $item) {
+                if (empty($item)) {
+                    continue;
+                }
+
                 $writerSituation = $item['writerSituation'] ?? 0;
                 $clientId = $item['id'] ?? 0;
                 if (!$clientId) {
                     $writer = Writer::create([
-                        'writerNum'         => $item['writerNum'] ?: 0,
+                        'writerNum'         => $item['writerNum'] ?? 0,
                         'name'              => $item['name'] ?? '',
                         'alipayAccount'     => $item['alipayAccount'] ?? '',
                         'qqAccount'         => $item['qqAccount'] ?? '',
@@ -289,7 +331,7 @@ class businessController extends Controller
                 }
                 else{
                     $num = Writer::where('id', '=', $item['id'])->update([
-                        'writerNum'         => $item['writerNum'] ?: 0,
+                        'writerNum'         => $item['writerNum'] ?? 0,
                         'name'              => $item['name'] ?? '',
                         'alipayAccount'     => $item['alipayAccount'] ?? '',
                         'qqAccount'         => $item['qqAccount'] ?? '',
@@ -538,6 +580,8 @@ class businessController extends Controller
             return oaUsersController::result([],-1, 'err_token');
         }
 
+        $user_id = $data['user_id'];
+
         $shopId = intval($param['shop']);
 //        $shopId = $request['shop'];
         if (!$shopId) {
@@ -596,6 +640,9 @@ class businessController extends Controller
         $sqlArr[] = ['shop_id', '=', $shopId];
         $sqlArr[] = ['paymentTime', '>=', $pStartTime];
         $sqlArr[] = ['paymentTime', '<=', $pEndTime];
+
+        // 接单客服
+        $sqlArr[] = ['acceptUser', '=', $user_id];
 
         // 确认收货时间
         if (isset($data['rStartTime']) && $data['rStartTime'] && isset($data['rEndTime']) && $data['rEndTime']) {
