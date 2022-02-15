@@ -313,18 +313,24 @@ class businessController extends Controller
                 $writerSituation = $item['writerSituation'] ?? 0;
                 $clientId = $item['id'] ?? 0;
                 if (!$clientId) {
-                    $writer = Writer::create([
-                        'writerNum'         => $item['writerNum'] ?? 0,
-                        'name'              => $item['name'] ?? '',
-                        'alipayAccount'     => $item['alipayAccount'] ?? '',
-                        'qqAccount'         => $item['qqAccount'] ?? '',
-                        'wechatAccount'     => $item['wechatAccount'] ?? '',
-                        'writerSituation'   => intval($writerSituation),
-                        'writerQuality'     => $item['writerQuality'] ?? '',
-                    ]);
+                    $writerNum = $item['writerNum'] ?? 0;
+                    // 写手表无需重复添加同一个写手
+                    $writerSql = Writer::where([['writerNum', '=', $writerNum], ['shop_id', '=', $shopId]])->get()->toArray();
+                    !empty($writerSql) && $writerSql = $writerSql[0];
+                    if (empty($writerSql)) {
+                        $writerSql = Writer::create([
+                            'writerNum' => $item['writerNum'] ?? 0,
+                            'name' => $item['name'] ?? '',
+                            'alipayAccount' => $item['alipayAccount'] ?? '',
+                            'qqAccount' => $item['qqAccount'] ?? '',
+                            'wechatAccount' => $item['wechatAccount'] ?? '',
+                            'writerSituation' => intval($writerSituation),
+                            'writerQuality' => $item['writerQuality'] ?? '',
+                        ]);
+                    }
 
                     $writerOrderArr[] = [
-                        'writerId' => $writer['id'],
+                        'writerId' => $writerSql['id'],
                         'orderId' => $orderData['id'],
                         'writerPrice' => $item['writerPrice'] ?: 0,
                     ];
