@@ -130,6 +130,9 @@ class businessController extends Controller
                 continue;
             }
             $writerNum = $item['writerNum'] ?? 0;
+            if (!$writerNum) {
+                return oaUsersController::result([],-1, '存在未传入的写手手机号');
+            }
 
             if (!empty($arrNum) && in_array($writerNum, $arrNum)) {
                 $repeatNum = $writerNum;
@@ -187,7 +190,7 @@ class businessController extends Controller
                 }
 
                 $writerOrderArr[] = [
-                    'shop_id'           => $shopId,
+                    'shop_id' => $shopId,
                     'writerId' => $writerSql['id'],
                     'orderId' => $order['id'],
                     'writerPrice' => $item['writerPrice'] ?? 0,
@@ -268,6 +271,9 @@ class businessController extends Controller
                 continue;
             }
             $writerNum = $item['writerNum'] ?? 0;
+            if (!$writerNum) {
+                return oaUsersController::result([],-1, '存在未传入的写手手机号');
+            }
 
             if (!empty($arrNum) && in_array($writerNum, $arrNum)) {
                 $repeatNum = $writerNum;
@@ -319,7 +325,8 @@ class businessController extends Controller
                     !empty($writerSql) && $writerSql = $writerSql[0];
                     if (empty($writerSql)) {
                         $writerSql = Writer::create([
-                            'writerNum' => $item['writerNum'] ?? 0,
+                            'shop_id' => $shopId,
+                            'writerNum' => $writerNum,
                             'name' => $item['name'] ?? '',
                             'alipayAccount' => $item['alipayAccount'] ?? '',
                             'qqAccount' => $item['qqAccount'] ?? '',
@@ -347,7 +354,7 @@ class businessController extends Controller
                     ]);
 
                     $writerOrderArr[] = [
-                        'shop_id'           => $shopId,
+                        'shop_id' => $shopId,
                         'writerId' => $item['id'],
                         'orderId' => $orderData['id'],
                         'writerPrice' => $item['writerPrice'] ?? 0,
