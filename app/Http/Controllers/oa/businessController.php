@@ -343,15 +343,21 @@ class businessController extends Controller
                     ];
                 }
                 else{
-                    $num = Writer::where('id', '=', $item['id'])->update([
-                        'writerNum'         => $item['writerNum'] ?? 0,
-                        'name'              => $item['name'] ?? '',
-                        'alipayAccount'     => $item['alipayAccount'] ?? '',
-                        'qqAccount'         => $item['qqAccount'] ?? '',
-                        'wechatAccount'     => $item['wechatAccount'] ?? '',
-                        'writerSituation'   => intval($writerSituation),
-                        'writerQuality'     => $item['writerQuality'] ?? '',
-                    ]);
+                    $writerNum = $item['writerNum'] ?? 0;
+                    // 写手表无需重复添加同一个写手
+                    $writerSql = Writer::where([['writerNum', '=', $writerNum], ['shop_id', '=', $shopId]])->get()->toArray();
+                    !empty($writerSql) && $writerSql = $writerSql[0];
+                    if (empty($writerSql)) {
+                        $num = Writer::where('id', '=', $item['id'])->update([
+                            'writerNum' => $item['writerNum'] ?? 0,
+                            'name' => $item['name'] ?? '',
+                            'alipayAccount' => $item['alipayAccount'] ?? '',
+                            'qqAccount' => $item['qqAccount'] ?? '',
+                            'wechatAccount' => $item['wechatAccount'] ?? '',
+                            'writerSituation' => intval($writerSituation),
+                            'writerQuality' => $item['writerQuality'] ?? '',
+                        ]);
+                    }
 
                     $writerOrderArr[] = [
                         'shop_id' => $shopId,
@@ -384,7 +390,7 @@ class businessController extends Controller
         }
 
         $mobile = $request['writerNum'];
-        if (!preg_match("/^1[345678]\d{9}$/", $mobile)) {
+        if (!preg_match("/^1[23456789]\d{9}$/", $mobile)) {
             return oaUsersController::result([],-1, '手机号码不合法');
         }
 
