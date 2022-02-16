@@ -690,7 +690,7 @@ class businessController extends Controller
             $sqlArr[] = ['settleState', '=', $data['settleState']];
         }
 
-        $order = Order::where($sqlArr)->skip($offset)->take($limit)->get()->toArray();
+        $order = Order::where($sqlArr)->get()->toArray();
 
         $data = [];
         // 导出字断
@@ -1088,7 +1088,7 @@ class businessController extends Controller
         return oaUsersController::result($relt);
     }
 
-    private function writerReportSearch($shopId, $data)
+    private function writerReportSearch($shopId, $data, $isExport = false)
     {
         // 页码，条数
         $page = isset($data['page']) ? intval($data['page']) : 1;
@@ -1120,7 +1120,11 @@ class businessController extends Controller
             $writerSqlArr[] = ['id', '=', $data['writerId']];
         }
 
-        $writer = Writer::where($writerSqlArr)->skip($offset)->take($limit)->get()->toArray();
+        if (!$isExport) {
+            $writer = Writer::where($writerSqlArr)->skip($offset)->take($limit)->get()->toArray();
+        }else{
+            $writer = Writer::where($writerSqlArr)->get()->toArray();
+        }
 
         // 获取对应写手所有订单ID
         $jsonInfo = [];
@@ -1479,7 +1483,7 @@ class businessController extends Controller
 
         $data = $request['searchParams'];
 
-        $jsonInfo = $this->writerReportSearch($shopId, $data);
+        $jsonInfo = $this->writerReportSearch($shopId, $data, true);
 
         $fileDatas = [];
         $fileField = [
@@ -1740,7 +1744,7 @@ class businessController extends Controller
         return oaUsersController::result($relt);
     }
 
-    private function kefuCheckSearch($shopId, $params)
+    private function kefuCheckSearch($shopId, $params, $isLimitPage = true)
     {
         $data = $params ?? [];
         if (empty($data)) {
@@ -1795,7 +1799,11 @@ class businessController extends Controller
             $sqlArr[] = ['settleState', '=', $data['settleState']];
         }
 
-        $order = Order::where($sqlArr)->skip($offset)->take($limit)->get()->toArray();
+        if ($isLimitPage) {
+            $order = Order::where($sqlArr)->skip($offset)->take($limit)->get()->toArray();
+        }else{
+            $order = Order::where($sqlArr)->get()->toArray();
+        }
 
         foreach ($order as $k => $item) {
             $writerOrder = DB::table('writer_order')->where('orderId', '=', $item['id'])
@@ -1926,7 +1934,7 @@ class businessController extends Controller
 
         $data = $request['searchParams'];
 
-        $orders = $this->kefuCheckSearch($shopId, $data);
+        $orders = $this->kefuCheckSearch($shopId, $data, false);
         $ids = array_column($orders, 'id');
 
         $num = Order::whereIn('id', $ids)->update([
@@ -1973,7 +1981,7 @@ class businessController extends Controller
 
         $data = $request['searchParams'];
 
-        $relt = $this->kefuCheckSearch($shopId, $data);
+        $relt = $this->kefuCheckSearch($shopId, $data, false);
 
         $fileField = [
             '发单号', '接单客服', '淘宝订单编号', '会员名', '淘宝价格', '写手派单价格', '结算状态', '订单付款时间', '确认收货时间',
