@@ -499,11 +499,11 @@ class businessController extends Controller
 //            }
 
             $updates = [];
-            isset($data['paymentMer']) && $updates['taobaoPrice'] = $data['paymentMer'];
+            isset($data['paymentMer']) && $updates['taobaoPrice'] = floatval($data['paymentMer']);
             isset($data['paymentTime']) && $updates['paymentTime'] = $data['paymentTime'];
             isset($data['confirmTime']) && $updates['receivingTime'] = $data['confirmTime'];
-            isset($data['paymentMer']) && $updates['overviewFilePrice'] = $data['paymentMer'];
-            isset($data['actualPaymentPrice']) && $updates['actualPaymentPrice'] = $data['actualPaymentPrice'];
+            isset($data['paymentMer']) && $updates['overviewFilePrice'] = floatval($data['paymentMer']);
+            isset($data['actualPaymentPrice']) && $updates['actualPaymentPrice'] = floatval($data['actualPaymentPrice']);
 
             $sqlUpdates[] = $updates;
             // 更新数据
